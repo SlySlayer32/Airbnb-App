@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import PropertyCard from '@/components/PropertyCard';
+import CleanerPropertyCard from '@/components/CleanerPropertyCard';
 import RoleBasedWrapper from '@/components/RoleBasedWrapper';
 import { useAuth } from '@/contexts/AuthContext';
 import { propertyService } from '@/services';
 import { EnhancedProperty } from '@/types';
+import { mockEnhancedProperties, mockCleanerUser } from '@/data/mockEnhancedData';
 
 export default function PropertiesScreen() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [properties, setProperties] = useState<EnhancedProperty[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [demoMode, setDemoMode] = useState<'cleaner' | 'owner' | null>(null);
 
   useEffect(() => {
-    loadProperties();
-  }, [profile?.role]);
+    if (user && profile) {
+      loadProperties();
+    } else {
+      // Demo mode - show mock data
+      setProperties(mockEnhancedProperties);
+      setDemoMode('cleaner'); // Default to cleaner view for demo
+      setLoading(false);
+    }
+  }, [profile?.role, user]);
 
   const loadProperties = async () => {
     try {
@@ -40,7 +50,9 @@ export default function PropertiesScreen() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadProperties();
+    if (user && profile) {
+      await loadProperties();
+    }
     setRefreshing(false);
   };
 
@@ -52,7 +64,9 @@ export default function PropertiesScreen() {
   });
 
   const getStatusFilters = () => {
-    if (profile?.role === 'cleaner') {
+    const effectiveRole = user ? profile?.role : demoMode;
+    
+    if (effectiveRole === 'cleaner') {
       // For cleaners, show session-based filters
       return [
         { key: 'all', label: 'All', count: properties.length },
@@ -72,6 +86,7 @@ export default function PropertiesScreen() {
   };
 
   const statusFilters = getStatusFilters();
+  const effectiveRole = user ? profile?.role : demoMode;
 
   if (loading) {
     return (
@@ -85,8 +100,34 @@ export default function PropertiesScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
+        {!user && (
+          <>
+            <Text style={styles.demoTitle}>🎯 Cleaner-Focused Property Management Demo</Text>
+            <Text style={styles.demoSubtitle}>Real-world solution for cleaner workflow problems</Text>
+            
+            <View style={styles.modeSelector}>
+              <TouchableOpacity
+                style={[styles.modeButton, demoMode === 'cleaner' && styles.modeButtonActive]}
+                onPress={() => setDemoMode('cleaner')}
+              >
+                <Text style={[styles.modeButtonText, demoMode === 'cleaner' && styles.modeButtonTextActive]}>
+                  🧹 Cleaner View
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modeButton, demoMode === 'owner' && styles.modeButtonActive]}
+                onPress={() => setDemoMode('owner')}
+              >
+                <Text style={[styles.modeButtonText, demoMode === 'owner' && styles.modeButtonTextActive]}>
+                  🏠 Owner View
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        
         <Text style={styles.title}>
-          {profile?.role === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
+          {effectiveRole === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
         </Text>
         
         <TextInput
@@ -118,10 +159,16 @@ export default function PropertiesScreen() {
       </View>
 
       <View style={styles.content}>
-        {profile?.role === 'cleaner' && (
+        {effectiveRole === 'cleaner' && (
           <View style={styles.cleanerInfo}>
+            <Text style={styles.cleanerInfoTitle}>
+              {user ? '📍 Today\'s Schedule' : '👋 Welcome Maria!'}
+            </Text>
             <Text style={styles.cleanerInfoText}>
-              📍 Today's Schedule • Tap any property for details and updates
+              {user 
+                ? 'Tap any property for details and updates'
+                : 'Here are your assigned cleaning sessions. All essential information is displayed upfront.'
+              }
             </Text>
           </View>
         )}
@@ -133,10 +180,10 @@ export default function PropertiesScreen() {
         {filteredProperties.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateTitle}>
-              {profile?.role === 'cleaner' ? 'No cleaning sessions assigned' : 'No properties found'}
+              {effectiveRole === 'cleaner' ? 'No cleaning sessions assigned' : 'No properties found'}
             </Text>
             <Text style={styles.emptyStateText}>
-              {profile?.role === 'cleaner' 
+              {effectiveRole === 'cleaner' 
                 ? 'Check back later for new cleaning assignments.'
                 : 'Try adjusting your search or filters.'}
             </Text>
@@ -146,15 +193,37 @@ export default function PropertiesScreen() {
           </View>
         ) : (
           filteredProperties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              onPress={() => {
-                // TODO: Navigate to property details
-                console.log('Property pressed:', property.name);
-              }}
-            />
+            effectiveRole === 'cleaner' ? (
+              <CleanerPropertyCard
+                key={property.id}
+                property={property}
+                onPress={() => {
+                  console.log('Property pressed:', property.name);
+                }}
+              />
+            ) : (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                onPress={() => {
+                  console.log('Property pressed:', property.name);
+                }}
+              />
+            )
           ))
+        )}
+
+        {!user && (
+          <View style={styles.features}>
+            <Text style={styles.featuresTitle}>✨ Key Features Demonstrated</Text>
+            <Text style={styles.featureItem}>• 👥 Guest count prominently displayed for linen preparation</Text>
+            <Text style={styles.featureItem}>• 🔑 Access codes and instructions clearly visible</Text>
+            <Text style={styles.featureItem}>• 🛏️ Automatic linen requirements based on guest count</Text>
+            <Text style={styles.featureItem}>• ❌ Clear cancellation handling with notice period</Text>
+            <Text style={styles.featureItem}>• 📍 Special areas and cleaning requirements highlighted</Text>
+            <Text style={styles.featureItem}>• 🆘 Emergency contact information readily available</Text>
+            <Text style={styles.featureItem}>• 📱 WiFi credentials for cleaner mobile access</Text>
+          </View>
         )}
       </View>
     </ScrollView>
@@ -182,6 +251,44 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
+  },
+  demoTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  demoSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  modeSelector: {
+    flexDirection: 'row',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 20,
+  },
+  modeButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modeButtonActive: {
+    backgroundColor: '#007AFF',
+  },
+  modeButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  modeButtonTextActive: {
+    color: 'white',
   },
   title: {
     fontSize: 24,
@@ -225,10 +332,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
   },
+  cleanerInfoTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1e40af',
+    marginBottom: 4,
+  },
   cleanerInfoText: {
     fontSize: 14,
     color: '#1e40af',
-    textAlign: 'center',
   },
   resultsText: {
     fontSize: 14,
@@ -261,5 +373,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
+  },
+  features: {
+    backgroundColor: '#f0fdf4',
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 20,
+  },
+  featuresTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#15803d',
+    marginBottom: 12,
+  },
+  featureItem: {
+    fontSize: 14,
+    color: '#166534',
+    marginBottom: 6,
+    lineHeight: 20,
   },
 });
