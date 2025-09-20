@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Activi
 import PropertyCard from '@/components/PropertyCard';
 import CleanerPropertyCard from '@/components/CleanerPropertyCard';
 import OwnerPropertyCard from '@/components/OwnerPropertyCard';
+import NotificationBadge from '@/components/NotificationBadge';
 import RoleBasedWrapper from '@/components/RoleBasedWrapper';
 import { useAuth } from '@/contexts/AuthContext';
 import { propertyService } from '@/services';
@@ -175,9 +176,12 @@ export default function PropertiesScreen() {
           </>
         )}
         
-        <Text style={styles.title}>
-          {effectiveRole === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
-        </Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>
+            {effectiveRole === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
+          </Text>
+          {user && <NotificationBadge />}
+        </View>
         
         <TextInput
           style={styles.searchInput}
@@ -346,6 +350,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#1f2937',
+    flex: 1,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 16,
   },
   searchInput: {

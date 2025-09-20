@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { EnhancedProperty, CleaningSession } from '@/types';
 import { cleaningSessionService } from '@/services';
+import CleaningUpdates from './CleaningUpdates';
 
 interface CleanerPropertyCardProps {
   property: EnhancedProperty;
@@ -10,6 +11,7 @@ interface CleanerPropertyCardProps {
 }
 
 export default function CleanerPropertyCard({ property, onPress }: CleanerPropertyCardProps) {
+  const [showUpdates, setShowUpdates] = useState(false);
   const session = property.current_session;
   
   const formatTime = (timeString: string) => {
@@ -50,9 +52,39 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
   const handleReportIssue = () => {
     Alert.alert(
       'Report Issue',
-      'This feature will open the issue reporting form.',
-      [{ text: 'OK' }]
+      'What type of issue would you like to report?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Minor Issue', 
+          onPress: () => reportIssue('minor', 'Minor maintenance or cleaning issue') 
+        },
+        { 
+          text: 'Urgent Issue', 
+          onPress: () => reportIssue('urgent', 'Urgent issue requiring immediate attention'),
+          style: 'destructive'
+        },
+      ]
     );
+  };
+
+  const reportIssue = async (severity: 'minor' | 'urgent', description: string) => {
+    if (!session) return;
+    
+    try {
+      const { cleaningUpdateService } = await import('@/services/cleaningUpdateService');
+      await cleaningUpdateService.reportIssue(session.id, {
+        message: description,
+        is_urgent: severity === 'urgent'
+      });
+      
+      Alert.alert(
+        'Issue Reported', 
+        `${severity === 'urgent' ? 'Urgent issue' : 'Issue'} has been reported to the property owner.`
+      );
+    } catch (error) {
+      Alert.alert('Error', 'Failed to report issue. Please try again.');
+    }
   };
 
   const getLinenSummary = () => {
@@ -141,8 +173,40 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
 
         {/* Linen Requirements */}
         <View style={styles.linenSection}>
-          <Text style={styles.sectionTitle}>Linen Requirements</Text>
-          <Text style={styles.linenSummary}>{getLinenSummary()}</Text>
+          <Text style={styles.sectionTitle}>🛏️ Linen Requirements ({session?.guest_count || property.max_occupancy} guests)</Text>
+          {session?.linen_requirements ? (
+            <View style={styles.linenGrid}>
+              {session.linen_requirements.bed_sheets_queen > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_queen} Queen sheets</Text>
+              )}
+              {session.linen_requirements.bed_sheets_king > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_king} King sheets</Text>
+              )}
+              {session.linen_requirements.bed_sheets_double > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_double} Double sheets</Text>
+              )}
+              {session.linen_requirements.pillow_cases > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.pillow_cases} Pillowcases</Text>
+              )}
+              {session.linen_requirements.duvet_covers > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.duvet_covers} Duvet covers</Text>
+              )}
+              {session.linen_requirements.towels_bath > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.towels_bath} Bath towels</Text>
+              )}
+              {session.linen_requirements.towels_hand > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.towels_hand} Hand towels</Text>
+              )}
+              {session.linen_requirements.kitchen_towels > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.kitchen_towels} Kitchen towels</Text>
+              )}
+              {session.linen_requirements.bath_mats > 0 && (
+                <Text style={styles.linenItem}>• {session.linen_requirements.bath_mats} Bath mats</Text>
+              )}
+            </View>
+          ) : (
+            <Text style={styles.linenSummary}>{getLinenSummary()}</Text>
+          )}
         </View>
 
         {/* Special Areas and Requests */}
@@ -190,6 +254,10 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
               <Ionicons name="warning" size={16} color="#ef4444" />
               <Text style={styles.issueButtonText}>Report Issue</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.updatesButton} onPress={() => setShowUpdates(true)}>
+              <Ionicons name="chatbubbles" size={16} color="#007AFF" />
+              <Text style={styles.updatesButtonText}>Updates</Text>
+            </TouchableOpacity>
           </View>
         )}
 
@@ -200,6 +268,14 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
           </View>
         )}
       </View>
+
+      {/* Cleaning Updates Modal */}
+      {showUpdates && session && (
+        <CleaningUpdates
+          sessionId={session.id}
+          onClose={() => setShowUpdates(false)}
+        />
+      )}
     </TouchableOpacity>
   );
 }
@@ -348,6 +424,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#374151',
   },
+  linenGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+  },
+  linenItem: {
+    fontSize: 14,
+    color: '#374151',
+    marginBottom: 4,
+    width: '48%',
+  },
   specialSection: {
     marginBottom: 12,
   },
@@ -418,6 +505,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#ef4444',
     fontWeight: '500',
+  },
+  updatesButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#eff6ff',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#007AFF',
+    marginLeft: 8,
+  },
+  updatesButtonText: {
+    color: '#007AFF',
+    fontSize: 14,
+    fontWeight: '500',
+    marginLeft: 4,
   },
   statusBadge: {
     position: 'absolute',
