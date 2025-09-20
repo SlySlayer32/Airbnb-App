@@ -91,11 +91,14 @@ export const propertyService = {
 
     // Transform to property-centric view
     const uniqueProperties = new Map();
-    (data || []).forEach(session => {
+    (data || []).forEach((session: any) => {
       if (session.properties && !uniqueProperties.has(session.properties.id)) {
         uniqueProperties.set(session.properties.id, {
           ...session.properties,
-          current_session: session
+          current_session: {
+            ...session,
+            properties: undefined // Remove nested properties to avoid circular reference
+          }
         });
       }
     });
