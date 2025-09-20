@@ -1,11 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
+// This file lives under the `app/` directory, so expo-router treats it as a route.
+// To prevent route errors while keeping backward-compat imports, we re-export the
+// real client from `@/lib/supabase` and provide a no-op default component.
 
+export { supabase } from '@/lib/supabase';
 
-// Initialize Supabase client
-// Using direct values from project configuration
-const supabaseUrl = 'https://qvvfjxjwuucmkjrvaqxf.supabase.co';
-const supabaseKey = 'sb_publishable_dJi8cFhhTAVJvE682L1x8A_JkHc-PAP';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-
-export { supabase };
+// Default export to satisfy expo-router's route requirement; this screen is unused.
+export default function SupabaseShim() {
+    return null;
+}

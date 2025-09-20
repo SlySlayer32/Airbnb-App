@@ -1,6 +1,6 @@
+import { supabase } from '@/lib/supabase';
+import { Session, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/app/lib/supabase';
-import { User, Session } from '@supabase/supabase-js';
 
 interface Profile {
   id: string;
@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         await fetchProfile(session.user.id);
       } else {
@@ -122,14 +122,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) throw new Error('No user');
-    
+
     const { error } = await supabase
       .from('profiles')
       .update(updates)
       .eq('id', user.id);
 
     if (error) throw error;
-    
+
     setProfile(prev => prev ? { ...prev, ...updates } : null);
   };
 
