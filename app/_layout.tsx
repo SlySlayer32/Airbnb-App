@@ -1,4 +1,4 @@
-import { Stack, router } from 'expo-router';
+import { Stack, router, usePathname, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
@@ -6,16 +6,18 @@ import { View, ActivityIndicator } from 'react-native';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuth();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading) {
-      if (!user) {
+      // Temporarily allow properties page without auth for demo
+      if (!user && pathname !== '/properties') {
         router.replace('/auth/login');
-      } else if (profile && !profile.onboarded) {
+      } else if (user && profile && !profile.onboarded) {
         router.replace('/onboarding');
       }
     }
-  }, [user, profile, loading]);
+  }, [user, profile, loading, pathname]);
 
   if (loading) {
     return (

@@ -1,13 +1,23 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Property } from '../types';
+import { Property, EnhancedProperty } from '../types';
+import { useAuth } from '@/contexts/AuthContext';
+import CleanerPropertyCard from './CleanerPropertyCard';
 
 interface PropertyCardProps {
-  property: Property;
+  property: Property | EnhancedProperty;
   onPress: () => void;
 }
 
 export default function PropertyCard({ property, onPress }: PropertyCardProps) {
+  const { profile } = useAuth();
+  
+  // Use cleaner-focused card for cleaner role
+  if (profile?.role === 'cleaner' && 'current_session' in property) {
+    return <CleanerPropertyCard property={property as EnhancedProperty} onPress={onPress} />;
+  }
+
+  // Default owner/manager view
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return '#10b981';
@@ -24,9 +34,13 @@ export default function PropertyCard({ property, onPress }: PropertyCardProps) {
     });
   };
 
+  // Handle both Property and EnhancedProperty interfaces
+  const imageUrl = 'imageUrl' in property ? property.imageUrl : property.image_url;
+  const nextClean = 'nextClean' in property ? property.nextClean : undefined;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image source={{ uri: property.imageUrl }} style={styles.image} />
+      <Image source={{ uri: imageUrl }} style={styles.image} />
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.name}>{property.name}</Text>
@@ -37,8 +51,8 @@ export default function PropertyCard({ property, onPress }: PropertyCardProps) {
         <Text style={styles.address}>{property.address}</Text>
         <View style={styles.details}>
           <Text style={styles.detailText}>{property.rooms} bed • {property.bathrooms} bath</Text>
-          {property.nextClean && (
-            <Text style={styles.nextClean}>Next clean: {formatDate(property.nextClean)}</Text>
+          {nextClean && (
+            <Text style={styles.nextClean}>Next clean: {formatDate(nextClean)}</Text>
           )}
         </View>
       </View>
