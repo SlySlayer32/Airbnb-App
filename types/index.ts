@@ -111,7 +111,7 @@ export interface CleaningSession {
   actual_guest_count?: number;
   
   // Relations
-  properties?: { name: string };
+  properties?: { name: string; owner_id: string };
   team_members?: { name: string; phone: string };
   linen_requirements?: LinenRequirement;
 }

@@ -55,7 +55,7 @@ export const mockEnhancedProperties: EnhancedProperty[] = [
       status: 'confirmed',
       special_requests: 'Extra attention to pool area - guests had a party last night',
       guest_notes: 'Expecting 4 guests, possible early arrival',
-      properties: { name: 'Sunset Villa' },
+      properties: { name: 'Sunset Villa', owner_id: 'owner1' },
       team_members: { name: 'Maria Garcia', phone: '(555) 234-5678' },
       linen_requirements: {
         guest_count: 4,
@@ -129,7 +129,7 @@ export const mockEnhancedProperties: EnhancedProperty[] = [
       cancelled_by: 'owner1',
       cancellation_reason: 'Guest extended stay by one day',
       cancellation_notice_hours: 6,
-      properties: { name: 'Downtown Loft' },
+      properties: { name: 'Downtown Loft', owner_id: 'owner1' },
       team_members: { name: 'Maria Garcia', phone: '(555) 234-5678' }
     }
   }

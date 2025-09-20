@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert, RefreshControl } from 'react-native';
 import PropertyCard from '@/components/PropertyCard';
 import CleanerPropertyCard from '@/components/CleanerPropertyCard';
+import OwnerPropertyCard from '@/components/OwnerPropertyCard';
+import NotificationBadge from '@/components/NotificationBadge';
 import RoleBasedWrapper from '@/components/RoleBasedWrapper';
 import { useAuth } from '@/contexts/AuthContext';
 import { propertyService } from '@/services';
@@ -59,8 +61,32 @@ export default function PropertiesScreen() {
   const filteredProperties = properties.filter(property => {
     const matchesSearch = property.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          property.address.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = statusFilter === 'all' || property.status === statusFilter;
-    return matchesSearch && matchesFilter;
+    
+    // Enhanced filtering based on role
+    const effectiveRole = user ? profile?.role : demoMode;
+    
+    if (effectiveRole === 'cleaner') {
+      // For cleaners, filter by session status
+      if (statusFilter === 'all') return matchesSearch;
+      if (statusFilter === 'scheduled') {
+        return matchesSearch && (
+          property.current_session?.status === 'scheduled' || 
+          property.current_session?.status === 'confirmed'
+        );
+      }
+      if (statusFilter === 'in_progress') {
+        return matchesSearch && property.current_session?.status === 'in_progress';
+      }
+      if (statusFilter === 'completed') {
+        return matchesSearch && property.current_session?.status === 'completed';
+      }
+    } else {
+      // For owners, filter by property status
+      const matchesFilter = statusFilter === 'all' || property.status === statusFilter;
+      return matchesSearch && matchesFilter;
+    }
+    
+    return matchesSearch;
   });
 
   const getStatusFilters = () => {
@@ -85,6 +111,21 @@ export default function PropertiesScreen() {
     }
   };
 
+  const handleScheduleClean = (propertyId: string) => {
+    // TODO: Navigate to scheduling screen
+    Alert.alert('Schedule Clean', `Scheduling cleaning for property ${propertyId}`);
+  };
+
+  const handleAssignCleaner = (propertyId: string) => {
+    // TODO: Navigate to cleaner assignment screen
+    Alert.alert('Assign Cleaner', `Assigning cleaner for property ${propertyId}`);
+  };
+
+  const handleEditProperty = (propertyId: string) => {
+    // TODO: Navigate to property edit screen
+    Alert.alert('Edit Property', `Editing property ${propertyId}`);
+  };
+
   const statusFilters = getStatusFilters();
   const effectiveRole = user ? profile?.role : demoMode;
 
@@ -98,7 +139,16 @@ export default function PropertiesScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl 
+          refreshing={refreshing} 
+          onRefresh={handleRefresh}
+          tintColor="#007AFF"
+        />
+      }
+    >
       <View style={styles.header}>
         {!user && (
           <>
@@ -126,9 +176,12 @@ export default function PropertiesScreen() {
           </>
         )}
         
-        <Text style={styles.title}>
-          {effectiveRole === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
-        </Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>
+            {effectiveRole === 'cleaner' ? 'My Cleaning Schedule' : 'Properties'}
+          </Text>
+          {user && <NotificationBadge />}
+        </View>
         
         <TextInput
           style={styles.searchInput}
@@ -202,12 +255,15 @@ export default function PropertiesScreen() {
                 }}
               />
             ) : (
-              <PropertyCard
+              <OwnerPropertyCard
                 key={property.id}
                 property={property}
                 onPress={() => {
                   console.log('Property pressed:', property.name);
                 }}
+                onEdit={handleEditProperty}
+                onScheduleClean={handleScheduleClean}
+                onAssignCleaner={handleAssignCleaner}
               />
             )
           ))
@@ -294,6 +350,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#1f2937',
+    flex: 1,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 16,
   },
   searchInput: {
