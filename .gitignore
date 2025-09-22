@@ -26,3 +26,6 @@ android
 .metro-health-check*
 
 expo-env.d.ts
+
+# Supabase
+.env
