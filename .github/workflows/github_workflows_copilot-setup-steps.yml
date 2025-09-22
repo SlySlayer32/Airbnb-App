@@ -5,10 +5,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - .github/workflows/copilot-setup-steps.yml
+      - .github/workflows/github_workflows_copilot-setup-steps.yml
   pull_request:
     paths:
-      - .github/workflows/copilot-setup-steps.yml
+      - .github/workflows/github_workflows_copilot-setup-steps.yml
 
 jobs:
   # IMPORTANT: The job MUST be called exactly `copilot-setup-steps`.
@@ -44,9 +44,6 @@ jobs:
         run: |
           echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
           echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Install dependencies
         run: npm ci
