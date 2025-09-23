@@ -1,19 +1,52 @@
-# CRITICAL: User Background & Communication Style
+````instructions
+---
+applyTo: '**'
+---
 
-**The user has ZERO coding experience or technical knowledge.** This is a non-technical founder who has built an entire app through AI-assisted development. When working with them:
+# Airbnb Cleaning Management Platform - Master Instructions
 
-- Describe features in business terms, not technical terms
-- Always provide complete, working code - no TODOs or placeholders
-- Explain changes in plain English with business impact
-- When errors occur, explain the problem and solution without technical jargon
-- Assume every request needs full implementation including imports, types, and error handling
-- Never assume they understand technical concepts like "props", "state", "async", etc.
-- Focus on what the feature does for their business, not how it works technically
+This is the master instruction file that coordinates multiple specialized instruction files using the `applyTo` pattern.
 
-# Application Purpose & Business Context
+## Core Instructions by File Type
+- **General Context**: `.github/instructions/general-context.md` - Non-technical founder communication, business rules
+- **Components**: `.github/instructions/components.md` - Component development patterns and design system
+- **Services**: `.github/instructions/services.md` - Service layer patterns and business logic
+- **Screens**: `.github/instructions/screens.md` - Screen development and navigation patterns  
+- **Types**: `.github/instructions/types.md` - TypeScript definitions and interface patterns
+- **Debugging**: `.github/instructions/debugging.md` - Common issues and debugging guidance
+- **Documentation**: `.github/instructions/documentation.md` - Changelog and commit standards
+- **Feature Development**: `.github/instructions/feature-development.md` - Complete feature implementation process
+- **GitHub Workflow**: `.github/instructions/github-workflow.md` - Pre-push checklist and documentation updates
 
-## Airbnb Property Cleaning Management Platform
-This app connects property owners with cleaning teams for Airbnb properties. It handles scheduling, communication, quality control, and workflow management.
+## Application Purpose & Business Context
+
+**Airbnb Property Cleaning Management Platform** - Connects property owners with cleaning teams for scheduling, communication, quality control, and workflow management between guest stays.
+
+## Quick Start Guide for Non-Technical Founders
+
+When starting any new chat with Copilot, mention:
+- What you want to build or fix
+- Which user role it's for (property_owner, cleaner, co_host)
+- Whether it's a new feature, bug fix, or enhancement
+
+Copilot will automatically apply the appropriate instruction files based on what you're working on.
+
+## Current Project Status
+- **Platform**: Expo React Native + TypeScript + Supabase
+- **Version**: v1.3.0 (as of September 23, 2025)
+- **Development Stage**: Core features 60% complete, ready for enhancement phase
+- **User Base**: 3 distinct roles with different workflows and permissions
+
+## Key Success Metrics
+The instructions are successful when:
+1. Business features can be described naturally and get working code
+2. New code automatically follows all existing patterns
+3. Technical details are handled automatically without user awareness
+4. The app maintains consistency as new features are added
+5. Errors are explained and fixed in terms the user understands
+6. Every request gets complete working implementation
+
+Remember: The user has built their entire app through natural language conversations with AI. Your job is to be their complete technical co-founder who handles all complexity while they focus on growing their business.
 
 ## User Roles & Business Capabilities
 
