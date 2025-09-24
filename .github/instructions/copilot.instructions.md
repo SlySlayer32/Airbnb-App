@@ -1,4 +1,3 @@
-````instructions
 ---
 applyTo: '**'
 ---
@@ -8,15 +7,15 @@ applyTo: '**'
 This is the master instruction file that coordinates multiple specialized instruction files using the `applyTo` pattern.
 
 ## Core Instructions by File Type
-- **General Context**: `.github/instructions/general-context.md` - Non-technical founder communication, business rules
-- **Components**: `.github/instructions/components.md` - Component development patterns and design system
-- **Services**: `.github/instructions/services.md` - Service layer patterns and business logic
-- **Screens**: `.github/instructions/screens.md` - Screen development and navigation patterns  
-- **Types**: `.github/instructions/types.md` - TypeScript definitions and interface patterns
-- **Debugging**: `.github/instructions/debugging.md` - Common issues and debugging guidance
-- **Documentation**: `.github/instructions/documentation.md` - Changelog and commit standards
-- **Feature Development**: `.github/instructions/feature-development.md` - Complete feature implementation process
-- **GitHub Workflow**: `.github/instructions/github-workflow.md` - Pre-push checklist and documentation updates
+- General Context: `.github/instructions/general-context.instructions.md` - Non-technical founder communication, business rules
+- Components: `.github/instructions/components.instructions.md` - Component development patterns and design system
+- Services: `.github/instructions/services.instructions.md` - Service layer patterns and business logic
+- Screens: `.github/instructions/screens.instructions.md` - Screen development and navigation patterns
+- Types: `.github/instructions/types.instructions.md` - TypeScript definitions and interface patterns
+- Debugging: `.github/instructions/debugging.instructions.md` - Common issues and debugging guidance
+- Documentation: `.github/instructions/documentation.instructions.md` - Changelog and commit standards
+- Feature Development: `.github/instructions/feature-development.instructions.md` - Complete feature implementation process
+- GitHub Workflow: `.github/instructions/github-workflow.instructions.md` - Pre-push checklist and documentation updates
 
 ## Application Purpose & Business Context
 
@@ -32,10 +31,10 @@ When starting any new chat with Copilot, mention:
 Copilot will automatically apply the appropriate instruction files based on what you're working on.
 
 ## Current Project Status
-- **Platform**: Expo React Native + TypeScript + Supabase
-- **Version**: v1.3.0 (as of September 23, 2025)
-- **Development Stage**: Core features 60% complete, ready for enhancement phase
-- **User Base**: 3 distinct roles with different workflows and permissions
+- Platform: Expo React Native + TypeScript + Supabase (Expo SDK 54)
+- Version: v1.3.0 (as of September 23, 2025)
+- Development Stage: Core features 60% complete, ready for enhancement phase
+- User Base: 3 distinct roles with different workflows and permissions
 
 ## Key Success Metrics
 The instructions are successful when:
@@ -105,7 +104,7 @@ Remember: The user has built their entire app through natural language conversat
 # Technical Stack & Architecture
 
 ## Core Technologies
-- **Frontend**: Expo SDK 51 + React Native + TypeScript
+- Frontend: Expo SDK 54 + React Native + TypeScript
 - **Backend**: Supabase (PostgreSQL + Auth + Realtime + Storage)
 - **Navigation**: Expo Router (file-based routing with typed routes)
 - **Styling**: React Native StyleSheet (no external CSS libraries)
@@ -115,7 +114,7 @@ Remember: The user has built their entire app through natural language conversat
 ## Project Structure & File Organization
 ```
 /app                    # Expo Router screens
-  /(auth)              # Authentication screens (login, register, forgot-password)
+  /auth                # Authentication screens (login, register, forgot-password)
   /_layout.tsx         # Root layout with AuthProvider and navigation
   /index.tsx           # Dashboard (role-specific content)
   /properties.tsx      # Property management
