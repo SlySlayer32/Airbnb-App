@@ -8,9 +8,9 @@
 
 <!-- List specific changes in this PR -->
 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
 
 ## Business Impact
 
@@ -18,21 +18,23 @@
 
 **User Roles Affected**: <!-- property_owner, cleaner, co_host, or multiple -->
 
-**Business Value**:
-- 
-- 
+**Business Value**
+-
+
+-
 
 ## Documentation Updates
 
 <!-- Check all that apply -->
 
 - [ ] `CHANGELOG.md` updated with changes
-- [ ] `COMPLETE_PRODUCT_ROADMAP.md` updated (if feature related)
-- [ ] `USER_WORKFLOW_ANALYSIS.md` updated (if workflow changed)
-- [ ] `INTERACTIVE_TESTING_RESULTS.md` updated (if testing status changed)
-- [ ] `SUCCESS_METRICS_FRAMEWORK.md` updated (if metrics affected)
-- [ ] `VISUAL_WORKFLOW_DIAGRAMS.md` updated (if workflows changed)
-- [ ] `DEVELOPMENT_HISTORY.md` updated with AI context
+- [ ] `docs/business/COMPLETE_PRODUCT_ROADMAP.md` updated (if feature related)
+- [ ] `docs/business/USER_WORKFLOW_ANALYSIS.md` updated (if workflow changed)
+- [ ] `docs/technical/INTERACTIVE_TESTING_RESULTS.md` updated (if testing status changed)
+- [ ] `docs/business/SUCCESS_METRICS_FRAMEWORK.md` updated (if metrics affected)
+- [ ] `docs/business/VISUAL_WORKFLOW_DIAGRAMS.md` updated (if workflows changed)
+- [ ] `docs/technical/DEVELOPMENT_HISTORY.md` updated with AI context
+- [ ] `docs/DOCUMENTATION_INDEX.md` updated (if new docs added)
 - [ ] Other docs updated: <!-- list files -->
 
 ## Testing Completed
@@ -71,7 +73,7 @@
 
 - [ ] Code follows existing patterns from `.github/instructions/`
 - [ ] TypeScript compilation passes
-- [ ] Documentation updated per `DOCUMENTATION_INDEX.md` rules
+- [ ] Documentation updated per `docs/DOCUMENTATION_INDEX.md` rules
 - [ ] Commit message follows format from `github-workflow.instructions.md`
 - [ ] Business impact clearly explained
 - [ ] Changes align with product roadmap
@@ -89,6 +91,7 @@
 ---
 
 **Ready for Review**: <!-- Check when ready -->
+
 - [ ] All documentation updated
 - [ ] All testing completed  
 - [ ] Business impact validated

@@ -62,6 +62,7 @@ npm start
 ### Development Workflow
 
 1. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -77,12 +78,14 @@ npm start
    - Follow the documentation update rules in `DOCUMENTATION_INDEX.md`
 
 4. **Test Your Changes**
+
    ```bash
    npm run lint      # Type checking
    npm start         # Manual testing
    ```
 
 5. **Commit with Proper Format**
+
    ```bash
    git commit -m "FEATURE: Brief description (affects: user_role)
 
@@ -113,6 +116,7 @@ When updating docs, use this checklist from `DOCUMENTATION_INDEX.md`:
 ### PR Template
 
 We provide a PR template that covers:
+
 - Summary of changes
 - Business impact
 - Documentation updates

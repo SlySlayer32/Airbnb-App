@@ -222,17 +222,17 @@ This project includes comprehensive GitHub Copilot instructions (975 lines) that
 
 ### Complete Development History
 
-- [`DEVELOPMENT_HISTORY.md`](./DEVELOPMENT_HISTORY.md) - Complete record of all changes
+- [`docs/technical/DEVELOPMENT_HISTORY.md`](docs/technical/DEVELOPMENT_HISTORY.md) - Complete record of all changes
 - [`CHANGELOG.md`](./CHANGELOG.md) - Technical change log
-
 - [GitHub Issues](https://github.com/SlySlayer32/Airbnb-App/issues) - Detailed problem documentation
 
 ### Documentation Map
 
-- [`DOCUMENTATION_INDEX.md`](./DOCUMENTATION_INDEX.md) — Where to find every doc and when to update it
-- Investor/Stakeholder: `EXECUTIVE_SUMMARY.md`, `COMPLETE_PRODUCT_ROADMAP.md`, `SUCCESS_METRICS_FRAMEWORK.md`, `VISUAL_WORKFLOW_DIAGRAMS.md`
-- Developer: `.github/instructions/*.instructions.md`, `USER_WORKFLOW_ANALYSIS.md`, `INTERACTIVE_TESTING_RESULTS.md`, `THIRD_PARTY_INTEGRATIONS.md`, `DEVELOPMENT_HISTORY.md`, `CHANGELOG.md`
-- Process/Ops: `.github/workflows/*.yml`, `VERSION.md`
+- [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) — Central hub for all documentation
+- **Business**: Executive summary, roadmap, metrics, workflows ([`/docs/business/`](docs/business/))
+- **Technical**: Integration research, testing results, development history ([`/docs/technical/`](docs/technical/))
+- **Process**: Contributing guidelines, version tracking ([`/docs/process/`](docs/process/))
+- **Templates**: Issue and PR templates ([`/docs/templates/`](docs/templates/))
 
 ### For Non-Technical Founders
 

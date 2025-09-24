@@ -12,9 +12,9 @@ assignees: []
 
 ## Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behavior
 
@@ -57,8 +57,8 @@ assignees: []
 
 **Severity**: <!-- Low/Medium/High/Critical -->
 
-**Impact on Operations**:
-- 
+**Impact on Operations**
+-
 
 ## Additional Context
 
