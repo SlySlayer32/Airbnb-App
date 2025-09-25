@@ -31,29 +31,75 @@ graph TD
 ### **Future Complete Cleaner Workflow (Target: 100%)**
 
 ```mermaid
-graph TD
-    A[Login] --> B[Dashboard<br/>📱 Today's Schedule]
-    B --> C[Properties List<br/>🔍 Filtered by Today]
-    C --> D[Select Property<br/>👥 Guest Count Visible]
-    D --> E[Property Details<br/>🔑 Access Codes<br/>📋 Special Instructions]
-    
-    E --> F[✅ Check-In Button]
-    F --> G[Start Cleaning Timer]
-    G --> H[Quality Checklist<br/>📝 Room-by-Room Tasks]
-    H --> I[Photo Evidence<br/>📸 Before/After Shots]
-    
-    I --> J{Issues Found?}
-    J -->|Yes| K[Report Issue<br/>📞 Auto-notify Owner]
-    J -->|No| L[Complete Cleaning]
-    K --> L
-    
-    L --> M[Final Photos<br/>✅ Completion Evidence]
-    M --> N[Check-Out<br/>⏰ Time Logged]
-    N --> O[Submit Report<br/>📋 Summary & Notes]
-    O --> P[Payment Calculated<br/>💰 Instant Earnings]
-    
-    style A fill:#e1f5fe
-    style P fill:#c8e6c9
+flowchart TD
+    A[Cleaner Dashboard]
+
+    %% MAIN NAVIGATION
+    A --> B[Properties Section]
+    A --> C[Schedule Section]
+    A --> D[Profile Section]
+
+    %% PROPERTIES
+    B --> B1[Property Card List]
+    B1 --> B2[Property Card]
+    B2 --> B2a[Property Info: Name, Address, Time]
+    B2 --> B2b[Guest Count]
+    B2 --> B2c[Access Method / Code]
+
+    %% Property Card Actions
+    B2 --> E[📋 Tasks View]
+    E --> E1[Room-by-Room Checklist]
+    E --> E2[Swipe/Tick Complete]
+    E --> E3[Upload Before/After Photos]
+
+    B2 --> F[🧺 Linen View]
+    F --> F1[Auto Linen Requirements]
+    F --> F2[Storage Location Info]
+    F --> F3[Report Linen Missing]
+
+    B2 --> G[ℹ️ Instructions View]
+    G --> G1[Special Instructions (Pets, Eco, etc.)]
+    G --> G2[Wi-Fi Credentials]
+    G --> G3[Emergency Contact]
+
+    %% SCHEDULE
+    C --> C1[Day View: Timeline]
+    C --> C2[Week View: 7-Day Overview]
+
+    %% Day View Cards
+    C1 --> C1a[Schedule Item Card]
+    C1a --> C1a1[Property + Time Slot]
+    C1a --> C1a2[Guest Count + Access Info]
+    C1a --> C1a3[Status: Scheduled/In Progress/Completed]
+
+    %% Actions inside Schedule
+    C1a --> H[▶ Start Cleaning → Timer + Checklist]
+    C1a --> I[✔ Mark Complete → Upload Photos + Close Job]
+    C1a --> J[Tap → Property Details (links back to Properties Section)]
+
+    %% PROFILE
+    D --> D1[Personal Information]
+    D1 --> D1a[Name, Email, Phone]
+    D1 --> D1b[Bank Details]
+    D1 --> D1c[Documents (ID Verification)]
+    D1 --> D1d[Edit Profile Button]
+
+    D --> D2[Availability Settings]
+    D2 --> D2a[Day Toggles (Mon–Sun)]
+    D2 --> D2b[Preferred Working Hours]
+    D2 --> D2c[Mark Unavailable]
+
+    D --> D3[Performance Stats]
+    D3 --> D3a[⭐ Average Rating]
+    D3 --> D3b[🧹 Jobs Completed]
+    D3 --> D3c[⏱️ On-Time Rate]
+    D3 --> D3d[Recent Reviews]
+
+    D --> D4[App Settings]
+    D4 --> D4a[🔔 Notifications Toggle]
+    D4 --> D4b[🌙 Dark Mode Toggle]
+    D4 --> D4c[🚪 Sign Out]
+
 ```
 
 ### **Current Property Owner Workflow (25% Complete)**

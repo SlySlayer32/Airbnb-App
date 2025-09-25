@@ -4,21 +4,15 @@ Use this as your source of truth for where every topic lives. Keep this updated 
 
 ## 📁 Documentation Structure
 
-All documentation has been organized into logical folders under `/docs/`:
+Documentation has been cleaned up to reflect the correct **"Uber for Home Services"** marketplace positioning.
 
 ### 🏢 Business Documentation (`/docs/business/`)
 
-- [EXECUTIVE_SUMMARY.md](business/EXECUTIVE_SUMMARY.md) — High-level value, market, roadmap
-- [COMPLETE_PRODUCT_ROADMAP.md](business/COMPLETE_PRODUCT_ROADMAP.md) — 12-week plan, finances, KPIs
-- [SUCCESS_METRICS_FRAMEWORK.md](business/SUCCESS_METRICS_FRAMEWORK.md) — KPI definitions and targets
-- [VISUAL_WORKFLOW_DIAGRAMS.md](business/VISUAL_WORKFLOW_DIAGRAMS.md) — Visuals for decks and demos
-- [USER_WORKFLOW_ANALYSIS.md](business/USER_WORKFLOW_ANALYSIS.md) — Personas, workflows, gaps
+- [EXECUTIVE_SUMMARY.md](business/EXECUTIVE_SUMMARY.md) — Marketplace positioning, $500B+ market opportunity, hybrid revenue model
 
 ### 🔧 Technical Documentation (`/docs/technical/`)
 
-- [THIRD_PARTY_INTEGRATIONS.md](technical/THIRD_PARTY_INTEGRATIONS.md) — Integration research and priorities
-- [INTERACTIVE_TESTING_RESULTS.md](technical/INTERACTIVE_TESTING_RESULTS.md) — Current app testing status and gaps
-- [DEVELOPMENT_HISTORY.md](technical/DEVELOPMENT_HISTORY.md) — Commit-to-business narrative
+- [DEVELOPMENT_HISTORY.md](technical/DEVELOPMENT_HISTORY.md) — Technical implementation history and business value
 
 ### 📋 Process Documentation (`/docs/process/`)
 
@@ -28,6 +22,10 @@ All documentation has been organized into logical folders under `/docs/`:
 ### 📄 Templates (`/docs/templates/`)
 
 - [GITHUB_ISSUES_TEMPLATE.md](templates/GITHUB_ISSUES_TEMPLATE.md) — Issue templates for organization
+
+### 🗃️ Archive (`/docs/archive/`)
+
+- Outdated property management positioning documents (moved for reference)
 
 ## 📂 Root Level Files (Essential Only)
 
