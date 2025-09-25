@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🔄 **MAJOR: Business Positioning Pivot & Documentation Restructure (September 25, 2025)**
+
+- **CRITICAL POSITIONING CHANGE**: Pivoted from "Airbnb cleaning management software" to "Uber for Home Services marketplace"
+- **Market Opportunity Expansion**: From $2.3B property management market to $500B+ home services market  
+- **Revenue Model Evolution**: From SaaS subscriptions to hybrid commission + subscription marketplace model
+- **Documentation Archive**: Moved all outdated property management docs to `/docs/archive/` for reference
+- **New Executive Summary**: Complete rewrite reflecting marketplace positioning with live GPS tracking advantage
+- **Cleaned Documentation Structure**: Eliminated positioning conflicts, aligned all docs with GitHub issues roadmap
+
+### 💰 **Revenue Model Innovation**
+- **Hybrid Commission Structure**: 15% (non-subscribers) down to 5% (tier 2 subscribers) + monthly subscriptions  
+- **Competitive Advantage**: Lower commissions than TaskRabbit (20%), Handy (20%), Thumbtack (15-28%)
+- **Market Differentiation**: First platform with Uber-style real-time GPS tracking for home services
+- **Dual Revenue Streams**: Predictable subscription income + transaction volume growth
+
 ### 🏗️ **MAJOR: Comprehensive Documentation & GitHub Organization System**
 
 - **Complete Documentation Structure**: Centralized index, contributing guidelines, and stakeholder navigation
