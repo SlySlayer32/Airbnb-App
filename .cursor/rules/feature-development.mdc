@@ -1,0 +1,226 @@
+---
+description: Complete feature implementation process
+globs: ["app/**/*", "components/**/*", "services/**/*", "types/**/*"]
+alwaysApply: false
+---
+
+# Feature Development Process
+
+## New Feature Request Workflow
+
+### 1. Identify Requirements
+
+- Who will use this feature? (property_owner, cleaner, co_host)
+- What permissions are needed? (read-only, modify, delete)  
+- Where should it appear? (dashboard, dedicated screen, modal)
+- Define success in business terms (“Cleaner finishes turnover 15 minutes faster”)
+
+### 2. Check Existing Patterns
+
+- Look for similar features in codebase
+- Identify reusable components to adapt
+- Find service methods handling similar data
+- Note any Supabase table relations or real-time channels to reuse
+
+### 3. Complete Implementation Checklist
+
+- [ ] TypeScript types in `/types/index.ts`
+- [ ] Service methods in `/services/[domain]Service.ts`
+- [ ] Components in `/components/[RoleFeature]Component.tsx`
+- [ ] Screen in `/app/[feature].tsx` if needed
+- [ ] Navigation update in `_layout.tsx` if new route
+- [ ] RoleBasedWrapper for access control
+- [ ] Error handling and loading states
+- [ ] Update CHANGELOG.md with business impact
+- [ ] Write verification steps (manual or automated) covering success + error paths
+- [ ] Update relevant docs (`DOCUMENTATION_INDEX.md`, process guides) when behavior changes
+
+### 4. Security & Permissions
+
+- Validate user roles before operations
+- Use RoleBasedWrapper for UI access control
+- Never expose sensitive data to unauthorized roles
+- Test permission enforcement
+- Document the expected RLS behavior so future queries stay aligned
+
+### 5. Performance Considerations
+
+- Use FlatList for large lists (>10 items)
+- Implement pagination for 50+ records
+- Add loading indicators for >500ms operations
+- Include pull-to-refresh functionality
+
+### 6. Business Rules Validation
+
+- Enforce 4-hour cleaning window (11 AM - 3 PM)
+- Calculate cancellation notice periods
+- Auto-calculate linen requirements from guest count
+- Trigger appropriate notifications for status changes
+- Confirm urgent issues escalate notifications to owners immediately
+
+## Implementation Template
+
+### A. Add Types
+```typescript
+// In /types/index.ts
+export interface NewFeature {
+  id: string;
+  property_id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  status: 'active' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+```
+
+### B. Create Service
+```typescript
+// In /services/newFeatureService.ts
+export const newFeatureService = {
+  async getFeatures(propertyId?: string): Promise<NewFeature[]> {
+    // Implementation
+  },
+  
+  async createFeature(data: Omit<NewFeature, 'id'>): Promise<NewFeature> {
+    // Implementation with notifications
+  },
+  
+  async updateFeature(id: string, updates: Partial<NewFeature>): Promise<NewFeature> {
+    // Implementation
+  }
+};
+```
+
+### C. Create Component
+```tsx
+// In /components/NewFeatureCard.tsx
+interface NewFeatureCardProps {
+  feature: NewFeature;
+  onPress: () => void;
+}
+
+export default function NewFeatureCard({ feature, onPress }: NewFeatureCardProps) {
+  // Follow component template pattern
+}
+```
+
+### D. Add to Screen
+```tsx
+// In /app/features.tsx or existing screen
+import { newFeatureService } from '@/services';
+import NewFeatureCard from '@/components/NewFeatureCard';
+
+export default function FeaturesScreen() {
+  const [features, setFeatures] = useState<NewFeature[]>([]);
+  
+  // Implementation following screen patterns
+}
+```
+
+## Success Criteria
+
+Feature is complete when:
+
+- [ ] Business need is solved in plain English terms
+- [ ] Code follows all existing patterns consistently
+- [ ] Error handling provides user-friendly messages
+- [ ] Loading states are shown appropriately
+- [ ] Role-based access is properly enforced
+- [ ] Business impact is documented in CHANGELOG
+
+## Feature Implementation Checklist
+
+When creating any new feature, automatically verify:
+
+- [ ] **User role permissions checked** - who can access this?
+- [ ] **TypeScript types created** - in `/types/index.ts`
+- [ ] **Service layer methods implemented** - following service patterns
+- [ ] **Proper error handling added** - user-friendly messages
+- [ ] **Loading states included** - visual feedback during operations
+- [ ] **Existing UI patterns followed** - consistent with app design
+- [ ] **Appropriate notifications added** - for status changes
+- [ ] **Related components updated** - maintain consistency
+- [ ] **Role-based access tested** - verify permissions work
+- [ ] **Changes explained in business terms** - what this does for users
+
+## Business Rules Implementation
+
+### Cleaning Window Enforcement
+```typescript
+const validateCleaningTime = (scheduledTime: string) => {
+  const time = new Date(scheduledTime);
+  const hour = time.getHours();
+  
+  if (hour < 11 || hour > 15) {
+    throw new Error('Cleaning must be scheduled between 11 AM and 3 PM');
+  }
+};
+```
+
+### Cancellation Notice Calculation
+```typescript
+const calculateCancellationNotice = (scheduledTime: string): number => {
+  const scheduled = new Date(scheduledTime);
+  const now = new Date();
+  const diffInMs = scheduled.getTime() - now.getTime();
+  return Math.max(0, Math.floor(diffInMs / (1000 * 60 * 60)));
+};
+```
+
+### Linen Requirements Auto-Calculation
+```typescript
+const calculateLinenRequirements = (guestCount: number, propertyType: string): LinenRequirement => {
+  const baseRequirements = {
+    towels_bath: guestCount,
+    towels_hand: guestCount,
+    towels_face: guestCount,
+    pillow_cases: guestCount * 2,
+    kitchen_towels: 2,
+    bath_mats: 1,
+  };
+
+  // Adjust based on property type and guest count
+  if (propertyType === 'villa' && guestCount > 4) {
+    baseRequirements.towels_pool = guestCount;
+    baseRequirements.bath_mats = 2;
+  }
+
+  return baseRequirements;
+};
+```
+
+## Testing Strategy
+
+### Unit Tests
+- Test business logic functions
+- Test service methods
+- Test utility functions
+
+### Integration Tests
+- Test component interactions
+- Test service integration
+- Test navigation flows
+
+### User Acceptance Tests
+- Test from user perspective
+- Verify business requirements
+- Test error scenarios
+
+## Documentation Requirements
+
+### Code Documentation
+- Add JSDoc comments for complex functions
+- Document business rules and constraints
+- Include usage examples
+
+### User Documentation
+- Update CHANGELOG.md
+- Document new features in business terms
+- Include screenshots or demos if helpful
+
+### Technical Documentation
+- Update type definitions
+- Document API changes
+- Update service documentation

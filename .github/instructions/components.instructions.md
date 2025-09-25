@@ -8,6 +8,13 @@ applyTo: 'components/**/*.tsx'
 
 Format: `[Role][Feature]Card` (e.g., `CleanerPropertyCard`, `OwnerScheduleCard`)
 
+## Before You Start A Component
+
+- Write the business problem + role in one sentence (e.g., “Cleaner needs door codes instantly to avoid delays”).
+- List required props, their types, and source services/types.
+- Define states: loading, empty, success, error, permissions.
+- Identify main CTA and any side effects (trigger notification refresh, update cache).
+
 ## Standard Component Template
 
 ```tsx
@@ -114,6 +121,31 @@ const colors = {
 
 const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 };
 const borderRadius = { small: 6, medium: 8, large: 12 };
+
+const layout = {
+  card: {
+    backgroundColor: colors.cardBackground,
+    borderRadius: borderRadius.large,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  sectionHeading: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginVertical: spacing.md,
+  },
+};
 ```
 
 ## Error Handling Rules
@@ -122,3 +154,44 @@ const borderRadius = { small: 6, medium: 8, large: 12 };
 - Use Alert.alert for system messages
 - Provide user-friendly error messages (no technical jargon)
 - Include error recovery options when possible
+
+## Component Patterns by Role
+
+### Cleaner Components
+- Show essential info upfront (access codes, guest count, special areas)
+- Emphasize actionable items (start cleaning, report issues)
+- Hide financial information completely
+- Use clear, simple language
+- Include progress indicators (Arrived → In Progress → Completed) when session timestamps available
+- Display urgent issue banner when notification priority is `urgent`
+
+### Owner Components
+- Show comprehensive property management options
+- Include financial data and analytics
+- Provide scheduling and team management controls
+- Display detailed status information
+- Highlight trends (upcoming cleanings vs. last week, outstanding invoices)
+- Flag compliance risks such as short notice cancellations in red
+
+### Co-Host Components
+- Limited management capabilities
+- Can view but not modify financial data
+- Focus on coordination and communication
+- Show property status without full control
+- Provide quick coordination CTAs (message cleaner, confirm schedule) without exposing billing
+
+## Performance Rules
+
+- Use FlatList for lists >10 items (not ScrollView)
+- Implement React.memo for expensive components
+- Minimize re-renders with proper state management
+- Use lazy loading for heavy components
+
+## Accessibility Rules
+
+- Always include meaningful text for screen readers
+- Use proper touch targets (minimum 44pt)
+- Ensure sufficient color contrast
+- Test with accessibility tools
+- Set `accessibilityRole` and `accessibilityLabel` that state the business action
+- Pair icons with text or provide accessible labels for icon-only buttons

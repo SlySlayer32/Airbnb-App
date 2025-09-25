@@ -4,6 +4,8 @@ applyTo: '**'
 
 # GitHub Pre-Push Workflow & Documentation Updates
 
+**Note**: This workflow now works with Cursor AI. Feature requests should automatically generate GitHub issues via the new GitHub integration workflow.
+
 ## Complete Pre-Push Checklist
 
 **Before every GitHub push, follow this exact sequence to maintain complete AI context and roadmap alignment:**

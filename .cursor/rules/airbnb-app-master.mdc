@@ -1,0 +1,224 @@
+---
+description: Master instructions for Airbnb Cleaning Management Platform
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Airbnb Cleaning Management Platform - Master Instructions
+
+This is the master instruction file that coordinates multiple specialized instruction files using the `applyTo` pattern.
+
+## Core Instructions by File Type
+- General Context: `.cursor/rules/general-context.mdc` - Non-technical founder communication, business rules
+- Components: `.cursor/rules/components.mdc` - Component development patterns and design system
+- Services: `.cursor/rules/services.mdc` - Service layer patterns and business logic
+- Screens: `.cursor/rules/screens.mdc` - Screen development and navigation patterns
+- Types: `.cursor/rules/types.mdc` - TypeScript definitions and interface patterns
+- Debugging: `.cursor/rules/debugging.mdc` - Common issues and debugging guidance
+- Documentation: `.cursor/rules/documentation.mdc` - Changelog and commit standards
+- Feature Development: `.cursor/rules/feature-development.mdc` - Complete feature implementation process
+
+## Application Purpose & Business Context
+
+**Airbnb Property Cleaning Management Platform** - Connects property owners with cleaning teams for scheduling, communication, quality control, and workflow management between guest stays.
+
+## Quick Start Guide for Non-Technical Founders
+
+When starting any new chat with Cursor, mention:
+- What you want to build or fix
+- Which user role it's for (property_owner, cleaner, co_host)
+- Whether it's a new feature, bug fix, or enhancement
+
+Cursor will automatically apply the appropriate instruction files based on what you're working on.
+
+## Current Project Status
+- Platform: Expo React Native + TypeScript + Supabase (Expo SDK 54)
+- Version: v1.3.0 (as of September 23, 2025)
+- Development Stage: Core features 60% complete, ready for enhancement phase
+- User Base: 3 distinct roles with different workflows and permissions
+
+## Environment & Tooling At A Glance
+- Run locally with `npm install` then `npx expo start`
+- Lint with `npm run lint` (ESLint + TypeScript rules)
+- Ensure `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` exist in `.env` before any Supabase calls
+- Mobile testing priority: iOS Simulator (primary), Android Emulator (parity checks), Expo Go for quick smoke tests
+- Preferred debugging helpers: React DevTools, Supabase dashboard SQL editor, Expo network inspector
+- Never commit `.env` files or Supabase service keys
+
+## Delivery Workflow For Every Request
+1. Restate the business goal in plain English to confirm the requirement
+2. Map goal → user role(s) → screens/services/types that need updates
+3. Produce a lightweight implementation plan (types → services → UI → tests → docs)
+4. Execute changes following the specialized instruction files (components/services/screens/etc.)
+5. Validate business rules, run lint/tests, and describe outcomes + remaining risks back to the founder
+
+## Architecture Snapshot
+- **Auth Flow**: Supabase auth → `AuthContext` → role-based routing guard in `app/_layout.tsx`
+- **Primary Tables**: `properties`, `profiles`, `team_members`, `cleaning_sessions`, `cleaning_updates`, `notifications`, `maintenance_tickets`, `linen_requirements`
+- **Realtime Channels**: `cleaning_sessions` (status + timing), `notifications` (priority alerts)
+- **Storage**: Supabase Storage buckets for completion photos (cleaners only)
+- **Key Relationships**: `team_members` links users ↔ properties; `cleaning_updates` reference `cleaning_sessions`; notifications target role-specific audiences
+
+## Quality Gates Before Handing Work Back
+- All async flows include loading, success, empty, and error states
+- Role-based access confirmed both in UI (`RoleBasedWrapper`) and services (Supabase RLS aware)
+- Business rules enforced: cleaning window, cancellation notice hours, linen scaling, urgent escalation
+- Tests or manual verification notes documented for success + failure paths
+- CHANGELOG entry drafted for any user-facing change with business impact summary
+- Documentation pointers updated (e.g., `DOCUMENTATION_INDEX.md` or relevant guide) if behavior changes
+
+## Key Success Metrics
+The instructions are successful when:
+1. Business features can be described naturally and get working code
+2. New code automatically follows all existing patterns
+3. Technical details are handled automatically without user awareness
+4. The app maintains consistency as new features are added
+5. Errors are explained and fixed in terms the user understands
+6. Every request gets complete working implementation
+
+Remember: The user has built their entire app through natural language conversations with AI. Your job is to be their complete technical co-founder who handles all complexity while they focus on growing their business.
+
+## User Roles & Business Capabilities
+
+### **property_owner** (Primary Revenue Generator)
+- Manages multiple Airbnb properties
+- Schedules cleanings between guest stays
+- Views cleaning reports and photos
+- Handles billing and payments
+- Sets property-specific cleaning requirements
+- Receives notifications about issues
+
+### **cleaner** (Service Provider)
+- Receives cleaning assignments
+- Updates cleaning progress in real-time
+- Reports maintenance issues
+- Accesses property details (codes, WiFi, special instructions)
+- Cannot see financial information
+- Submits completion photos and notes
+
+### **co_host** (Limited Management)
+- Limited property management capabilities
+- Can view reports but cannot modify billing
+- Helps coordinate schedules
+- Cannot add/remove team members
+
+## Critical Business Rules
+
+### Cleaning Window Constraints
+- Cleanings MUST happen between checkout (11 AM) and checkin (3 PM)
+- This 4-hour window is sacred - violations cause guest conflicts
+- System should prevent scheduling outside this window
+
+### Cancellation Notice Policy
+- 24-hour cancellation notice required for standard notice
+- Less than 24 hours = "short notice" (flagged in red)
+- Short notice cancellations may incur fees
+- Always calculate and display notice period in hours
+
+### Linen Requirements Scaling
+- Linen needs scale directly with guest count
+- More guests = more towels, sheets, pillowcases needed
+- System auto-calculates based on guest_count
+- Essential for cleaner preparation and time estimation
+
+### Urgent Issue Handling
+- Urgent issues (broken locks, flooding, etc.) trigger immediate notifications
+- Property owners get instant alerts
+- Cleaners can escalate to urgent status
+- Different notification priority levels
+
+### Financial Privacy
+- Cleaners never see pricing, rates, or financial data
+- Only completion status and basic property details
+- Owner/co-host roles handle all financial aspects
+
+## Technical Stack & Architecture
+
+### Core Technologies
+- Frontend: Expo SDK 54 + React Native + TypeScript
+- **Backend**: Supabase (PostgreSQL + Auth + Realtime + Storage)
+- **Navigation**: Expo Router (file-based routing with typed routes)
+- **Styling**: React Native StyleSheet (no external CSS libraries)
+- **Icons**: @expo/vector-icons (Ionicons only - consistent across app)
+- **State**: React Context for auth, local useState for UI
+
+## Project Structure & File Organization
+```
+/app                    # Expo Router screens
+  /auth                # Authentication screens (login, register, forgot-password)
+  /_layout.tsx         # Root layout with AuthProvider and navigation
+  /index.tsx           # Dashboard (role-specific content)
+  /properties.tsx      # Property management
+  /schedule.tsx        # Cleaning schedules
+  /team.tsx            # Team member management
+  /invoices.tsx        # Financial management
+  /maintenance.tsx     # Maintenance tickets
+  /reports.tsx         # Performance reports
+  /profile.tsx         # User profile settings
+  /onboarding.tsx      # First-time user setup
+
+/components             # Reusable UI components
+  /CleanerPropertyCard.tsx    # Property view for cleaners
+  /OwnerPropertyCard.tsx      # Property view for owners
+  /RoleBasedWrapper.tsx       # Access control component
+  /QuickActions.tsx           # Dashboard quick action buttons
+  /DashboardStats.tsx         # Statistics display
+  [Other role-specific components]
+
+/contexts              # React contexts
+  /AuthContext.tsx     # Authentication & user state
+
+/services             # Business logic & Supabase queries
+  /cleaningSessionService.ts  # Cleaning workflow
+  /propertyService.ts         # Property management
+  /notificationService.ts     # Alert system
+  /cleaningUpdateService.ts   # Progress tracking
+  /index.ts                   # Service exports
+
+/types                # TypeScript definitions
+  /index.ts           # All type definitions
+
+/data                 # Mock data & constants
+  /mockData.ts        # Basic demo data
+  /mockEnhancedData.ts # Advanced demo scenarios
+
+/lib                  # Utilities
+  /supabase.ts        # Supabase client configuration
+
+/shims                # Platform compatibility
+  /node-fetch.js      # Supabase React Native compatibility
+```
+
+## Code Quality Standards
+
+### Required for All Code
+1. **No console.log in production code** - use proper error handling
+2. **Always include TypeScript types** - no `any` types allowed
+3. **Handle all possible states** - loading, error, empty, success
+4. **Follow existing naming conventions exactly**
+5. **Include helpful comments** only for complex business logic
+6. **Use existing colors and spacing** from design system
+7. **Test both success and error scenarios**
+
+### Code Review Checklist
+Before submitting any code, verify:
+- [ ] All TypeScript errors resolved
+- [ ] Error handling implemented for all async operations
+- [ ] Loading states shown during async operations
+- [ ] User feedback provided for all actions
+- [ ] Existing patterns followed consistently
+- [ ] No hardcoded values (use constants)
+- [ ] Responsive design works on different screen sizes
+- [ ] Role-based access control implemented where needed
+
+## Success Criteria
+
+The instructions are successful when:
+1. **Business features can be described naturally** and get working code
+2. **New code automatically follows all existing patterns**
+3. **Technical details are handled automatically** without user awareness
+4. **The app maintains consistency** as new features are added
+5. **Errors are explained and fixed** in terms the user understands
+6. **Every request gets complete working implementation**
+
+Remember: The user has built their entire app through natural language conversations with AI. Your job is to be their complete technical co-founder who handles all the complexity while they focus on growing their business.

@@ -10,6 +10,8 @@ applyTo: 'services/**/*.ts'
 - All Supabase queries go through services (never direct in components)
 - Always handle errors and return typed data
 - Include notification triggers for important actions
+- Document table name and RLS expectation at top of file
+- Record required filters enforcing role/team membership
 
 ## Standard Service Template
 
@@ -17,8 +19,10 @@ applyTo: 'services/**/*.ts'
 import { supabase } from '@/lib/supabase';
 import { Alert } from 'react-native';
 import { SomeType } from '@/types';
+import { ensureRole, ensureCanEdit } from '@/services/security';
 
 export const domainService = {
+  // Table: public.table_name (RLS: user must be assigned via team_members)
   async getData(filters?: any): Promise<SomeType[]> {
     try {
       const { data, error } = await supabase
@@ -38,6 +42,7 @@ export const domainService = {
 
   async createItem(itemData: Omit<SomeType, 'id'>): Promise<SomeType> {
     try {
+      await ensureRole(['property_owner', 'co_host']);
       if (!itemData.required_field) {
         throw new Error('Required field is missing');
       }
@@ -60,6 +65,7 @@ export const domainService = {
 
   async updateItem(id: string, updates: Partial<SomeType>): Promise<SomeType> {
     try {
+      await ensureCanEdit(id);
       const { data, error } = await supabase
         .from('table_name')
         .update({ ...updates, updated_at: new Date().toISOString() })
@@ -89,6 +95,10 @@ const calculateCancellationNotice = (scheduledTime: string): number => {
   return Math.max(0, Math.floor(diffInMs / (1000 * 60 * 60)));
 };
 
+const categorizeNotice = (hours: number): 'on_time' | 'short_notice' => (
+  hours < 24 ? 'short_notice' : 'on_time'
+);
+
 // Linen requirements calculation
 const calculateLinenRequirements = (guestCount: number): LinenRequirement => ({
   towels_bath: guestCount,
@@ -97,6 +107,16 @@ const calculateLinenRequirements = (guestCount: number): LinenRequirement => ({
   kitchen_towels: 2,
   bath_mats: 1,
 });
+
+const withRetry = async <T>(operation: () => Promise<T>, retries = 2): Promise<T> => {
+  try {
+    return await operation();
+  } catch (error) {
+    if (retries === 0) throw error;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return withRetry(operation, retries - 1);
+  }
+};
 ```
 
 ## Notification Integration

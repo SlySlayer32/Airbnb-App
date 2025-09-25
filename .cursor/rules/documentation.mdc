@@ -1,0 +1,198 @@
+---
+description: Changelog and commit standards
+globs: ["CHANGELOG.md", "README.md", "docs/**/*.md"]
+alwaysApply: false
+---
+
+# Documentation Standards
+
+## Changelog Documentation Standards
+
+### For Every Significant Change
+
+Add an entry to CHANGELOG.md following this format:
+
+```markdown
+## [vX.X.X] - YYYY-MM-DD - Brief Description
+
+### 🏠 New Features (if applicable)
+- **Feature Name**: Description of feature and business value
+
+### 🐛 Fixed Issues (if applicable)  
+- **Issue Description**: How it was resolved and business impact
+
+### 🔧 Technical Improvements (if applicable)
+- **Improvement Name**: What changed and why it matters
+
+**Business Impact**: Explain how this change benefits users and the business
+
+**Pull Request/Commit**: Reference to PR or commit hash
+```
+
+## Commit Message Format
+
+`[TYPE]: Brief description of what changed and why`
+
+Types:
+- FEATURE: New functionality
+- FIX: Bug fixes  
+- DOCS: Documentation changes
+- REFACTOR: Code changes that neither fix bugs nor add features
+- PERF: Performance improvements
+
+## Examples
+
+- "FEATURE: Add real-time notifications for cleaning updates"
+- "FIX: Resolve linen calculation for large properties"
+- "DOCS: Update API documentation for cleaner endpoints"
+
+## Documentation Structure
+
+### Business Documentation
+- Focus on user value and business impact
+- Use plain English, avoid technical jargon
+- Include screenshots or demos when helpful
+- Explain workflows from user perspective
+
+### Technical Documentation
+- Include code examples and patterns
+- Document API changes and new endpoints
+- Explain architectural decisions
+- Include troubleshooting guides
+
+### User Documentation
+- Step-by-step instructions
+- Screenshots and visual guides
+- FAQ and common issues
+- Video tutorials when appropriate
+
+## Documentation Maintenance
+
+### Regular Updates
+- Update docs with every feature release
+- Review and update quarterly
+- Remove outdated information
+- Keep examples current
+- Mirror updates between `.cursor/rules` and `.github/instructions` so Cursor and GitHub stay in sync
+
+### Quality Checklist
+- [ ] Information is accurate and up-to-date
+- [ ] Easy to understand for target audience
+- [ ] Links work correctly
+- [ ] Consistent with other documentation
+- [ ] Follows project documentation standards
+
+## AI Context Documentation
+
+### Implementation Context
+```markdown
+## Change: [Brief Description]
+**Date**: [Current Date]
+**Affected Roles**: [property_owner/cleaner/co_host]
+**Files Modified**: [List of key files]
+**Business Metric Impacted**: [e.g., turnover time, cancellation rate]
+
+### Business Problem Solved
+[Explain the business need this addresses]
+
+### Technical Approach  
+[How was this implemented - key decisions and patterns used]
+
+### Future Considerations
+[What to watch out for, potential improvements, or next steps]
+
+### Testing Notes
+[How this was tested and what to verify in future changes]
+**Founder-Friendly Summary**: [One-sentence update for investor/stakeholder briefing]
+```
+
+### Example Context Record
+
+```markdown
+## Change: Real-time Cleaning Notifications
+**Date**: September 23, 2025
+**Affected Roles**: property_owner, cleaner
+**Files Modified**: services/notificationService.ts, components/NotificationBadge.tsx, app/_layout.tsx
+
+### Business Problem Solved
+Property owners needed instant updates when cleaners start/complete work to manage multiple properties efficiently and respond to issues quickly.
+
+### Technical Approach
+- Used Supabase real-time subscriptions on cleaning_sessions table
+- Created NotificationBadge component with unread count state management
+- Implemented notification service with background task handling
+- Added notification permissions handling in app startup
+
+### Future Considerations  
+- May need rate limiting if high-frequency updates cause performance issues
+- Consider adding notification preferences/settings screen
+- Plan for offline notification queueing when connection poor
+
+### Testing Notes
+- Test real-time updates with multiple devices
+- Verify notification permissions on iOS/Android
+- Check background app behavior with notifications
+```
+
+## Documentation Templates
+
+### Feature Documentation Template
+```markdown
+# [Feature Name]
+
+## Overview
+Brief description of what this feature does and why it's valuable.
+
+## User Roles
+- **property_owner**: [What they can do]
+- **cleaner**: [What they can do]
+- **co_host**: [What they can do]
+
+## How to Use
+1. Step one
+2. Step two
+3. Step three
+
+## Business Impact
+- [Benefit 1]
+- [Benefit 2]
+- [Benefit 3]
+**Key Metric Shift**: [What measurement moves and by how much]
+
+## Technical Details
+- [Technical note 1]
+- [Technical note 2]
+**RLS/Permission Notes**: [Clarify who can access new data]
+```
+
+### Bug Fix Documentation Template
+```markdown
+# [Bug Description]
+
+## Problem
+What was wrong and how it affected users.
+
+## Solution
+How the issue was fixed.
+
+## Testing
+How the fix was verified to work.
+
+## Prevention
+How to avoid this issue in the future.
+```
+
+## Documentation Review Process
+
+### Before Publishing
+- [ ] Content is accurate and complete
+- [ ] Language is clear and appropriate for audience
+- [ ] Examples work and are up-to-date
+- [ ] Links are valid and working
+- [ ] Formatting is consistent
+
+### After Publishing
+- [ ] Monitor for user feedback
+- [ ] Update based on common questions
+- [ ] Keep examples current with code changes
+- [ ] Archive outdated information

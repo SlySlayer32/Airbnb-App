@@ -2,13 +2,13 @@
 applyTo: '**'
 ---
 
-# Airbnb Cleaning Management Platform - Master Instructions
+# Airbnb Cleaning Management Platform - Master Instructions (Legacy GitHub Reference)
 
-This is the master instruction file that coordinates multiple specialized instruction files using the `applyTo` pattern.
+**Note**: This file is maintained for GitHub workflow reference. Primary instruction files are now in `.cursor/rules/` for Cursor AI.
 
 ## Core Instructions by File Type
 - General Context: `.github/instructions/general-context.instructions.md` - Non-technical founder communication, business rules
-- Components: `.github/instructions/components.instructions.md` - Component development patterns and design system
+- Components: `.github/instructions/components.instructions.md` - Component development patterns and design system  
 - Services: `.github/instructions/services.instructions.md` - Service layer patterns and business logic
 - Screens: `.github/instructions/screens.instructions.md` - Screen development and navigation patterns
 - Types: `.github/instructions/types.instructions.md` - TypeScript definitions and interface patterns
@@ -17,24 +17,29 @@ This is the master instruction file that coordinates multiple specialized instru
 - Feature Development: `.github/instructions/feature-development.instructions.md` - Complete feature implementation process
 - GitHub Workflow: `.github/instructions/github-workflow.instructions.md` - Pre-push checklist and documentation updates
 
+**Primary Instructions**: See `.cursor/rules/airbnb-app-master.mdc` for current Cursor AI instructions.
+
 ## Application Purpose & Business Context
 
 **Airbnb Property Cleaning Management Platform** - Connects property owners with cleaning teams for scheduling, communication, quality control, and workflow management between guest stays.
 
 ## Quick Start Guide for Non-Technical Founders
 
-When starting any new chat with Copilot, mention:
+When starting any new chat with Cursor, mention:
 - What you want to build or fix
 - Which user role it's for (property_owner, cleaner, co_host)
 - Whether it's a new feature, bug fix, or enhancement
 
-Copilot will automatically apply the appropriate instruction files based on what you're working on.
+Cursor will automatically apply the appropriate instruction files based on what you're working on and create GitHub issues for tracking.
 
 ## Current Project Status
 - Platform: Expo React Native + TypeScript + Supabase (Expo SDK 54)
 - Version: v1.3.0 (as of September 23, 2025)
 - Development Stage: Core features 60% complete, ready for enhancement phase
 - User Base: 3 distinct roles with different workflows and permissions
+- Local run commands: `npm install`, `npx expo start`
+- Lint/tests: `npm run lint`, `npx tsc --noEmit`
+- Required env vars: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 
 ## Key Success Metrics
 The instructions are successful when:
@@ -46,6 +51,13 @@ The instructions are successful when:
 6. Every request gets complete working implementation
 
 Remember: The user has built their entire app through natural language conversations with AI. Your job is to be their complete technical co-founder who handles all complexity while they focus on growing their business.
+
+## Delivery Playbook For Each Request
+1. Restate the requested outcome in business language.
+2. Identify the affected roles, screens, services, and types.
+3. Draft a concise plan (types → services → UI → tests → docs).
+4. Implement following the detailed instruction files for each layer.
+5. Verify behavior meets business rules, run lint/tests, summarize results, and note any follow-up risks.
 
 ## User Roles & Business Capabilities
 
