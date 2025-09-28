@@ -4,7 +4,7 @@ export interface CleaningUpdate {
   id: string;
   cleaning_session_id: string;
   user_id: string;
-  update_type: 'status' | 'issue' | 'note' | 'completion' | 'arrival';
+  update_type: 'status' | 'issue' | 'note' | 'completion' | 'arrival' | 'session_start' | 'session_pause' | 'session_resume' | 'session_complete';
   message: string;
   photo_urls?: string[];
   requires_response: boolean;
@@ -17,7 +17,7 @@ export interface CleaningUpdate {
 export const cleaningUpdateService = {
   // Add an update/note to a cleaning session
   async addUpdate(sessionId: string, updateData: {
-    update_type: 'status' | 'issue' | 'note' | 'completion' | 'arrival';
+    update_type: 'status' | 'issue' | 'note' | 'completion' | 'arrival' | 'session_start' | 'session_pause' | 'session_resume' | 'session_complete';
     message: string;
     photo_urls?: string[];
     requires_response?: boolean;
@@ -102,6 +102,47 @@ export const cleaningUpdateService = {
       update_type: 'note',
       message: noteData.message,
       photo_urls: noteData.photo_urls,
+      requires_response: false,
+      is_urgent: false
+    });
+  },
+
+  // Record session lifecycle events
+  async recordSessionStart(sessionId: string, propertyName?: string): Promise<CleaningUpdate> {
+    return this.addUpdate(sessionId, {
+      update_type: 'session_start',
+      message: `Cleaning session started${propertyName ? ` at ${propertyName}` : ''}`,
+      requires_response: false,
+      is_urgent: false
+    });
+  },
+
+  async recordSessionPause(sessionId: string, reason?: string): Promise<CleaningUpdate> {
+    return this.addUpdate(sessionId, {
+      update_type: 'session_pause',
+      message: `Cleaning session paused${reason ? ` - ${reason}` : ''}`,
+      requires_response: false,
+      is_urgent: false
+    });
+  },
+
+  async recordSessionResume(sessionId: string): Promise<CleaningUpdate> {
+    return this.addUpdate(sessionId, {
+      update_type: 'session_resume',
+      message: 'Cleaning session resumed',
+      requires_response: false,
+      is_urgent: false
+    });
+  },
+
+  async recordSessionComplete(sessionId: string, propertyName?: string, notes?: string): Promise<CleaningUpdate> {
+    const message = notes 
+      ? `Cleaning completed${propertyName ? ` at ${propertyName}` : ''} - ${notes}`
+      : `Cleaning completed${propertyName ? ` at ${propertyName}` : ''}`;
+    
+    return this.addUpdate(sessionId, {
+      update_type: 'session_complete',
+      message,
       requires_response: false,
       is_urgent: false
     });

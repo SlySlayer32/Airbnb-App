@@ -9,10 +9,15 @@ Documentation has been cleaned up to reflect the correct **"Uber for Home Servic
 ### 🏢 Business Documentation (`/docs/business/`)
 
 - [EXECUTIVE_SUMMARY.md](business/EXECUTIVE_SUMMARY.md) — Marketplace positioning, $500B+ market opportunity, hybrid revenue model
+- [FOUNDER_EXECUTIVE_SUMMARY.md](business/FOUNDER_EXECUTIVE_SUMMARY.md) — Non-technical Phase 1 completion summary for stakeholder communication
+- [GITHUB_ISSUES_STATUS.md](business/GITHUB_ISSUES_STATUS.md) — Development progress tracking and issue status
+- [FOUNDER_ACTION_CHECKLIST.md](business/FOUNDER_ACTION_CHECKLIST.md) — Simple steps to close completed GitHub issues
 
 ### 🔧 Technical Documentation (`/docs/technical/`)
 
 - [DEVELOPMENT_HISTORY.md](technical/DEVELOPMENT_HISTORY.md) — Technical implementation history and business value
+- [PHASE_1_COMPLETION_REPORT.md](technical/PHASE_1_COMPLETION_REPORT.md) — Comprehensive Phase 1 technical completion summary
+- [DEVELOPER_HANDOFF_GUIDE.md](technical/DEVELOPER_HANDOFF_GUIDE.md) — Technical onboarding guide for future developers
 
 ### 📋 Process Documentation (`/docs/process/`)
 

@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, FlatList, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { cleaningUpdateService } from '@/services';
-
-interface CleaningUpdate {
-  id: string;
-  cleaning_session_id: string;
-  user_id: string;
-  update_type: 'status' | 'issue' | 'note' | 'completion' | 'arrival';
-  message: string;
-  photo_urls?: string[];
-  requires_response: boolean;
-  is_urgent: boolean;
-  created_at: string;
-  user_name?: string;
-  user_role?: string;
-}
+import { cleaningUpdateService, CleaningUpdate } from '@/services/cleaningUpdateService';
 
 interface CleaningUpdatesProps {
   sessionId: string;

@@ -79,6 +79,21 @@ export interface CleaningTask {
   checklist: ChecklistItem[];
 }
 
+// Dashboard metadata interface for enhanced session data
+export interface DashboardMetadata {
+  time_until_start_minutes: number;
+  cleaning_window_status: 'valid' | 'outside_window';
+  is_within_cleaning_window: boolean;
+  is_overdue: boolean;
+  has_started: boolean;
+  has_completed: boolean;
+  expected_completion_time: string;
+  cleaning_window_start: string;
+  cleaning_window_end: string;
+  status_indicator: 'completed' | 'in_progress' | 'overdue' | 'starting_soon' | 'scheduled';
+  priority_level: 'urgent' | 'high' | 'medium' | 'normal';
+}
+
 // Enhanced cleaning session interface for the new workflow
 export interface CleaningSession {
   id: string;
@@ -109,6 +124,15 @@ export interface CleaningSession {
   cleaner_started_at?: string;
   cleaner_completed_at?: string;
   actual_guest_count?: number;
+  
+  // Pause/Resume tracking
+  cleaner_paused_at?: string;
+  cleaner_resumed_at?: string;
+  total_break_minutes?: number;
+  is_currently_paused?: boolean;
+  
+  // Dashboard-specific metadata (only present in getTodaySessions response)
+  dashboard_metadata?: DashboardMetadata;
   
   // Relations
   properties?: { name: string; owner_id: string };

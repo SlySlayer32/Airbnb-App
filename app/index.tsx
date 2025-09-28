@@ -5,10 +5,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import DashboardStats from '@/components/DashboardStats';
 import QuickActions from '@/components/QuickActions';
 import RoleBasedWrapper from '@/components/RoleBasedWrapper';
+import CleanerDashboard from '@/components/CleanerDashboard';
 
 export default function Dashboard() {
   const { profile } = useAuth();
 
+  // Show cleaner dashboard for cleaner role
+  if (profile?.role === 'cleaner') {
+    return <CleanerDashboard />;
+  }
+
+  // Show owner/co-host dashboard for other roles
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -17,7 +24,6 @@ export default function Dashboard() {
         </Text>
         <Text style={styles.subtitle}>
           {profile?.role === 'property_owner' && 'Manage your properties'}
-          {profile?.role === 'cleaner' && 'Your cleaning schedule'}
           {profile?.role === 'co_host' && 'Property coordination'}
         </Text>
         <TouchableOpacity 
@@ -27,29 +33,16 @@ export default function Dashboard() {
           <Text style={styles.profileButtonText}>View Profile</Text>
         </TouchableOpacity>
       </View>
-      <RoleBasedWrapper allowedRoles={['property_owner', 'co_host']}>
-        <DashboardStats />
-      </RoleBasedWrapper>
       
+      <DashboardStats />
       <QuickActions />
       
-      <RoleBasedWrapper allowedRoles={['property_owner', 'co_host']}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <Text style={styles.activityText}>
-            Welcome to your dashboard! Start by adding your first property.
-          </Text>
-        </View>
-      </RoleBasedWrapper>
-
-      <RoleBasedWrapper allowedRoles={['cleaner']}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Today's Schedule</Text>
-          <Text style={styles.activityText}>
-            No cleanings scheduled for today. Check your schedule for upcoming tasks.
-          </Text>
-        </View>
-      </RoleBasedWrapper>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Recent Activity</Text>
+        <Text style={styles.activityText}>
+          Welcome to your dashboard! Start by adding your first property.
+        </Text>
+      </View>
     </ScrollView>
   );
 }
