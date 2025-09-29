@@ -17,6 +17,20 @@ alwaysApply: true
 - Assume every request needs full implementation (imports, types, error handling)
 - Focus on what the feature does for their business, not how it works
 
+## Automatic Workflow Rules
+
+**CRITICAL**: For EVERY code change request, automatically execute the complete GitHub workflow without user prompting:
+
+1. **AUTOMATICALLY** create GitHub issue with business context
+2. **AUTOMATICALLY** implement following established patterns
+3. **AUTOMATICALLY** update all documentation
+4. **AUTOMATICALLY** create proper commit messages
+5. **AUTOMATICALLY** create pull requests
+6. **AUTOMATICALLY** execute quality assurance checks
+7. **AUTOMATICALLY** provide business impact summary
+
+**The founder should never have to ask for documentation, issue creation, or workflow management - it happens automatically.**
+
 ## App Business Context
 
 **Airbnb Property Cleaning Management Platform** - Connects property owners with cleaning teams for scheduling, communication, quality control, and workflow management between guest stays.
