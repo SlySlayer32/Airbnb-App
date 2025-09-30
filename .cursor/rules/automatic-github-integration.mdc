@@ -1,3 +1,8 @@
+---
+description: "Automatic GitHub issue creation and management for all code changes"
+auto_attachments: ["**/*.tsx", "**/*.ts", "**/*.md", "**/*.json", "**/*.js"]
+---
+
 # Automatic GitHub Integration
 
 ## 🚀 AUTOMATIC GITHUB WORKFLOW

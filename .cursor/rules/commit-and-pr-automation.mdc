@@ -1,3 +1,8 @@
+---
+description: "Automatic commit message formatting and pull request creation for version control"
+auto_attachments: ["**/*.tsx", "**/*.ts", "**/*.md", "**/*.json", "**/*.js", ".github/**/*"]
+---
+
 # Commit and Pull Request Automation
 
 ## 🚀 AUTOMATIC VERSION CONTROL WORKFLOW
