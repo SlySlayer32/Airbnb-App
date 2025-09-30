@@ -61,22 +61,106 @@ export const cleaningSessionService = {
     return this.updateSessionStatus(sessionId, updates);
   },
 
-  // Start a cleaning session (cleaner arrives)
+  // Start a cleaning session (cleaner arrives) with business rule validation
   async startCleaning(sessionId: string): Promise<CleaningSession> {
-    const now = new Date().toISOString();
+    try {
+      // 1. Fetch current session with property data
+      const { data: session, error: fetchError } = await supabase
+        .from('cleaning_sessions')
+        .select('*, properties(*)')
+        .eq('id', sessionId)
+        .single();
+      
+      if (fetchError || !session) throw new Error('Session not found');
+      
+      // 2. Validate business rules
+      this.validateSessionStart(session, new Date());
+      
+      const now = new Date().toISOString();
+      
+      const updatedSession = await this.updateSessionStatus(sessionId, {
+        status: 'in_progress',
+        cleaner_arrived_at: now,
+        cleaner_started_at: now,
+        is_currently_paused: false
+      });
+
+      // Record the session start event
+      const { cleaningUpdateService } = await import('./cleaningUpdateService');
+      await cleaningUpdateService.recordSessionStart(sessionId, session.properties?.name);
+
+      return updatedSession;
+    } catch (error) {
+      console.error('startCleaning error:', error);
+      throw error;
+    }
+  },
+
+  // Validate session start business rules
+  validateSessionStart(session: any, currentTime: Date): void {
+    // Rule 1: Must be within 11 AM - 3 PM cleaning window
+    const hour = currentTime.getHours();
+    if (hour < 11 || hour >= 15) {
+      throw new Error('Cleaning sessions must start between 11:00 AM and 3:00 PM');
+    }
     
-    const session = await this.updateSessionStatus(sessionId, {
-      status: 'in_progress',
-      cleaner_arrived_at: now,
-      cleaner_started_at: now,
-      is_currently_paused: false
-    });
+    // Rule 2: Session must be in correct status
+    if (!['scheduled', 'confirmed'].includes(session.status)) {
+      throw new Error('Session cannot be started from current status');
+    }
+    
+    // Rule 3: Not already started
+    if (session.cleaner_started_at) {
+      throw new Error('Session has already been started');
+    }
+    
+    // Rule 4: Not too early (optional buffer)
+    const sessionStart = new Date(session.scheduled_cleaning_time);
+    const bufferMinutes = 30;
+    if (currentTime < new Date(sessionStart.getTime() - bufferMinutes * 60000)) {
+      throw new Error('Cannot start session more than 30 minutes early');
+    }
+  },
 
-    // Record the session start event
-    const { cleaningUpdateService } = await import('./cleaningUpdateService');
-    await cleaningUpdateService.recordSessionStart(sessionId, session.properties?.name);
+  // Validate session completion business rules
+  validateSessionCompletion(session: any, completionData: any): void {
+    // Rule 1: Session must be in progress
+    if (session.status !== 'in_progress') {
+      throw new Error('Can only complete sessions that are in progress');
+    }
+    
+    // Rule 2: Minimum duration check (prevents accidental completions)
+    const minDuration = 30; // minutes
+    const elapsed = (Date.now() - new Date(session.cleaner_started_at).getTime()) / (1000 * 60);
+    if (elapsed < minDuration) {
+      throw new Error('Session must run for at least 30 minutes before completion');
+    }
+    
+    // Rule 3: Photo requirements
+    if (session.photos_required && !completionData.photosComplete) {
+      throw new Error('Photos are required before session can be completed');
+    }
+    
+    // Rule 4: Checklist requirements
+    if (session.checklist_required && !completionData.checklistComplete) {
+      throw new Error('Checklist must be completed before session can be finished');
+    }
+  },
 
-    return session;
+  // Alias for startCleaning to match issue specification
+  async startSession(sessionId: string): Promise<CleaningSession> {
+    return this.startCleaning(sessionId);
+  },
+
+  // Alias for completeCleaning to match issue specification  
+  async completeSession(sessionId: string, completionData: {
+    photosComplete?: boolean;
+    checklistComplete?: boolean;
+    notes?: string;
+    issues?: string[];
+    nextCleaningNotes?: string;
+  }): Promise<CleaningSession> {
+    return this.completeCleaning(sessionId, completionData);
   },
 
   // Pause an active cleaning session
@@ -155,20 +239,28 @@ export const cleaningSessionService = {
     return session;
   },
 
-  // Complete a cleaning session
+  // Complete a cleaning session with business rule validation
   async completeCleaning(sessionId: string, completionData: {
     actual_guest_count?: number;
     notes?: string;
     photos?: string[];
+    photosComplete?: boolean;
+    checklistComplete?: boolean;
   }): Promise<CleaningSession> {
-    const now = new Date().toISOString();
-    
-    // Get current session to calculate final break time if paused
-    const { data: currentSession } = await supabase
-      .from('cleaning_sessions')
-      .select('*')
-      .eq('id', sessionId)
-      .single();
+    try {
+      const now = new Date().toISOString();
+      
+      // Get current session to calculate final break time if paused
+      const { data: currentSession, error: fetchError } = await supabase
+        .from('cleaning_sessions')
+        .select('*')
+        .eq('id', sessionId)
+        .single();
+
+      if (fetchError || !currentSession) throw new Error('Session not found');
+      
+      // Validate business rules
+      this.validateSessionCompletion(currentSession, completionData);
 
     let totalBreakMinutes = currentSession?.total_break_minutes || 0;
     
@@ -206,6 +298,10 @@ export const cleaningSessionService = {
     }
 
     return session;
+    } catch (error) {
+      console.error('completeCleaning error:', error);
+      throw error;
+    }
   },
 
   // Get today's sessions for cleaner dashboard with enhanced metadata
