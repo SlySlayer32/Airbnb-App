@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { CleaningSession } from '@/types';
 import { cleaningSessionService } from '@/services';
+import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
 import CleanerTopBar from './CleanerTopBar';
 import CleanerStatusBanner, { CleanerStatus } from './CleanerStatusBanner';
 import CleanerNextJobCard from './CleanerNextJobCard';
@@ -11,6 +12,7 @@ export default function CleanerDashboard() {
   const [sessions, setSessions] = useState<CleaningSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [realtimeConnected, setRealtimeConnected] = useState(false);
 
   // Determine dashboard state
   const activeSession = sessions.find(s => s.status === 'in_progress');
@@ -167,13 +169,89 @@ export default function CleanerDashboard() {
     Alert.alert('Add Update', 'Update and photo functionality will be implemented in Phase 2');
   };
 
+  // Real-time subscription handlers
+  const handleSessionUpdate = useCallback((updatedSession: CleaningSession) => {
+    console.log('Real-time session update received:', updatedSession);
+    setSessions(prevSessions => {
+      const updatedSessions = prevSessions.map(session => 
+        session.id === updatedSession.id ? updatedSession : session
+      );
+      
+      // If this was a new session, add it
+      if (!prevSessions.find(s => s.id === updatedSession.id)) {
+        updatedSessions.push(updatedSession);
+      }
+      
+      return updatedSessions;
+    });
+  }, []);
+
+  const handleSessionInsert = useCallback((newSession: CleaningSession) => {
+    console.log('Real-time new session received:', newSession);
+    setSessions(prevSessions => {
+      // Check if session already exists to avoid duplicates
+      if (prevSessions.find(s => s.id === newSession.id)) {
+        return prevSessions;
+      }
+      return [...prevSessions, newSession];
+    });
+  }, []);
+
+  const handleSessionDelete = useCallback((sessionId: string) => {
+    console.log('Real-time session deletion received:', sessionId);
+    setSessions(prevSessions => prevSessions.filter(s => s.id !== sessionId));
+  }, []);
+
+  const handleUpdateInsert = useCallback((newUpdate: any) => {
+    console.log('Real-time new update received:', newUpdate);
+    // For now, just refresh the sessions to get updated data
+    // In a more sophisticated implementation, we'd update specific session data
+    loadTodaySessions();
+  }, []);
+
+  const handleRealtimeError = useCallback((error: Error) => {
+    console.error('Real-time connection error:', error);
+    setRealtimeConnected(false);
+    // Don't show error to user unless it's critical - real-time is enhancement
+  }, []);
+
+  // Setup real-time subscriptions
+  useEffect(() => {
+    const setupRealtime = async () => {
+      try {
+        const config: RealtimeSubscriptionConfig = {
+          onSessionUpdate: handleSessionUpdate,
+          onSessionInsert: handleSessionInsert,
+          onSessionDelete: handleSessionDelete,
+          onUpdateInsert: handleUpdateInsert,
+          onError: handleRealtimeError
+        };
+
+        await realtimeService.subscribe(config);
+        setRealtimeConnected(true);
+        console.log('Real-time subscriptions established for dashboard');
+      } catch (error) {
+        console.error('Failed to setup real-time subscriptions:', error);
+        setRealtimeConnected(false);
+      }
+    };
+
+    setupRealtime();
+
+    // Cleanup on unmount
+    return () => {
+      realtimeService.unsubscribe();
+      setRealtimeConnected(false);
+    };
+  }, [handleSessionUpdate, handleSessionInsert, handleSessionDelete, handleUpdateInsert, handleRealtimeError]);
+
   useEffect(() => {
     loadTodaySessions();
   }, []);
 
   return (
     <View style={styles.container}>
-      <CleanerTopBar />
+      <CleanerTopBar realtimeConnected={realtimeConnected} />
       
       <ScrollView
         style={styles.content}

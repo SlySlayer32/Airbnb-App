@@ -193,3 +193,19 @@ export interface MaintenanceTicket {
   createdDate: Date;
   photos: string[];
 }
+
+// Real-time subscription types
+export interface RealtimeConnectionState {
+  isConnected: boolean;
+  lastConnected?: Date;
+  connectionError?: string;
+  reconnectAttempts: number;
+}
+
+export interface RealtimeSubscriptionConfig {
+  onSessionUpdate: (session: CleaningSession) => void;
+  onSessionInsert: (session: CleaningSession) => void;
+  onSessionDelete: (sessionId: string) => void;
+  onUpdateInsert: (update: any) => void;
+  onError?: (error: Error) => void;
+}

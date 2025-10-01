@@ -3,7 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NotificationBadge from './NotificationBadge';
 
-export default function CleanerTopBar() {
+interface CleanerTopBarProps {
+  realtimeConnected?: boolean;
+}
+
+export default function CleanerTopBar({ realtimeConnected = false }: CleanerTopBarProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -39,9 +43,15 @@ export default function CleanerTopBar() {
       
       <View style={styles.rightSection}>
         <NotificationBadge />
-        <View style={styles.statusIndicator}>
-          <Ionicons name="radio-button-on" size={16} color="#10b981" />
-          <Text style={styles.statusText}>Online</Text>
+        <View style={[styles.statusIndicator, realtimeConnected ? styles.connected : styles.disconnected]}>
+          <Ionicons 
+            name={realtimeConnected ? "radio-button-on" : "radio-button-off"} 
+            size={16} 
+            color={realtimeConnected ? "#10b981" : "#ef4444"} 
+          />
+          <Text style={[styles.statusText, realtimeConnected ? styles.connectedText : styles.disconnectedText]}>
+            {realtimeConnected ? 'Live' : 'Offline'}
+          </Text>
         </View>
       </View>
     </View>
@@ -88,7 +98,18 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: '#10b981',
     fontWeight: '600',
+  },
+  connected: {
+    backgroundColor: '#f0fdf4',
+  },
+  disconnected: {
+    backgroundColor: '#fef2f2',
+  },
+  connectedText: {
+    color: '#10b981',
+  },
+  disconnectedText: {
+    color: '#ef4444',
   },
 });
