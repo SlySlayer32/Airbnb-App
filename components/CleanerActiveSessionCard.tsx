@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { CleaningSession } from '@/types';
+import PhotoProofGate from './PhotoProofGate';
 
 interface CleanerActiveSessionCardProps {
   session: CleaningSession | null;
   onPauseSession?: (sessionId: string) => void;
   onResumeSession?: (sessionId: string) => void;
-  onCompleteSession?: (sessionId: string) => void;
+  onCompleteSession?: (sessionId: string, photos?: string[]) => void;
   onAddUpdate?: (sessionId: string) => void;
 }
 
@@ -19,6 +20,8 @@ export default function CleanerActiveSessionCard({
   onAddUpdate
 }: CleanerActiveSessionCardProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [showPhotoGate, setShowPhotoGate] = useState(false);
+  const [completionPhotos, setCompletionPhotos] = useState<string[]>([]);
   
   // Get pause state from session data instead of local state
   const isPaused = session?.is_currently_paused || false;
@@ -90,6 +93,23 @@ export default function CleanerActiveSessionCard({
     const expectedTime = new Date(session.dashboard_metadata.expected_completion_time);
     return currentTime > expectedTime;
   };
+
+  // Mock photo requirements logic - determines if photos are required for this session
+  const getPhotoRequirements = () => {
+    if (!session) return { required: false, completed: false };
+    
+    // Mock logic: require photos for sessions with 3+ guests or properties with 3+ rooms
+    const guestCount = session.guest_count || 0;
+    const propertyRooms = (session.properties as any)?.rooms || 0;
+    
+    const photosRequired = guestCount >= 3 || propertyRooms >= 3;
+    const photosCompleted = session.photos_completed || completionPhotos.length > 0;
+    
+    return { required: photosRequired, completed: photosCompleted };
+  };
+
+  const photoRequirements = getPhotoRequirements();
+  const canComplete = !photoRequirements.required || photoRequirements.completed;
 
   return (
     <View style={[styles.container, isRunningLate() && styles.containerLate]}>
@@ -195,12 +215,42 @@ export default function CleanerActiveSessionCard({
         </TouchableOpacity>
         
         <TouchableOpacity 
-          style={styles.primaryButton} 
-          onPress={() => onCompleteSession?.(session.id)}
+          style={[styles.primaryButton, !canComplete && styles.primaryButtonDisabled]} 
+          onPress={() => {
+            if (photoRequirements.required && !photoRequirements.completed) {
+              setShowPhotoGate(true);
+            } else {
+              onCompleteSession?.(session.id, completionPhotos);
+            }
+          }}
+          disabled={!canComplete}
         >
-          <Text style={styles.primaryButtonText}>Complete</Text>
+          <Ionicons 
+            name={photoRequirements.required && !photoRequirements.completed ? "camera" : "checkmark"} 
+            size={16} 
+            color={canComplete ? "#fff" : "#9ca3af"} 
+          />
+          <Text style={[styles.primaryButtonText, !canComplete && styles.primaryButtonTextDisabled]}>
+            {photoRequirements.required && !photoRequirements.completed ? 'Photos Required' : 'Complete'}
+          </Text>
         </TouchableOpacity>
       </View>
+
+      {showPhotoGate && (
+        <PhotoProofGate
+          session={session}
+          onPhotosComplete={(photos) => {
+            setCompletionPhotos(photos);
+            setShowPhotoGate(false);
+            onCompleteSession?.(session.id, photos);
+          }}
+          onSkipPhotos={() => {
+            setShowPhotoGate(false);
+            // Allow completion without photos (for testing/override)
+            onCompleteSession?.(session.id, []);
+          }}
+        />
+      )}
     </View>
   );
 }
@@ -372,15 +422,24 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 8,
     backgroundColor: '#10b981',
-    alignItems: 'center',
+    gap: 6,
+  },
+  primaryButtonDisabled: {
+    backgroundColor: '#d1d5db',
   },
   primaryButtonText: {
     fontSize: 12,
     color: '#fff',
     fontWeight: '600',
+  },
+  primaryButtonTextDisabled: {
+    color: '#9ca3af',
   },
 });

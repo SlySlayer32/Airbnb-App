@@ -131,6 +131,11 @@ export interface CleaningSession {
   total_break_minutes?: number;
   is_currently_paused?: boolean;
   
+  // Photo requirements for completion validation
+  photos_required?: boolean;
+  photos_completed?: boolean;
+  completion_photos?: string[];
+  
   // Dashboard-specific metadata (only present in getTodaySessions response)
   dashboard_metadata?: DashboardMetadata;
   

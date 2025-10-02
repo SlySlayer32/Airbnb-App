@@ -141,6 +141,15 @@ export const cleaningSessionService = {
       throw new Error('Photos are required before session can be completed');
     }
     
+    // Rule 3b: Mock photo requirements based on session data
+    const guestCount = session.guest_count || 0;
+    const propertyRooms = (session.properties as any)?.rooms || 0;
+    const mockPhotosRequired = guestCount >= 3 || propertyRooms >= 3;
+    
+    if (mockPhotosRequired && !completionData.photosComplete && (!completionData.photos || completionData.photos.length === 0)) {
+      throw new Error('Photos are required for this session (3+ guests or 3+ rooms)');
+    }
+    
     // Rule 4: Checklist requirements
     if (session.checklist_required && !completionData.checklistComplete) {
       throw new Error('Checklist must be completed before session can be finished');

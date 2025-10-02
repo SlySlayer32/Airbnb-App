@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl, Alert } from 'react-native';
 import { CleaningSession } from '@/types';
-import { cleaningSessionService } from '@/services';
+import { cleaningSessionService, BannerStateService } from '@/services';
 import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
 import CleanerTopBar from './CleanerTopBar';
 import CleanerStatusBanner, { CleanerStatus } from './CleanerStatusBanner';
@@ -20,57 +20,16 @@ export default function CleanerDashboard() {
     .filter(s => s.status === 'scheduled')
     .sort((a, b) => new Date(a.scheduled_cleaning_time).getTime() - new Date(b.scheduled_cleaning_time).getTime())[0];
   
-  const getCurrentStatus = (): CleanerStatus => {
-    if (activeSession) {
-      // Check if we're waiting for photos (placeholder logic)
-      return 'active';
-    }
+  const getBannerState = () => {
+    const currentTime = new Date();
+    const context = {
+      sessions,
+      currentTime,
+      activeSession,
+      nextSession
+    };
     
-    if (nextSession?.dashboard_metadata) {
-      const { status_indicator } = nextSession.dashboard_metadata;
-      switch (status_indicator) {
-        case 'overdue':
-        case 'starting_soon':
-          return 'ready';
-        case 'scheduled':
-          return 'scheduled';
-        default:
-          return 'scheduled';
-      }
-    }
-    
-    if (sessions.length === 0 || sessions.every(s => s.status === 'completed')) {
-      const now = new Date();
-      const hour = now.getHours();
-      // If it's after 3 PM and all sessions are complete, show day wrap
-      return hour >= 15 ? 'day_wrap' : 'relax';
-    }
-    
-    return 'relax';
-  };
-
-  const getStatusMessage = (): string | undefined => {
-    const status = getCurrentStatus();
-    
-    if (status === 'ready' && nextSession?.dashboard_metadata) {
-      const { time_until_start_minutes, is_overdue } = nextSession.dashboard_metadata;
-      if (is_overdue) {
-        return `Your cleaning at ${nextSession.properties?.name} is overdue!`;
-      }
-      if (time_until_start_minutes <= 30) {
-        return `Ready to start cleaning at ${nextSession.properties?.name}`;
-      }
-    }
-    
-    if (status === 'active' && activeSession) {
-      return `Currently cleaning ${activeSession.properties?.name}`;
-    }
-    
-    if (status === 'scheduled' && sessions.length > 0) {
-      return `${sessions.filter(s => s.status === 'scheduled').length} cleaning(s) scheduled for today`;
-    }
-    
-    return undefined;
+    return BannerStateService.calculateBannerState(context);
   };
 
   const loadTodaySessions = async () => {
@@ -125,7 +84,7 @@ export default function CleanerDashboard() {
     }
   };
 
-  const handleCompleteSession = async (sessionId: string) => {
+  const handleCompleteSession = async (sessionId: string, photos?: string[]) => {
     try {
       // For now, just show alert - full completion flow comes in Phase 2
       Alert.alert(
@@ -139,7 +98,8 @@ export default function CleanerDashboard() {
               try {
                 await cleaningSessionService.completeCleaning(sessionId, {
                   notes: 'Session completed via dashboard',
-                  photosComplete: true, // Placeholder - would be determined by actual photo status
+                  photos: photos || [],
+                  photosComplete: (photos && photos.length > 0) || false,
                   checklistComplete: true // Placeholder - would be determined by actual checklist status
                 });
                 await loadTodaySessions();
@@ -260,9 +220,9 @@ export default function CleanerDashboard() {
         }
       >
         <CleanerStatusBanner 
-          status={getCurrentStatus()}
-          message={getStatusMessage()}
-          timeRemaining={nextSession?.dashboard_metadata?.time_until_start_minutes}
+          status={getBannerState().status}
+          message={getBannerState().message}
+          timeRemaining={getBannerState().timeRemaining}
         />
         
         {activeSession && (
