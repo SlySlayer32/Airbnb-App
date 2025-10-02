@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@expo/metro-config": "~54.0.2",
+    "@expo/metro-runtime": "~6.1.2",
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "axios": "^1.7.9",
+    "eslint-config-expo": "~10.0.0",
+    "expo": "^54.0.12",
+    "expo-router": "~6.0.10",
+    "expo-web-browser": "~15.0.8",
+    "express": "^5.0.1",
+    "react": "^18.2.0",
+    "react-native": "^0.77.1",
+    "react-native-safe-area-context": "^5.2.0",
+    "react-native-screens": "^4.6.0"
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
+}
