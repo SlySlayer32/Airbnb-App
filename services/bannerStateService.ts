@@ -1,4 +1,4 @@
-import { CleaningSession } from '@/types';
+import { CleaningSession, BannerState, BannerStateContext, BannerStateResult, BannerTransition } from '@/types';
 import { CleanerStatus } from '@/components/CleanerStatusBanner';
 
 export interface BannerStateContext {
@@ -6,6 +6,8 @@ export interface BannerStateContext {
   currentTime: Date;
   activeSession?: CleaningSession;
   nextSession?: CleaningSession;
+  userRole: 'cleaner' | 'property_owner' | 'co_host';
+  isOnline: boolean;
 }
 
 export interface BannerStateResult {
@@ -13,6 +15,9 @@ export interface BannerStateResult {
   message?: string;
   timeRemaining?: number;
   priority: 'low' | 'medium' | 'high' | 'urgent';
+  actionRequired?: boolean;
+  nextAction?: string;
+  urgencyReason?: string;
 }
 
 /**
@@ -23,11 +28,32 @@ export class BannerStateService {
   
   /**
    * Calculate the optimal banner state based on current session context
+   * Enhanced with intelligent state machine logic and time-based transitions
    */
   static calculateBannerState(context: BannerStateContext): BannerStateResult {
-    const { sessions, currentTime, activeSession, nextSession } = context;
+    const { sessions, currentTime, activeSession, nextSession, userRole, isOnline } = context;
     
-    // Priority 1: Active session states
+    // Only show banner for cleaners
+    if (userRole !== 'cleaner') {
+      return {
+        status: 'relax',
+        message: 'Banner not applicable for this user role',
+        priority: 'low'
+      };
+    }
+    
+    // Check for offline state
+    if (!isOnline) {
+      return {
+        status: 'relax',
+        message: 'Working offline - sync when connection restored',
+        priority: 'medium',
+        actionRequired: true,
+        nextAction: 'Check internet connection'
+      };
+    }
+    
+    // Priority 1: Active session states (highest priority)
     if (activeSession) {
       return this.calculateActiveSessionState(activeSession, currentTime);
     }
@@ -37,12 +63,19 @@ export class BannerStateService {
       return this.calculateNextSessionState(nextSession, currentTime);
     }
     
-    // Priority 3: Overall day state
+    // Priority 3: Time-based automatic state changes
+    const timeBasedState = this.calculateTimeBasedState(currentTime, sessions);
+    if (timeBasedState) {
+      return timeBasedState;
+    }
+    
+    // Priority 4: Overall day state
     return this.calculateDayState(sessions, currentTime);
   }
   
   /**
    * Calculate state when there's an active cleaning session
+   * Enhanced with intelligent urgency detection and action guidance
    */
   private static calculateActiveSessionState(session: CleaningSession, currentTime: Date): BannerStateResult {
     const isPaused = session.is_currently_paused || false;
@@ -51,31 +84,51 @@ export class BannerStateService {
     // Check if photos are required and not completed
     const photoRequirements = this.checkPhotoRequirements(session);
     if (photoRequirements.required && !photoRequirements.completed) {
+      const isRunningLate = this.isSessionRunningLate(session, currentTime);
       return {
         status: 'awaiting_photos',
         message: `Please take ${photoRequirements.requiredCount} completion photos to finish ${session.properties?.name}`,
-        priority: 'high'
+        priority: isRunningLate ? 'urgent' : 'high',
+        actionRequired: true,
+        nextAction: 'Capture required photos to complete session',
+        urgencyReason: isRunningLate ? 'Session running late' : 'Photos required for completion'
       };
     }
     
     // Check if session is paused
     if (isPaused) {
       const pauseDuration = this.calculatePauseDuration(session, currentTime);
+      const isLongBreak = pauseDuration > 30; // More than 30 minutes
+      
       return {
         status: 'break',
         message: `Break time at ${session.properties?.name} - ${pauseDuration}min break taken`,
-        priority: 'medium'
+        priority: isLongBreak ? 'high' : 'medium',
+        actionRequired: isLongBreak,
+        nextAction: isLongBreak ? 'Consider resuming session soon' : 'Take your time',
+        urgencyReason: isLongBreak ? 'Extended break duration' : undefined
       };
     }
     
     // Active cleaning session
     const sessionDuration = this.calculateSessionDuration(session, currentTime);
     const isRunningLate = this.isSessionRunningLate(session, currentTime);
+    const isOverdue = this.isSessionOverdue(session, currentTime);
+    
+    let urgencyReason: string | undefined;
+    if (isOverdue) {
+      urgencyReason = 'Session significantly overdue';
+    } else if (isRunningLate) {
+      urgencyReason = 'Session running behind schedule';
+    }
     
     return {
       status: 'active',
       message: `Cleaning in progress at ${session.properties?.name} - ${sessionDuration}min elapsed`,
-      priority: isRunningLate ? 'urgent' : 'medium'
+      priority: isOverdue ? 'urgent' : (isRunningLate ? 'high' : 'medium'),
+      actionRequired: isOverdue || isRunningLate,
+      nextAction: isOverdue ? 'Complete session immediately' : (isRunningLate ? 'Focus on completing session' : 'Continue cleaning'),
+      urgencyReason
     };
   }
   
@@ -116,6 +169,76 @@ export class BannerStateService {
       timeRemaining: minutesUntilStart,
       priority: 'low'
     };
+  }
+  
+  /**
+   * Calculate time-based automatic state changes
+   * Business Rule: Automatic state transitions based on time of day
+   */
+  private static calculateTimeBasedState(currentTime: Date, sessions: CleaningSession[]): BannerStateResult | null {
+    const hour = currentTime.getHours();
+    const minute = currentTime.getMinutes();
+    const timeOfDay = hour * 60 + minute; // Convert to minutes for easier comparison
+    
+    // Morning preparation (8:00 AM - 10:00 AM)
+    if (timeOfDay >= 480 && timeOfDay < 600) {
+      const upcomingSessions = sessions.filter(s => 
+        s.status === 'scheduled' && 
+        new Date(s.scheduled_cleaning_time).getTime() > currentTime.getTime()
+      );
+      
+      if (upcomingSessions.length > 0) {
+        return {
+          status: 'scheduled',
+          message: `Good morning! ${upcomingSessions.length} cleaning${upcomingSessions.length > 1 ? 's' : ''} scheduled today`,
+          priority: 'medium',
+          actionRequired: true,
+          nextAction: 'Review schedule and prepare for first cleaning'
+        };
+      }
+    }
+    
+    // Lunch break reminder (12:00 PM - 1:00 PM)
+    if (timeOfDay >= 720 && timeOfDay < 780) {
+      const activeSessions = sessions.filter(s => s.status === 'in_progress');
+      if (activeSessions.length > 0) {
+        return {
+          status: 'break',
+          message: 'Lunch break time! Consider pausing active sessions',
+          priority: 'medium',
+          actionRequired: true,
+          nextAction: 'Take a well-deserved lunch break'
+        };
+      }
+    }
+    
+    // End of day wrap-up (3:00 PM - 4:00 PM)
+    if (timeOfDay >= 900 && timeOfDay < 960) {
+      const incompleteSessions = sessions.filter(s => 
+        s.status !== 'completed' && s.status !== 'cancelled'
+      );
+      
+      if (incompleteSessions.length === 0) {
+        return {
+          status: 'day_wrap',
+          message: 'Excellent work! All cleanings completed for today',
+          priority: 'low',
+          actionRequired: false,
+          nextAction: 'Review today\'s work and prepare for tomorrow'
+        };
+      } else {
+        return {
+          status: 'ready',
+          message: `${incompleteSessions.length} cleaning${incompleteSessions.length > 1 ? 's' : ''} still pending`,
+          priority: 'high',
+          actionRequired: true,
+          nextAction: 'Complete remaining cleanings before end of day',
+          urgencyReason: 'Cleaning window closing soon'
+        };
+      }
+    }
+    
+    return null; // No time-based state change needed
   }
   
   /**
@@ -219,6 +342,17 @@ export class BannerStateService {
     
     const expectedTime = new Date(session.dashboard_metadata.expected_completion_time);
     return currentTime > expectedTime;
+  }
+  
+  /**
+   * Check if session is significantly overdue (more than 30 minutes late)
+   */
+  private static isSessionOverdue(session: CleaningSession, currentTime: Date): boolean {
+    if (!session.dashboard_metadata?.expected_completion_time) return false;
+    
+    const expectedTime = new Date(session.dashboard_metadata.expected_completion_time);
+    const overdueMinutes = Math.floor((currentTime.getTime() - expectedTime.getTime()) / (1000 * 60));
+    return overdueMinutes > 30;
   }
   
   /**

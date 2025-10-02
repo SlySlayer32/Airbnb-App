@@ -5,3 +5,4 @@ export { cleaningUpdateService } from './cleaningUpdateService';
 export { notificationService } from './notificationService';
 export { realtimeService } from './realtimeService';
 export { BannerStateService } from './bannerStateService';
+export { PhotoProofService } from './photoProofService';

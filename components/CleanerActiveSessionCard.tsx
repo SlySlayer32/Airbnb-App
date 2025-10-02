@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { CleaningSession } from '@/types';
-import PhotoProofGate from './PhotoProofGate';
+import { PhotoProofGate } from './PhotoProofGate';
 
 interface CleanerActiveSessionCardProps {
   session: CleaningSession | null;
@@ -33,6 +33,12 @@ export default function CleanerActiveSessionCard({
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (session) {
+      getPhotoRequirements().then(setPhotoRequirements);
+    }
+  }, [session]);
 
   if (!session || session.status !== 'in_progress') {
     return null;
@@ -94,21 +100,26 @@ export default function CleanerActiveSessionCard({
     return currentTime > expectedTime;
   };
 
-  // Mock photo requirements logic - determines if photos are required for this session
-  const getPhotoRequirements = () => {
+  // Photo requirements logic using PhotoProofService
+  const getPhotoRequirements = async () => {
     if (!session) return { required: false, completed: false };
     
-    // Mock logic: require photos for sessions with 3+ guests or properties with 3+ rooms
-    const guestCount = session.guest_count || 0;
-    const propertyRooms = (session.properties as any)?.rooms || 0;
-    
-    const photosRequired = guestCount >= 3 || propertyRooms >= 3;
-    const photosCompleted = session.photos_completed || completionPhotos.length > 0;
-    
-    return { required: photosRequired, completed: photosCompleted };
+    try {
+      const { PhotoProofService } = await import('../services/photoProofService');
+      const hasRequirements = await PhotoProofService.hasPhotoRequirements(session.id);
+      const status = await PhotoProofService.getPhotoProofStatus(session.id);
+      
+      return { 
+        required: hasRequirements, 
+        completed: status.is_complete 
+      };
+    } catch (error) {
+      console.error('Error checking photo requirements:', error);
+      return { required: false, completed: false };
+    }
   };
 
-  const photoRequirements = getPhotoRequirements();
+  const [photoRequirements, setPhotoRequirements] = useState({ required: false, completed: false });
   const canComplete = !photoRequirements.required || photoRequirements.completed;
 
   return (
@@ -237,19 +248,28 @@ export default function CleanerActiveSessionCard({
       </View>
 
       {showPhotoGate && (
-        <PhotoProofGate
-          session={session}
-          onPhotosComplete={(photos) => {
-            setCompletionPhotos(photos);
-            setShowPhotoGate(false);
-            onCompleteSession?.(session.id, photos);
-          }}
-          onSkipPhotos={() => {
-            setShowPhotoGate(false);
-            // Allow completion without photos (for testing/override)
-            onCompleteSession?.(session.id, []);
-          }}
-        />
+        <Modal
+          visible={showPhotoGate}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <PhotoProofGate
+            sessionId={session.id}
+            sessionType={session.session_type}
+            propertyRooms={(session.properties as any)?.rooms || 0}
+            onPhotoProofComplete={(isComplete) => {
+              if (isComplete) {
+                setPhotoRequirements(prev => ({ ...prev, completed: true }));
+                setShowPhotoGate(false);
+                onCompleteSession?.(session.id, completionPhotos);
+              }
+            }}
+            onCompleteSession={() => {
+              setShowPhotoGate(false);
+              onCompleteSession?.(session.id, completionPhotos);
+            }}
+          />
+        </Modal>
       )}
     </View>
   );

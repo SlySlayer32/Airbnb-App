@@ -1,328 +1,515 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+  Image
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { CleaningSession } from '@/types';
+import { PhotoProofService } from '../services/photoProofService';
+import { 
+  PhotoProofRequirement, 
+  PhotoProofStatus, 
+  PhotoCaptureResult 
+} from '../types';
 
 interface PhotoProofGateProps {
-  session: CleaningSession;
-  onPhotosComplete: (photos: string[]) => void;
-  onSkipPhotos?: () => void;
+  sessionId: string;
+  sessionType: string;
+  propertyRooms: number;
+  onPhotoProofComplete: (isComplete: boolean) => void;
+  onCompleteSession: () => void;
 }
 
-export default function PhotoProofGate({ 
-  session, 
-  onPhotosComplete, 
-  onSkipPhotos 
-}: PhotoProofGateProps) {
-  const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
-  const [isCapturing, setIsCapturing] = useState(false);
+/**
+ * PhotoProofGate Component - Ensures cleaning completion with photo evidence
+ * 
+ * Business Purpose: Blocks session completion until required photos are captured,
+ * providing property owners with visual proof of completed cleaning work.
+ */
+export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
+  sessionId,
+  sessionType,
+  propertyRooms,
+  onPhotoProofComplete,
+  onCompleteSession
+}) => {
+  const [photoStatus, setPhotoStatus] = useState<PhotoProofStatus | null>(null);
+  const [requirements, setRequirements] = useState<PhotoProofRequirement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [capturingPhoto, setCapturingPhoto] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock photo requirements logic
-  const getRequiredPhotos = () => {
-    // Mock logic: require 2-4 photos based on property size and guest count
-    const basePhotos = 2;
-    const guestMultiplier = Math.min(session.guest_count, 6) * 0.5;
-    const propertySize = (session.properties as any)?.rooms || 3;
-    const sizeMultiplier = Math.min(propertySize / 2, 2);
-    
-    return Math.min(Math.max(basePhotos + guestMultiplier + sizeMultiplier, 2), 4);
-  };
+  useEffect(() => {
+    loadPhotoRequirements();
+  }, [sessionId]);
 
-  const requiredPhotoCount = getRequiredPhotos();
-  const hasRequiredPhotos = capturedPhotos.length >= requiredPhotoCount;
-
-  const handleCapturePhoto = async () => {
-    setIsCapturing(true);
-    
+  const loadPhotoRequirements = async () => {
     try {
-      // Mock photo capture - in real implementation, this would use expo-camera
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
+      setError(null);
       
-      const mockPhotoUrl = `mock_photo_${Date.now()}_${capturedPhotos.length + 1}.jpg`;
-      const newPhotos = [...capturedPhotos, mockPhotoUrl];
+      // Generate requirements for this session
+      const generatedRequirements = await PhotoProofService.generatePhotoRequirements(
+        sessionId, 
+        sessionType, 
+        propertyRooms
+      );
       
-      setCapturedPhotos(newPhotos);
+      // Get current status
+      const status = await PhotoProofService.getPhotoProofStatus(sessionId);
       
-      // If we've reached the required count, automatically complete
-      if (newPhotos.length >= requiredPhotoCount) {
-        onPhotosComplete(newPhotos);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to capture photo. Please try again.');
+      setRequirements(generatedRequirements);
+      setPhotoStatus(status);
+      onPhotoProofComplete(status.is_complete);
+    } catch (err) {
+      setError('Failed to load photo requirements');
+      console.error('Error loading photo requirements:', err);
     } finally {
-      setIsCapturing(false);
+      setLoading(false);
     }
   };
 
-  const handleRemovePhoto = (index: number) => {
-    const newPhotos = capturedPhotos.filter((_, i) => i !== index);
-    setCapturedPhotos(newPhotos);
-  };
+  const capturePhoto = async (requirement: PhotoProofRequirement) => {
+    try {
+      setCapturingPhoto(requirement.id);
+      setError(null);
 
-  const handleCompletePhotos = () => {
-    if (hasRequiredPhotos) {
-      onPhotosComplete(capturedPhotos);
+      const result: PhotoCaptureResult = await PhotoProofService.capturePhoto(
+        sessionId,
+        requirement.category,
+        requirement.area_name
+      );
+
+      if (result.success && result.photo_url) {
+        // Mark requirement as completed
+        const success = await PhotoProofService.markPhotoCompleted(
+          sessionId,
+          requirement.id,
+          result.photo_url
+        );
+
+        if (success) {
+          // Update local state
+          const updatedRequirements = requirements.map(req => 
+            req.id === requirement.id 
+              ? { ...req, is_completed: true, photo_url: result.photo_url }
+              : req
+          );
+          
+          setRequirements(updatedRequirements);
+          
+          // Recalculate status
+          const totalRequired = updatedRequirements.filter(req => req.is_required).length;
+          const totalCompleted = updatedRequirements.filter(req => req.is_completed).length;
+          const isComplete = totalCompleted >= totalRequired;
+          
+          setPhotoStatus({
+            session_id: sessionId,
+            total_required: totalRequired,
+            total_completed: totalCompleted,
+            is_complete: isComplete,
+            missing_categories: updatedRequirements
+              .filter(req => req.is_required && !req.is_completed)
+              .map(req => req.category),
+            requirements: updatedRequirements
+          });
+          
+          onPhotoProofComplete(isComplete);
+          
+          Alert.alert(
+            'Photo Captured!',
+            `Photo for ${requirement.area_name} has been captured successfully.`
+          );
+        } else {
+          setError('Failed to save photo. Please try again.');
+        }
+      } else {
+        setError(result.error || 'Failed to capture photo. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred while capturing the photo.');
+      console.error('Error capturing photo:', err);
+    } finally {
+      setCapturingPhoto(null);
     }
   };
 
-  const handleSkipPhotos = () => {
-    Alert.alert(
-      'Skip Photo Requirements',
-      'Are you sure you want to skip photo requirements? This may affect quality verification.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Skip', onPress: onSkipPhotos }
-      ]
+  const handleCompleteSession = async () => {
+    try {
+      const validation = await PhotoProofService.validatePhotoProof(sessionId);
+      
+      if (validation.can_complete_session) {
+        Alert.alert(
+          'Complete Session',
+          'All required photos have been captured. Are you sure you want to complete this session?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { 
+              text: 'Complete', 
+              style: 'default',
+              onPress: onCompleteSession
+            }
+          ]
+        );
+      } else {
+        Alert.alert(
+          'Photos Required',
+          validation.validation_message,
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (err) {
+      setError('Failed to validate photo proof');
+      console.error('Error validating photo proof:', err);
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'before_cleaning':
+        return 'camera-outline';
+      case 'after_cleaning':
+        return 'checkmark-circle-outline';
+      case 'specific_area':
+        return 'location-outline';
+      case 'issue_report':
+        return 'warning-outline';
+      default:
+        return 'camera-outline';
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'before_cleaning':
+        return '#FF9500';
+      case 'after_cleaning':
+        return '#34C759';
+      case 'specific_area':
+        return '#007AFF';
+      case 'issue_report':
+        return '#FF3B30';
+      default:
+        return '#8E8E93';
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>Loading photo requirements...</Text>
+      </View>
     );
-  };
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Ionicons name="alert-circle-outline" size={48} color="#FF3B30" />
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={loadPhotoRequirements}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Ionicons 
-            name="camera" 
-            size={24} 
-            color={hasRequiredPhotos ? "#10b981" : "#6b7280"} 
-          />
-          <Text style={styles.title}>Completion Photos</Text>
-        </View>
-        
-        {hasRequiredPhotos && (
-          <View style={styles.completeBadge}>
-            <Ionicons name="checkmark-circle" size={16} color="#10b981" />
-            <Text style={styles.completeText}>Complete</Text>
+        <Text style={styles.title}>Photo Proof Required</Text>
+        <Text style={styles.subtitle}>
+          Capture photos to complete this cleaning session
+        </Text>
+      </View>
+
+      {photoStatus && (
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBar}>
+            <View 
+              style={[
+                styles.progressFill, 
+                { width: `${photoStatus.completion_percentage}%` }
+              ]} 
+            />
           </View>
-        )}
-      </View>
-
-      <View style={styles.requirementInfo}>
-        <Text style={styles.requirementText}>
-          Required: {capturedPhotos.length}/{requiredPhotoCount} photos
-        </Text>
-        <Text style={styles.requirementSubtext}>
-          Capture photos of key areas to verify cleaning completion
-        </Text>
-      </View>
-
-      {capturedPhotos.length > 0 && (
-        <View style={styles.photoGrid}>
-          {capturedPhotos.map((photo, index) => (
-            <View key={index} style={styles.photoItem}>
-              <View style={styles.photoPlaceholder}>
-                <Ionicons name="image" size={32} color="#6b7280" />
-                <Text style={styles.photoLabel}>Photo {index + 1}</Text>
-              </View>
-              <TouchableOpacity 
-                style={styles.removeButton}
-                onPress={() => handleRemovePhoto(index)}
-              >
-                <Ionicons name="close-circle" size={20} color="#ef4444" />
-              </TouchableOpacity>
-            </View>
-          ))}
+          <Text style={styles.progressText}>
+            {photoStatus.total_completed} of {photoStatus.total_required} photos captured
+          </Text>
         </View>
       )}
 
-      <View style={styles.actions}>
-        <TouchableOpacity 
-          style={[styles.captureButton, isCapturing && styles.captureButtonDisabled]}
-          onPress={handleCapturePhoto}
-          disabled={isCapturing}
+      <ScrollView style={styles.requirementsList}>
+        {requirements.map((requirement) => (
+          <View key={requirement.id} style={styles.requirementCard}>
+            <View style={styles.requirementHeader}>
+              <View style={styles.requirementInfo}>
+                <Ionicons 
+                  name={getCategoryIcon(requirement.category)} 
+                  size={24} 
+                  color={getCategoryColor(requirement.category)} 
+                />
+                <View style={styles.requirementDetails}>
+                  <Text style={styles.areaName}>{requirement.area_name}</Text>
+                  <Text style={styles.categoryText}>
+                    {requirement.category.replace('_', ' ').toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+              
+              {requirement.is_completed ? (
+                <View style={styles.completedBadge}>
+                  <Ionicons name="checkmark-circle" size={24} color="#34C759" />
+                  <Text style={styles.completedText}>Done</Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.captureButton,
+                    capturingPhoto === requirement.id && styles.captureButtonDisabled
+                  ]}
+                  onPress={() => capturePhoto(requirement)}
+                  disabled={capturingPhoto === requirement.id}
+                >
+                  {capturingPhoto === requirement.id ? (
+                    <ActivityIndicator size="small" color="#FFFFFF" />
+                  ) : (
+                    <>
+                      <Ionicons name="camera" size={20} color="#FFFFFF" />
+                      <Text style={styles.captureButtonText}>Capture</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {requirement.photo_url && (
+              <View style={styles.photoPreview}>
+                <Image 
+                  source={{ uri: requirement.photo_url }} 
+                  style={styles.photoImage}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+          </View>
+        ))}
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={[
+            styles.completeButton,
+            (!photoStatus?.is_complete) && styles.completeButtonDisabled
+          ]}
+          onPress={handleCompleteSession}
+          disabled={!photoStatus?.is_complete}
         >
-          <Ionicons 
-            name={isCapturing ? "hourglass-outline" : "camera-outline"} 
-            size={20} 
-            color={isCapturing ? "#9ca3af" : "#fff"} 
-          />
-          <Text style={[styles.captureButtonText, isCapturing && styles.captureButtonTextDisabled]}>
-            {isCapturing ? 'Capturing...' : 'Capture Photo'}
+          <Text style={[
+            styles.completeButtonText,
+            (!photoStatus?.is_complete) && styles.completeButtonTextDisabled
+          ]}>
+            Complete Session
           </Text>
         </TouchableOpacity>
-
-        {hasRequiredPhotos && (
-          <TouchableOpacity 
-            style={styles.completeButton}
-            onPress={handleCompletePhotos}
-          >
-            <Ionicons name="checkmark" size={20} color="#fff" />
-            <Text style={styles.completeButtonText}>Complete Photos</Text>
-          </TouchableOpacity>
+        
+        {!photoStatus?.is_complete && (
+          <Text style={styles.completionHint}>
+            Complete all required photos to finish the session
+          </Text>
         )}
-      </View>
-
-      {!hasRequiredPhotos && onSkipPhotos && (
-        <TouchableOpacity 
-          style={styles.skipButton}
-          onPress={handleSkipPhotos}
-        >
-          <Text style={styles.skipButtonText}>Skip Photo Requirements</Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.photoTips}>
-        <Text style={styles.tipsTitle}>Photo Tips:</Text>
-        <Text style={styles.tipsText}>• Capture main living areas</Text>
-        <Text style={styles.tipsText}>• Include bathroom and kitchen</Text>
-        <Text style={styles.tipsText}>• Show clean surfaces and organized spaces</Text>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    margin: 16,
+    flex: 1,
+    backgroundColor: '#F2F2F7',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2F2F7',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#8E8E93',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2F2F7',
     padding: 20,
-    borderLeftWidth: 4,
-    borderLeftColor: '#3b82f6',
+  },
+  errorText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#FF3B30',
+    textAlign: 'center',
+  },
+  retryButton: {
+    marginTop: 20,
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  header: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5EA',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1C1C1E',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#8E8E93',
+  },
+  progressContainer: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5EA',
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: '#E5E5EA',
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#34C759',
+    borderRadius: 4,
+  },
+  progressText: {
+    fontSize: 14,
+    color: '#8E8E93',
+    textAlign: 'center',
+  },
+  requirementsList: {
+    flex: 1,
+    padding: 20,
+  },
+  requirementCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  header: {
+  requirementHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1f2937',
-  },
-  completeBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0fdf4',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    gap: 4,
-  },
-  completeText: {
-    fontSize: 12,
-    color: '#10b981',
-    fontWeight: '600',
   },
   requirementInfo: {
-    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
-  requirementText: {
+  requirementDetails: {
+    marginLeft: 12,
+    flex: 1,
+  },
+  areaName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 4,
+    color: '#1C1C1E',
   },
-  requirementSubtext: {
-    fontSize: 14,
-    color: '#6b7280',
+  categoryText: {
+    fontSize: 12,
+    color: '#8E8E93',
+    marginTop: 2,
   },
-  photoGrid: {
+  completedBadge: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 20,
-  },
-  photoItem: {
-    position: 'relative',
-  },
-  photoPlaceholder: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderStyle: 'dashed',
   },
-  photoLabel: {
-    fontSize: 10,
-    color: '#6b7280',
-    marginTop: 4,
-  },
-  removeButton: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-  },
-  actions: {
-    gap: 12,
+  completedText: {
+    marginLeft: 4,
+    fontSize: 14,
+    color: '#34C759',
+    fontWeight: '600',
   },
   captureButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
+    backgroundColor: '#007AFF',
     paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#3b82f6',
-    gap: 8,
   },
   captureButtonDisabled: {
-    backgroundColor: '#9ca3af',
+    backgroundColor: '#8E8E93',
   },
   captureButtonText: {
+    color: '#FFFFFF',
     fontSize: 14,
-    color: '#fff',
     fontWeight: '600',
+    marginLeft: 4,
   },
-  captureButtonTextDisabled: {
-    color: '#fff',
+  photoPreview: {
+    marginTop: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  photoImage: {
+    width: '100%',
+    height: 120,
+  },
+  footer: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5EA',
   },
   completeButton: {
-    flexDirection: 'row',
+    backgroundColor: '#34C759',
+    paddingVertical: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: '#10b981',
-    gap: 8,
+  },
+  completeButtonDisabled: {
+    backgroundColor: '#E5E5EA',
   },
   completeButtonText: {
-    fontSize: 14,
-    color: '#fff',
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
   },
-  skipButton: {
-    alignItems: 'center',
-    paddingVertical: 8,
+  completeButtonTextDisabled: {
+    color: '#8E8E93',
+  },
+  completionHint: {
     marginTop: 8,
-  },
-  skipButtonText: {
     fontSize: 14,
-    color: '#6b7280',
-    textDecorationLine: 'underline',
-  },
-  photoTips: {
-    marginTop: 16,
-    padding: 12,
-    backgroundColor: '#f9fafb',
-    borderRadius: 8,
-  },
-  tipsTitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 4,
-  },
-  tipsText: {
-    fontSize: 11,
-    color: '#6b7280',
-    marginBottom: 2,
+    color: '#8E8E93',
+    textAlign: 'center',
   },
 });

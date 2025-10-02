@@ -19,18 +19,6 @@ export default function CleanerDashboard() {
   const nextSession = sessions
     .filter(s => s.status === 'scheduled')
     .sort((a, b) => new Date(a.scheduled_cleaning_time).getTime() - new Date(b.scheduled_cleaning_time).getTime())[0];
-  
-  const getBannerState = () => {
-    const currentTime = new Date();
-    const context = {
-      sessions,
-      currentTime,
-      activeSession,
-      nextSession
-    };
-    
-    return BannerStateService.calculateBannerState(context);
-  };
 
   const loadTodaySessions = async () => {
     try {
@@ -220,9 +208,20 @@ export default function CleanerDashboard() {
         }
       >
         <CleanerStatusBanner 
-          status={getBannerState().status}
-          message={getBannerState().message}
-          timeRemaining={getBannerState().timeRemaining}
+          sessions={sessions}
+          activeSession={activeSession}
+          nextSession={nextSession}
+          userRole="cleaner"
+          isOnline={realtimeConnected}
+          onActionPress={(action) => {
+            console.log('Banner action pressed:', action);
+            // Handle banner action based on current state
+            if (action.includes('Start cleaning') && nextSession) {
+              handleStartCleaning(nextSession.id);
+            } else if (action.includes('Take photos') && activeSession) {
+              handleAddUpdate(activeSession.id);
+            }
+          }}
         />
         
         {activeSession && (

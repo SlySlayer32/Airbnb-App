@@ -214,3 +214,112 @@ export interface RealtimeSubscriptionConfig {
   onUpdateInsert: (update: any) => void;
   onError?: (error: Error) => void;
 }
+
+// Photo Proof Gate Types
+export interface PhotoProofRequirement {
+  id: string;
+  session_id: string;
+  category: 'before_cleaning' | 'after_cleaning' | 'specific_area' | 'issue_report';
+  area_name: string;
+  is_required: boolean;
+  is_completed: boolean;
+  photo_url?: string;
+  notes?: string;
+  created_at: string;
+  completed_at?: string;
+}
+
+export interface PhotoProofStatus {
+  session_id: string;
+  total_required: number;
+  total_completed: number;
+  is_complete: boolean;
+  missing_categories: string[];
+  requirements: PhotoProofRequirement[];
+}
+
+export interface PhotoCaptureResult {
+  success: boolean;
+  photo_url?: string;
+  error?: string;
+  category: string;
+  area_name: string;
+}
+
+export interface PhotoProofValidation {
+  can_complete_session: boolean;
+  missing_photos: PhotoProofRequirement[];
+  completion_percentage: number;
+  validation_message: string;
+}
+
+// Banner State Machine Types
+export type BannerState = 'relax' | 'scheduled' | 'ready' | 'active' | 'break' | 'awaiting_photos' | 'day_wrap';
+
+export interface BannerStateContext {
+  sessions: CleaningSession[];
+  currentTime: Date;
+  activeSession?: CleaningSession;
+  nextSession?: CleaningSession;
+  userRole: 'cleaner' | 'property_owner' | 'co_host';
+  isOnline: boolean;
+}
+
+export interface BannerStateResult {
+  status: BannerState;
+  message: string;
+  timeRemaining?: number;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  actionRequired?: boolean;
+  nextAction?: string;
+  urgencyReason?: string;
+}
+
+export interface BannerTransition {
+  from: BannerState;
+  to: BannerState;
+  condition: (context: BannerStateContext) => boolean;
+  priority: number;
+  description: string;
+}
+
+// Photo Storage Integration Types
+export interface PhotoUploadResult {
+  success: boolean;
+  photo_url?: string;
+  photo_id?: string;
+  error?: string;
+  upload_progress?: number;
+}
+
+export interface PhotoMetadata {
+  id: string;
+  session_id: string;
+  property_id: string;
+  photo_url: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  category: 'before_cleaning' | 'after_cleaning' | 'specific_area' | 'issue_report';
+  area_name: string;
+  uploaded_by: string;
+  uploaded_at: string;
+  storage_path: string;
+  thumbnail_url?: string;
+  is_compressed: boolean;
+}
+
+export interface StorageBucketConfig {
+  bucket_name: string;
+  max_file_size: number; // in bytes
+  allowed_mime_types: string[];
+  compression_enabled: boolean;
+  thumbnail_generation: boolean;
+}
+
+export interface PhotoUploadProgress {
+  photo_id: string;
+  progress: number; // 0-100
+  status: 'uploading' | 'processing' | 'completed' | 'error';
+  error_message?: string;
+}
