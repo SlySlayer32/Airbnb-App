@@ -4,8 +4,7 @@ module.exports = function (api) {
     presets: ['babel-preset-expo'],
     plugins: [
       '@babel/plugin-proposal-export-namespace-from', // For web support
-      'react-native-worklets/plugin', // Must be last
-      'react-native-reanimated',
+      'react-native-reanimated/plugin', // Must be last
       [
         'module:react-native-dotenv',
         {
