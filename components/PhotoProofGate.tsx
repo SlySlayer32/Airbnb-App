@@ -235,7 +235,7 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
             <View 
               style={[
                 styles.progressFill, 
-                { width: `${photoStatus.completion_percentage}%` }
+                { width: `${Math.round((photoStatus.total_completed / photoStatus.total_required) * 100)}%` }
               ]} 
             />
           </View>

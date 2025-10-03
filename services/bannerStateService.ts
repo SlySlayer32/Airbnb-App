@@ -1,4 +1,4 @@
-import { CleaningSession, BannerState, BannerStateContext, BannerStateResult, BannerTransition } from '@/types';
+import { CleaningSession, BannerState, BannerTransition } from '@/types';
 import { CleanerStatus } from '@/components/CleanerStatusBanner';
 
 export interface BannerStateContext {

@@ -1,4 +1,4 @@
-import { BannerStateService, BannerStateContext } from '../services/bannerStateService';
+import { BannerStateService, BannerStateContext } from '../bannerStateService';
 import { CleaningSession } from '../../types';
 
 // Mock data for testing

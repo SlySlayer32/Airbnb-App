@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../utils/supabase';
 import { CleaningSession } from '@/types';
 import { RealtimeChannel, RealtimeClient } from '@supabase/supabase-js';
 

@@ -1,115 +1,79 @@
-# Cursor Rules for Airbnb Cleaning Management Platform
+# Airbnb Cleaning App - Technical Instructions
 
-This directory contains Cursor-specific instructions that transform the GitHub instructions into a format optimized for Cursor's AI assistant.
+## Core Principle
+**Write complete, working code immediately. Focus on technical implementation, not explanations.**
 
-## Rule Files Overview
+## Project Context
+- **Platform**: Expo React Native + TypeScript + Supabase
+- **Users**: property_owner, cleaner, co_host
+- **Business Rules**: 4-hour cleaning window (11 AM-3 PM), 24-hour cancellation notice, cleaners never see financial data
 
-### Core Rules
-- **`airbnb-app-master.mdc`** - Master instructions that apply to all files
-- **`general-context.mdc`** - Non-technical founder communication guidelines
-- **`test.mdc`** - Example file showing rule structure
+## Technical Standards
 
-### Domain-Specific Rules
-- **`components.mdc`** - Component development patterns and design system
-- **`services.mdc`** - Service layer patterns and business logic
-- **`screens.mdc`** - Screen development and navigation patterns
-- **`types.mdc`** - TypeScript definitions and interface patterns
-- **`debugging.mdc`** - Common issues and debugging guidance
-- **`feature-development.mdc`** - Complete feature implementation process
-- **`documentation.mdc`** - Changelog and commit standards
+### TypeScript Requirements
+- **No `any` types** - Use proper interfaces and types
+- **Complete type definitions** - All functions, props, and state must be typed
+- **Interface consistency** - Follow existing type patterns in `/types/index.ts`
 
-## How Cursor Rules Work
+### React Native/Expo Patterns
+- **Expo Router** - Use file-based routing with typed routes
+- **StyleSheet** - Use React Native StyleSheet, no external CSS
+- **Ionicons** - Use @expo/vector-icons (Ionicons only)
+- **Mobile-first** - Responsive design for different screen sizes
 
-### File Structure
-Each `.mdc` file contains:
-```yaml
----
-description: What the rule covers
-globs: ["file/patterns/**/*.tsx"]  # Which files this applies to
-alwaysApply: true/false            # Apply to all files or only matching patterns
----
+### Code Completeness
+- **No TODOs or placeholders** - Every response must include complete, working code
+- **All imports included** - Every file must have proper import statements
+- **Error handling** - All async operations must handle loading, success, and error states
+- **State management** - Use React Context for auth, useState for UI state
 
-# Rule content in markdown
-```
+### Service Layer Patterns
+- **Supabase integration** - Use existing service patterns in `/services/`
+- **Error handling** - All service calls must handle errors gracefully
+- **Loading states** - Show loading indicators during async operations
+- **Type safety** - All service functions must be properly typed
 
-### Rule Application
-- **`alwaysApply: true`** - Rule applies to all files (like master and general-context)
-- **`alwaysApply: false`** - Rule only applies to files matching the `globs` patterns
-- **`globs`** - File patterns using glob syntax to target specific file types
+### Component Standards
+- **Role-based access** - Use `RoleBasedWrapper` for access control
+- **Consistent styling** - Follow existing color scheme and spacing
+- **Props validation** - All props must be properly typed
+- **Reusability** - Components should be reusable and well-structured
 
-### Examples
-- `components.mdc` applies to `components/**/*.tsx`, `app/**/*.tsx`, and `contexts/**/*.tsx`
-- `services.mdc` applies to `services/**/*.ts` and `lib/**/*.ts`
-- `types.mdc` applies to `types/**/*.ts` and `**/*.d.ts` files
-- `debugging.mdc` applies to test, debug, and error files
-- `documentation.mdc` applies to `CHANGELOG.md`, `README.md`, and `docs/**/*.md`
-- `feature-development.mdc` applies to main development directories
+### Business Logic Implementation
+- **Cleaning window validation** - Prevent scheduling outside 11 AM-3 PM window
+- **Cancellation notice** - Calculate and display notice period in hours
+- **Linen scaling** - Auto-calculate linen needs based on guest count
+- **Urgent escalation** - Handle urgent issues with immediate notifications
+- **Financial privacy** - Cleaners never see pricing or financial data
 
-## Key Features
+## Implementation Requirements
 
-### Business Context
-- Non-technical founder communication
-- Business value focus over technical details
-- User role-based development patterns
-- Real-world Airbnb property management scenarios
+### Every Code Response Must Include:
+1. **Complete working code** - No incomplete implementations
+2. **Proper imports** - All necessary dependencies included
+3. **TypeScript types** - All functions and variables typed
+4. **Error handling** - Loading, success, and error states
+5. **Role-based access** - Proper access control where needed
+6. **Business rule compliance** - Follow cleaning window and other constraints
 
-### Technical Patterns
-- Consistent component templates
-- Service layer architecture
-- TypeScript type definitions
-- Error handling patterns
-- Performance guidelines
+### Quality Gates
+- **Linting** - Code must pass ESLint and TypeScript checks
+- **Testing** - Manual verification of success and error scenarios
+- **Pattern consistency** - Follow existing codebase patterns exactly
+- **Business validation** - Ensure business rules are properly implemented
 
-### Development Workflow
-- Feature implementation checklist
-- Code quality standards
-- Testing and debugging guidance
-- Documentation requirements
+## File Organization
+- **Components**: `/components/` - Reusable UI components
+- **Services**: `/services/` - Business logic and Supabase queries
+- **Types**: `/types/index.ts` - TypeScript definitions
+- **Screens**: `/app/` - Expo Router screens
+- **Contexts**: `/contexts/` - React contexts for state management
 
-## Usage
+## Success Criteria
+- **Code works immediately** - No debugging or additional setup required
+- **Follows existing patterns** - Consistent with current codebase
+- **Handles all edge cases** - Loading, error, and empty states
+- **Business rules enforced** - Proper validation and constraints
+- **Type safe** - No TypeScript errors or warnings
 
-1. **Start a new chat** with Cursor
-2. **Mention what you want to build** - Cursor will automatically apply relevant rules
-3. **Specify the user role** - property_owner, cleaner, or co_host
-4. **Describe the business need** - Cursor will handle technical implementation
-
-## Example Prompts
-
-### For Property Owners
-> "I need a way for property owners to see all their cleaning schedules in one place"
-
-### For Cleaners  
-> "Cleaners need to see access codes and guest count prominently when they arrive at a property"
-
-### For Co-Hosts
-> "Co-hosts should be able to view reports but not modify billing information"
-
-## Rule Customization
-
-To modify rules:
-1. Edit the relevant `.mdc` file
-2. Update the `globs` patterns if needed
-3. Adjust `alwaysApply` setting
-4. Test with a new Cursor chat
-
-## Business Rules Enforced
-
-- **4-hour cleaning window** (11 AM - 3 PM)
-- **24-hour cancellation notice** requirement
-- **Linen requirements** scale with guest count
-- **Financial privacy** for cleaners
-- **Role-based access control** throughout
-
-## Success Metrics
-
-Rules are working when:
-- Business features described naturally get working code
-- New code follows existing patterns automatically
-- Technical details handled without user awareness
-- App maintains consistency as features are added
-- Errors explained in simple terms
-- Every request gets complete implementation
-
-## Support
-
-These rules are designed to make Cursor act as a complete technical co-founder who handles all complexity while the user focuses on growing their business.
+**Focus on: Write code that works. Make it complete. Follow patterns. Handle errors.**

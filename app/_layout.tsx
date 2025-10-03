@@ -2,7 +2,7 @@ import { Stack, router, usePathname, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuth();
@@ -10,19 +10,39 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading) {
-      // Temporarily allow properties page without auth for demo
-      if (!user && pathname !== '/properties') {
+      // Check if we're in demo mode (no Supabase configured)
+      const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+      const isDemoMode = !supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder');
+      
+      if (isDemoMode) {
+        // In demo mode, always show the dashboard
+        if (pathname.startsWith('/auth') || pathname === '/onboarding') {
+          router.replace('/');
+        }
+        return;
+      }
+
+      // If user is not authenticated and not on auth pages, redirect to login
+      if (!user && !pathname.startsWith('/auth')) {
         router.replace('/auth/login');
-      } else if (user && profile && !profile.onboarded) {
+      }
+      // If user is authenticated but not onboarded, redirect to onboarding
+      else if (user && profile && !profile.onboarded && pathname !== '/onboarding') {
         router.replace('/onboarding');
+      }
+      // If user is authenticated and onboarded, ensure they're on a valid page
+      else if (user && profile && profile.onboarded && pathname.startsWith('/auth')) {
+        router.replace('/');
       }
     }
   }, [user, profile, loading, pathname]);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
         <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={{ marginTop: 16, fontSize: 16, color: '#666' }}>Loading...</Text>
       </View>
     );
   }
@@ -36,7 +56,7 @@ export default function RootLayout() {
       <StatusBar style="auto" />
       <AuthGuard>
         <Stack>
-          <Stack.Screen name="index" options={{ title: 'Dashboard' }} />
+          <Stack.Screen name="index" options={{ title: 'Dashboard', headerShown: false }} />
           <Stack.Screen name="properties" options={{ title: 'Properties' }} />
           <Stack.Screen name="team" options={{ title: 'Team' }} />
           <Stack.Screen name="schedule" options={{ title: 'Schedule' }} />

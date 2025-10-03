@@ -10,6 +10,11 @@ import CleanerDashboard from '@/components/CleanerDashboard';
 export default function Dashboard() {
   const { profile } = useAuth();
 
+  // Check if we're in demo mode
+  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+  const isDemoMode = !supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder');
+
   // Show cleaner dashboard for cleaner role
   if (profile?.role === 'cleaner') {
     return <CleanerDashboard />;
@@ -18,6 +23,14 @@ export default function Dashboard() {
   // Show owner/co-host dashboard for other roles
   return (
     <ScrollView style={styles.container}>
+      {isDemoMode && (
+        <View style={styles.demoBanner}>
+          <Text style={styles.demoBannerText}>
+            🚀 Demo Mode - Configure Supabase to enable full functionality
+          </Text>
+        </View>
+      )}
+      
       <View style={styles.header}>
         <Text style={styles.greeting}>
           Good morning, {profile?.full_name?.split(' ')[0] || 'User'}!
@@ -25,6 +38,7 @@ export default function Dashboard() {
         <Text style={styles.subtitle}>
           {profile?.role === 'property_owner' && 'Manage your properties'}
           {profile?.role === 'co_host' && 'Property coordination'}
+          {isDemoMode && ' (Demo Mode)'}
         </Text>
         <TouchableOpacity 
           style={styles.profileButton}
@@ -40,7 +54,10 @@ export default function Dashboard() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Recent Activity</Text>
         <Text style={styles.activityText}>
-          Welcome to your dashboard! Start by adding your first property.
+          {isDemoMode 
+            ? 'Welcome to your dashboard! This is demo mode. Configure Supabase to enable full functionality.'
+            : 'Welcome to your dashboard! Start by adding your first property.'
+          }
         </Text>
       </View>
     </ScrollView>
@@ -51,6 +68,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9fafb',
+  },
+  demoBanner: {
+    backgroundColor: '#fef3c7',
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f59e0b',
+  },
+  demoBannerText: {
+    fontSize: 14,
+    color: '#92400e',
+    textAlign: 'center',
+    fontWeight: '500',
   },
   header: {
     backgroundColor: '#fff',
