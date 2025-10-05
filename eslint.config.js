@@ -1,15 +1,25 @@
 // https://docs.expo.dev/guides/using-eslint/
-module.exports = {
-  extends: [
-    'expo',
-    '@expo/eslint-config',
-  ],
-  ignorePatterns: ['dist/*'],
-  rules: {
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
-    'react/no-unescaped-entities': 'off',
+/* eslint-env node */
+const { FlatCompat } = require('@eslint/eslintrc');
+const js = require('@eslint/js');
+
+const compat = new FlatCompat({
+  baseDirectory: process.cwd(),
+  recommendedConfig: js.configs.recommended,
+});
+
+module.exports = [
+  ...compat.extends('expo'),
+  {
+    ignores: ['dist/*', 'node_modules/*', '.expo/*', 'web-build/*'],
   },
-};
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      'react/no-unescaped-entities': 'off',
+    },
+  },
+];

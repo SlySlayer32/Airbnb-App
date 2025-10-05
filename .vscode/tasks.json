@@ -1,0 +1,103 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Git: Fetch",
+            "type": "shell",
+            "command": "git fetch origin",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Git: Pull (rebase)",
+            "type": "shell",
+            "command": "git pull --rebase origin ${input:branch}",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Git: Stash WIP",
+            "type": "shell",
+            "command": "git",
+            "args": ["stash", "push", "-m", "WIP from VS Code task"],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Dependencies",
+            "type": "shell",
+            "command": "npm install",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Typecheck (tsc)",
+            "type": "shell",
+            "command": "npx tsc --noEmit",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "Lint (eslint)",
+            "type": "shell",
+            "command": "npx eslint .",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "label": "Start Dev Server",
+            "type": "shell",
+            "command": "npm start",
+            "presentation": {
+                "reveal": "always"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Install",
+            "type": "shell",
+            "command": "powershell -NoProfile -Command \"if (Test-Path node_modules) { Remove-Item -Recurse -Force node_modules } ; if (Test-Path package-lock.json) { Remove-Item -Force package-lock.json } ; npm install\"",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Sync & Verify",
+            "dependsOn": [
+                "Git: Stash WIP",
+                "Git: Fetch",
+                "Git: Pull (rebase)",
+                "Install Dependencies",
+                "Typecheck (tsc)",
+                "Lint (eslint)"
+            ],
+            "dependsOrder": "sequence"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "branch",
+            "type": "promptString",
+            "description": "Branch to pull from (default: main)",
+            "default": "main"
+        }
+    ]
+}

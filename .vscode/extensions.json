@@ -1,0 +1,42 @@
+{
+  "recommendations": [
+    // Essential for React Native development
+    "msjsdiag.vscode-react-native",
+    
+    // Code formatting and quality
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    
+    // TypeScript support
+    "ms-vscode.vscode-typescript-next",
+    
+    // Git tools
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    
+    // React/JSX support
+    "dsznajder.es7-react-js-snippets",
+    
+    // Path intellisense
+    "christian-kohler.path-intellisense",
+    
+    // Auto rename tag
+    "formulahendry.auto-rename-tag",
+    
+    // Markdown support (for your documentation)
+    "yzhang.markdown-all-in-one",
+    
+    // GitHub Copilot (AI assistance)
+    "github.copilot",
+    "github.copilot-chat",
+    
+    // Expo tools
+    "expo.vscode-expo-tools",
+    
+    // Better comments
+    "aaron-bond.better-comments",
+    
+    // Error lens (inline errors)
+    "usernamehw.errorlens"
+  ]
+}

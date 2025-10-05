@@ -333,3 +333,31 @@ The transformation from unclear commit messages to comprehensive business docume
 **Built with ❤️ by a non-technical founder proving that anyone can build substantial software products with the right approach and tools.**
 
 For questions or collaboration: [GitHub Issues](https://github.com/SlySlayer32/Airbnb-App/issues)
+
+## 🧰 VS Code Helper Tasks (non-technical)
+
+If you use Visual Studio Code, there are several handy tasks already set up to make common project actions easy. You don't need to open a terminal or remember long commands — just run the task from the Command Palette (Run Task).
+
+- "Git: Fetch": Refreshes the project with the latest information from the remote repository. Think of it as checking if there are new updates available.
+- "Git: Pull (rebase)": Updates your local branch with the latest changes from the remote branch. It will ask which branch to use (default: `main`). Use this when you want to bring your copy up-to-date.
+- "Git: Stash WIP": Temporarily saves any unfinished local changes so you can update the project safely. Use this if you have uncommitted work you don't want to lose before pulling remote changes.
+- "Install Dependencies": Downloads all the required project files (software packages) to run the app. Run this after pulling changes that updated the project's dependencies.
+- "Clean Install": Safely removes the local dependency folder and the lock file (if present), then re-downloads everything. Use this when things break after an update — it's the "start fresh" option for dependencies.
+- "Typecheck (tsc)": Runs a quick automated check that looks for type-related problems in the code (this is mainly for developers). You only need to run this if you are changing code.
+- "Lint (eslint)": Runs a style-and-quality check and points out code issues so they can be fixed. Helpful before committing changes.
+- "Start Dev Server": Starts the app in development mode so you can preview it on a device or simulator. This keeps running while you work and updates as you save files.
+- "Sync & Verify": A convenience task that runs several steps in order: stash any in-progress work, fetch updates, pull the chosen branch, install dependencies, run the typecheck, and run the linter. Use this to bring your workspace fully in line with the latest remote changes and verify everything looks okay.
+
+How to use
+
+1. In Visual Studio Code press Ctrl+Shift+P (or Cmd+Shift+P on Mac).
+2. Type "Run Task" and choose the task you want.
+3. If a task asks for the branch name, just press Enter to accept the default `main` or type another branch name.
+
+When to use these tasks
+
+- After pulling changes from the repository (use `Sync & Verify` for a single step).
+- When installation or dependency-related errors appear (use `Clean Install`).
+- Before creating a pull request, run `Typecheck (tsc)` and `Lint (eslint)` to catch common issues.
+
+If you'd like, I can also add short keyboard shortcuts or make a single-button script to run the full sync automatically. Let me know which you prefer.

@@ -22,6 +22,7 @@ export default function CleanerActiveSessionCard({
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showPhotoGate, setShowPhotoGate] = useState(false);
   const [completionPhotos, setCompletionPhotos] = useState<string[]>([]);
+  const [photoRequirements, setPhotoRequirements] = useState({ required: false, completed: false });
   
   // Get pause state from session data instead of local state
   const isPaused = session?.is_currently_paused || false;
@@ -119,7 +120,6 @@ export default function CleanerActiveSessionCard({
     }
   };
 
-  const [photoRequirements, setPhotoRequirements] = useState({ required: false, completed: false });
   const canComplete = !photoRequirements.required || photoRequirements.completed;
 
   return (
