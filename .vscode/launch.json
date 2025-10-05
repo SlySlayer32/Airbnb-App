@@ -4,24 +4,23 @@
     {
       "name": "Debug: Expo (Android)",
       "type": "reactnative",
-      "request": "launch",
-      "platform": "android",
+      "request": "attach",
       "cwd": "${workspaceFolder}",
-      "enableDebug": true
+      "preLaunchTask": "Expo: Start Android"
     },
     {
       "name": "Debug: Expo (iOS)",
       "type": "reactnative",
-      "request": "launch",
-      "platform": "ios",
+      "request": "attach",
       "cwd": "${workspaceFolder}",
-      "enableDebug": true
+      "preLaunchTask": "Expo: Start iOS"
     },
     {
       "name": "Debug: Expo (Web)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:8081",
+      "url": "http://localhost:19006",
+      "preLaunchTask": "Expo: Start Web",
       "webRoot": "${workspaceFolder}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
