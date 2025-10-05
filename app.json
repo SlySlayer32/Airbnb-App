@@ -8,9 +8,12 @@
     "scheme": "management-cleaning-maintenance",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.airbnb.management"
     },
     "android": {
+      "package": "com.airbnb.management",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
