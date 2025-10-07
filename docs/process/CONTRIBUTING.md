@@ -4,27 +4,33 @@ Welcome to our project! This guide helps you understand how to contribute effect
 
 ## 📋 Documentation Map
 
-**Start here**: [`DOCUMENTATION_INDEX.md`](./DOCUMENTATION_INDEX.md) - Find any document fast
-
-### For Investors & Stakeholders
-
-- [`EXECUTIVE_SUMMARY.md`](./EXECUTIVE_SUMMARY.md) - High-level value proposition and market analysis
-- [`COMPLETE_PRODUCT_ROADMAP.md`](./COMPLETE_PRODUCT_ROADMAP.md) - 12-week development plan with financials
-- [`SUCCESS_METRICS_FRAMEWORK.md`](./SUCCESS_METRICS_FRAMEWORK.md) - KPIs and success criteria
-- [`VISUAL_WORKFLOW_DIAGRAMS.md`](./VISUAL_WORKFLOW_DIAGRAMS.md) - Visual workflows for presentations
+**⚡ NEW**: [`/.ai/README.md`](../../.ai/README.md) - **Complete AI-optimized documentation hub** (Start here!)
 
 ### For Developers
 
-- [`README.md`](./README.md) - Setup and quick start guide
-- [`.github/instructions/`](.github/instructions/) - AI development patterns and rules
-- [`USER_WORKFLOW_ANALYSIS.md`](./USER_WORKFLOW_ANALYSIS.md) - User personas and workflow gaps
-- [`INTERACTIVE_TESTING_RESULTS.md`](./INTERACTIVE_TESTING_RESULTS.md) - Current app status and testing
-- [`THIRD_PARTY_INTEGRATIONS.md`](./THIRD_PARTY_INTEGRATIONS.md) - Integration research and priorities
+- **Primary Reference**: [`/.ai/`](../../.ai/) - Complete manifests, workflows, conventions, and guides
+  - [README.md](../../.ai/README.md) - Project overview and context
+  - [QUICK_REFERENCE.md](../../.ai/QUICK_REFERENCE.md) - Fast lookup for patterns
+  - [COMPONENT_MANIFEST.md](../../.ai/COMPONENT_MANIFEST.md) - All 18 components
+  - [SERVICE_MANIFEST.md](../../.ai/SERVICE_MANIFEST.md) - All 8 services
+  - [SCREEN_MANIFEST.md](../../.ai/SCREEN_MANIFEST.md) - All 13 screens
+  - [CONVENTIONS.md](../../.ai/CONVENTIONS.md) - Code patterns & design system
+  - [WORKFLOWS.md](../../.ai/WORKFLOWS.md) - Daily development processes
+  - [PROMPTING_GUIDE.md](../../.ai/PROMPTING_GUIDE.md) - AI communication templates
+  - [GITHUB_WORKFLOW.md](../../.ai/GITHUB_WORKFLOW.md) - Git operations guide
+  - [TROUBLESHOOTING.md](../../.ai/TROUBLESHOOTING.md) - Common issues & fixes
+
+### For Investors & Stakeholders
+
+- [`docs/business/EXECUTIVE_SUMMARY.md`](../business/EXECUTIVE_SUMMARY.md) - Market analysis and value proposition
+- [`docs/business/FOUNDER_EXECUTIVE_SUMMARY.md`](../business/FOUNDER_EXECUTIVE_SUMMARY.md) - Phase 1 completion summary
+- [`docs/archive/`](../archive/) - Historical roadmaps and analysis
 
 ### For Project History
 
-- [`DEVELOPMENT_HISTORY.md`](./DEVELOPMENT_HISTORY.md) - Complete project evolution narrative
-- [`CHANGELOG.md`](./CHANGELOG.md) - Technical version history
+- [`docs/technical/DEVELOPMENT_HISTORY.md`](../technical/DEVELOPMENT_HISTORY.md) - Complete project evolution
+- [`CHANGELOG.md`](../../CHANGELOG.md) - Technical version history
+- [`docs/technical/PHASE_1_COMPLETION_REPORT.md`](../technical/PHASE_1_COMPLETION_REPORT.md) - Phase 1 technical summary
 
 ## 🚀 Quick Start for Contributors
 
@@ -55,9 +61,10 @@ npm start
 
 ### Before You Start
 
-1. **Check Documentation Index** to find relevant docs
-2. **Read AI Instructions** in `.github/instructions/` for development patterns
-3. **Review Recent Changes** in CHANGELOG.md
+1. **Read [`.ai/README.md`](../../.ai/README.md)** for complete project context
+2. **Check [`.ai/WORKFLOWS.md`](../../.ai/WORKFLOWS.md)** for development processes
+3. **Review [`.ai/CONVENTIONS.md`](../../.ai/CONVENTIONS.md)** for code standards
+4. **Review Recent Changes** in CHANGELOG.md
 
 ### Development Workflow
 

@@ -2,22 +2,51 @@
 applyTo: '**'
 ---
 
-# Airbnb Cleaning Management Platform - Master Instructions (Legacy GitHub Reference)
+# Airbnb Cleaning Management Platform - Master Instructions
 
-**Note**: This file is maintained for GitHub workflow reference. Primary instruction files are now in `.cursor/rules/` for Cursor AI.
+**📚 PRIMARY DOCUMENTATION**: See [`.ai/README.md`](../../.ai/README.md) for complete AI-optimized project documentation.
 
-## Core Instructions by File Type
-- General Context: `.github/instructions/general-context.instructions.md` - Non-technical founder communication, business rules
-- Components: `.github/instructions/components.instructions.md` - Component development patterns and design system  
-- Services: `.github/instructions/services.instructions.md` - Service layer patterns and business logic
-- Screens: `.github/instructions/screens.instructions.md` - Screen development and navigation patterns
-- Types: `.github/instructions/types.instructions.md` - TypeScript definitions and interface patterns
-- Debugging: `.github/instructions/debugging.instructions.md` - Common issues and debugging guidance
-- Documentation: `.github/instructions/documentation.instructions.md` - Changelog and commit standards
-- Feature Development: `.github/instructions/feature-development.instructions.md` - Complete feature implementation process
-- GitHub Workflow: `.github/instructions/github-workflow.instructions.md` - Pre-push checklist and documentation updates
+## 🎯 Quick Start for AI Assistants
 
-**Primary Instructions**: See `.cursor/rules/airbnb-app-master.mdc` for current Cursor AI instructions.
+1. **Read [`.ai/README.md`](../../.ai/README.md) first** - Complete project context
+2. **Reference manifests** when working with code:
+   - [`.ai/COMPONENT_MANIFEST.md`](../../.ai/COMPONENT_MANIFEST.md) - 18 components
+   - [`.ai/SERVICE_MANIFEST.md`](../../.ai/SERVICE_MANIFEST.md) - 8 services
+   - [`.ai/SCREEN_MANIFEST.md`](../../.ai/SCREEN_MANIFEST.md) - 13 screens
+3. **Follow [`.ai/CONVENTIONS.md`](../../.ai/CONVENTIONS.md)** - Code patterns & design system
+4. **Use [`.ai/WORKFLOWS.md`](../../.ai/WORKFLOWS.md)** - Feature development processes
+
+## 📁 New Documentation System (`.ai/` Directory)
+
+The `.ai/` directory contains all technical documentation optimized for AI consumption:
+
+- **README.md** - Project overview, tech stack, business rules, user roles
+- **QUICK_REFERENCE.md** - Commands, imports, styling, navigation patterns
+- **COMPONENT_MANIFEST.md** - Complete component inventory with examples
+- **SERVICE_MANIFEST.md** - Service API reference with all methods
+- **SCREEN_MANIFEST.md** - Screen directory with routes and purposes
+- **CONVENTIONS.md** - Code standards and design system
+- **WORKFLOWS.md** - Daily development processes
+- **PROMPTING_GUIDE.md** - AI communication templates
+- **GITHUB_WORKFLOW.md** - Git operations guide
+- **TROUBLESHOOTING.md** - Common issues and solutions
+- **MIGRATION_GUIDE.md** - Documentation structure migration reference
+
+## 🔄 Legacy Instructions (Maintained for Compatibility)
+
+Individual instruction files in this directory are maintained for GitHub Copilot compatibility but should be considered secondary to the `.ai/` system:
+
+- `general-context.instructions.md` - Consolidated into `.ai/README.md`
+- `components.instructions.md` - Consolidated into `.ai/COMPONENT_MANIFEST.md` + `.ai/CONVENTIONS.md`
+- `services.instructions.md` - Consolidated into `.ai/SERVICE_MANIFEST.md` + `.ai/CONVENTIONS.md`
+- `screens.instructions.md` - Consolidated into `.ai/SCREEN_MANIFEST.md`
+- `types.instructions.md` - Consolidated into `.ai/CONVENTIONS.md`
+- `debugging.instructions.md` - Consolidated into `.ai/TROUBLESHOOTING.md`
+- `documentation.instructions.md` - Consolidated into `.ai/GITHUB_WORKFLOW.md`
+- `feature-development.instructions.md` - Consolidated into `.ai/WORKFLOWS.md`
+- `github-workflow.instructions.md` - Consolidated into `.ai/GITHUB_WORKFLOW.md`
+
+**Note**: Also see `.cursor/rules/` for Cursor AI-specific instructions (similar content, different format).
 
 ## Application Purpose & Business Context
 
