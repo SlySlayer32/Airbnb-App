@@ -13,8 +13,9 @@
     "lint:fix": "echo \"Lint fix not available - please format manually\"",
     "type-check": "npx tsc --noEmit",
     "build": "npx expo export --platform web --clear",
-    "docs:update": "node scripts/update-manifests.js",
-    "docs:validate": "node scripts/validate-docs.js",
+    "docs:precheck": "node scripts/precheck-docs.js",
+    "docs:update": "npm run docs:precheck && node scripts/update-manifests.js",
+    "docs:validate": "npm run docs:precheck && node scripts/validate-docs.js",
     "verify-config": "node verify-android-config.js"
   },
   "dependencies": {

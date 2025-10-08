@@ -10,8 +10,9 @@ module.exports = function (api) {
         {
           moduleName: '@env',
           path: '.env.local',
-          safe: false,
-          allowUndefined: true,
+          safe: true,
+          allowUndefined: false,
+          example: '.env.example',
         },
       ],
     ]

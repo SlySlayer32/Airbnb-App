@@ -89,7 +89,24 @@ console.log('');
 // Summary
 console.log('📋 Validation Summary:\n');
 
-if (allFilesPresent && hasQuickRefLink && hasComponentLink && hasServiceLink && rootHasAiLink) {
+const errors = [];
+if (!allFilesPresent) {
+  errors.push('❌ Missing required documentation files in .ai/ directory');
+}
+if (!hasQuickRefLink) {
+  errors.push('❌ .ai/README.md missing link to QUICK_REFERENCE.md');
+}
+if (!hasComponentLink) {
+  errors.push('❌ .ai/README.md missing link to COMPONENT_MANIFEST.md');
+}
+if (!hasServiceLink) {
+  errors.push('❌ .ai/README.md missing link to SERVICE_MANIFEST.md');
+}
+if (!rootHasAiLink) {
+  errors.push('❌ Root README.md missing link to .ai/README.md');
+}
+
+if (errors.length === 0) {
   console.log('   ✅ All validation checks passed!');
   console.log('   📚 Documentation structure is complete and properly cross-referenced.');
   console.log('');
@@ -98,6 +115,19 @@ if (allFilesPresent && hasQuickRefLink && hasComponentLink && hasServiceLink && 
   console.log('   2. Test AI assistant comprehension');
   console.log('   3. Update CHANGELOG.md with documentation changes');
 } else {
-  console.log('   ⚠️  Some validation checks failed. Please review above.');
+  console.log('   ⚠️  Validation failed with the following errors:\n');
+  errors.forEach(error => console.log(`      ${error}`));
+  console.log('');
+  console.log('💡 How to fix:');
+  if (!allFilesPresent) {
+    console.log('   • Create missing files in .ai/ directory');
+  }
+  if (!hasQuickRefLink || !hasComponentLink || !hasServiceLink) {
+    console.log('   • Add missing cross-reference links in .ai/README.md');
+  }
+  if (!rootHasAiLink) {
+    console.log('   • Add link to .ai/README.md in root README.md');
+  }
+  console.log('');
   process.exit(1);
 }
