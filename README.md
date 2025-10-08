@@ -113,6 +113,7 @@ Built with modern, scalable technologies:
 | `npm run ios` | Launch iOS simulator |
 | `npm run web` | Launch web browser |
 | `npm run lint` | Check code quality |
+| `npm run verify-config` | Verify Android/iOS configuration |
 
 ## 🏗️ Project Architecture
 

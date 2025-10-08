@@ -14,7 +14,8 @@
     "type-check": "npx tsc --noEmit",
     "build": "npx expo export --platform web --clear",
     "docs:update": "node scripts/update-manifests.js",
-    "docs:validate": "node scripts/validate-docs.js"
+    "docs:validate": "node scripts/validate-docs.js",
+    "verify-config": "node verify-android-config.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
