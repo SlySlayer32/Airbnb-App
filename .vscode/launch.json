@@ -1,62 +1,43 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug: Expo (Android)",
-      "type": "reactnative",
-      "request": "attach",
-      "cwd": "${workspaceFolder}",
-      "preLaunchTask": "Expo: Start Android"
-    },
-    {
-      "name": "Debug: Expo (iOS)",
-      "type": "reactnative",
-      "request": "attach",
-      "cwd": "${workspaceFolder}",
-      "preLaunchTask": "Expo: Start iOS"
-    },
-    {
-      "name": "Debug: Expo (Web)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:19006",
-      "preLaunchTask": "Expo: Start Web",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./~/*": "${webRoot}/node_modules/*",
-        "webpack:///./*": "${webRoot}/*",
-        "webpack:///*": "*"
-      }
-    },
-    {
-      "name": "Attach: Expo (Android)",
-      "type": "reactnative",
-      "request": "attach",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "Attach: Expo (iOS)",
-      "type": "reactnative",
-      "request": "attach",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "Run TypeScript Checks",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/typescript/bin/tsc",
-      "args": ["--noEmit"],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Debug: Expo (All Platforms)",
-      "configurations": ["Debug: Expo (Android)", "Debug: Expo (iOS)", "Debug: Expo (Web)"],
-      "stopAll": true
-    }
-  ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Expo: Android (npm run android)",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "android"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"name": "Expo: iOS (npm run ios)",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "ios"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"name": "Expo: Web (Chrome)",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:19006",
+			"webRoot": "${workspaceFolder}",
+			"preLaunchTask": "Dev: Start Server"
+		},
+		{
+			"name": "TypeScript: Check project",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npx",
+			"runtimeArgs": ["tsc", "--noEmit"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		}
+	]
 }
