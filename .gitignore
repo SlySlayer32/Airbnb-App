@@ -27,8 +27,10 @@ android
 
 expo-env.d.ts
 
-# Supabase
+# Supabase - protect environment variables with secrets
 .env
+.env.local
+.env*.local
 
 
 #Ignore vscode AI rules

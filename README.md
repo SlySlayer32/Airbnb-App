@@ -4,6 +4,8 @@
 
 A comprehensive property management application specifically designed to solve real-world coordination problems between property owners and cleaning staff. This platform transforms the chaotic world of Airbnb cleaning operations into a streamlined, professional workflow.
 
+> **📚 Complete Documentation**: See [`.ai/README.md`](.ai/README.md) for comprehensive AI-optimized project documentation with manifests, workflows, and guides.
+
 ## 🎯 The Problem This Solves
 
 As a non-technical founder who has experienced firsthand the frustrations of managing cleaning operations across multiple properties, this platform addresses critical pain points:
