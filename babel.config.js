@@ -3,8 +3,6 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      '@babel/plugin-proposal-export-namespace-from', // For web support
-      'react-native-reanimated/plugin', // Must be last
       [
         'module:react-native-dotenv',
         {
@@ -15,6 +13,7 @@ module.exports = function (api) {
           example: '.env.example',
         },
       ],
+      'react-native-reanimated/plugin', // Must be last
     ]
   };
 };

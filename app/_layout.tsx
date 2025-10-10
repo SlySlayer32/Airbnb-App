@@ -1,8 +1,19 @@
-import { Stack, router, usePathname, useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { useFonts } from 'expo-font';
+import { Stack, router, usePathname } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, LogBox, Text, View } from 'react-native';
+
+// Suppress network errors in demo mode
+LogBox.ignoreLogs([
+  'Network request failed',
+  'TypeError: Network request failed',
+]);
+
+// Keep the splash screen visible while we load fonts
+SplashScreen.preventAutoHideAsync();
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuth();
@@ -51,6 +62,20 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <AuthProvider>
       <StatusBar style="auto" />

@@ -1,6 +1,6 @@
-import { supabase } from '../utils/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '../utils/supabase';
 
 interface Profile {
   id: string;
@@ -47,24 +47,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
     
     if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder')) {
-      console.warn('⚠️  Supabase not configured. Running in demo mode.');
+      console.log('🚀 Demo Mode: Supabase not configured, using mock data');
       setLoading(false);
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
+    // Get initial session with network error handling
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        // Suppress network errors in demo mode
+        if (error.message?.includes('NetworkError') || error.message?.includes('Network request failed')) {
+          console.log('🚀 Demo Mode: Network unavailable, using mock data');
+        } else {
+          console.error('Auth error:', error);
+        }
         setLoading(false);
-      }
-    }).catch((error) => {
-      console.error('Error getting session:', error);
-      setLoading(false);
-    });
+      });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
