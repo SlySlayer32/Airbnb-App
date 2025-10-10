@@ -1,12 +1,12 @@
 # Cursor Rules Setup Guide
 
-This folder contains two rule files optimized for Cursor Settings:
+This folder contains rule files for Cursor in multiple formats:
 
 ## Files Overview
 
-### 📋 PROJECT_RULES.md
+### 📋 `.cursorrules` (Root Level)
 **What it is**: Airbnb app-specific rules  
-**Where it goes**: Cursor Settings → Project Rules  
+**Where it is**: Project root - Auto-loaded by Cursor  
 **What it contains**:
 - App description (cleaning management platform)
 - 5 critical business rules (cleaning window, cancellation, privacy, photo proof, linen calc)
@@ -18,13 +18,21 @@ This folder contains two rule files optimized for Cursor Settings:
 - When to read which docs for different tasks
 - How to use documentation as source of truth
 
-**Use this when**: Working on THIS project only
+**Status**: ✅ Active (Cursor reads this automatically)
 
 ---
 
-### 👤 USER_RULES.md
+### 📋 `.cursor/rules/project-rules.mdc`
+**What it is**: Same as `.cursorrules` but in .mdc format  
+**Where it is**: `.cursor/rules/` folder  
+**Status**: ✅ Active (`alwaysApply: true` makes it auto-load)  
+**Purpose**: Backup format for newer Cursor versions
+
+---
+
+### 👤 `.cursor/USER_RULES.md`
 **What it is**: Non-technical founder communication style  
-**Where it goes**: Cursor Settings → User Rules  
+**Where it goes**: Cursor Settings → User Rules (manual copy)  
 **What it contains**:
 - **📚 Documentation-first approach** (CRITICAL - read docs before starting)
 - Plain language communication standards
@@ -34,35 +42,44 @@ This folder contains two rule files optimized for Cursor Settings:
 - Quality assurance checklist
 - Response structure template
 
-**Use this when**: Working on ANY project (global settings)
+**Use this when**: Working on ANY project (global settings)  
+**Status**: ⚠️ Needs manual setup (copy to Cursor Settings)
 
 ---
 
-## How to Apply These Rules
+## Setup Status
 
-### Step 1: Open Cursor Settings
+### ✅ Project Rules - Already Active!
+
+**No action needed** - Project rules are automatically loaded from:
+1. `.cursorrules` (root level)
+2. `.cursor/rules/project-rules.mdc` (with `alwaysApply: true`)
+
+Both files are identical (kept in sync for compatibility). Cursor will read these automatically.
+
+---
+
+### ⚠️ User Rules - Manual Setup Required
+
+**You need to copy this to Cursor Settings** for global communication style:
+
+#### Step 1: Open Cursor Settings
 - Press `Ctrl+,` (Windows/Linux) or `Cmd+,` (Mac)
 - Or go to: File → Preferences → Settings
 
-### Step 2: Navigate to Rules Section
+#### Step 2: Navigate to Rules Section
 - In settings search bar, type: "rules"
-- Look for sections labeled:
-  - **"Cursor Rules for AI"** or **"Rules"**
-  - You'll see two text boxes: "User Rules" and "Project Rules"
+- Look for section labeled: **"Cursor Rules for AI"** or **"Rules"**
+- You'll see a text box labeled **"User Rules"**
 
-### Step 3: Copy Project Rules
-1. Open `.cursor/PROJECT_RULES.md`
-2. Select all content (Ctrl+A / Cmd+A)
-3. Copy (Ctrl+C / Cmd+C)
-4. Paste into **"Project Rules"** text box in Cursor Settings
-5. Click "Save" or just close (auto-saves)
-
-### Step 4: Copy User Rules
+#### Step 3: Copy User Rules
 1. Open `.cursor/USER_RULES.md`
 2. Select all content (Ctrl+A / Cmd+A)
 3. Copy (Ctrl+C / Cmd+C)
 4. Paste into **"User Rules"** text box in Cursor Settings
 5. Click "Save" or just close (auto-saves)
+
+**That's it!** User rules now work across ALL your projects.
 
 ---
 
