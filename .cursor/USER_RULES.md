@@ -1,5 +1,27 @@
 # Non-Technical Founder Communication Rules
 
+## Documentation First Approach
+
+**CRITICAL: Always check project documentation before starting work**
+
+### Before Every Task:
+1. ✅ Look for `docs/AI-README.md` or similar entry point
+2. ✅ Read it first (< 30 seconds) to understand project context
+3. ✅ Check for phase tracking or roadmap docs to know current priority
+4. ✅ Review relevant feature specs, component manifests, or pattern guides
+5. ✅ Use docs as source of truth - if docs conflict with request, flag it
+
+### If Documentation Exists:
+- Read relevant docs BEFORE writing code
+- Follow patterns shown in documentation exactly
+- Flag when docs need updating after completing work
+- Cite specific docs when explaining decisions: "According to docs/BUSINESS_RULES.md..."
+
+### If No Documentation:
+- Ask user if there's documentation you should read
+- Create clear documentation as you build
+- Establish patterns that future features can follow
+
 ## Communication Style
 - Explain changes in plain business terms without technical jargon
 - Start responses by confirming what you're building in simple language

@@ -14,7 +14,9 @@ This folder contains two rule files optimized for Cursor Settings:
 - Code patterns and examples
 - File organization structure
 - Design system (colors, spacing, naming)
-- Reference to docs/ folder
+- **📚 Complete docs/ folder navigation** (CRITICAL - tells AI to read docs first)
+- When to read which docs for different tasks
+- How to use documentation as source of truth
 
 **Use this when**: Working on THIS project only
 
@@ -24,6 +26,7 @@ This folder contains two rule files optimized for Cursor Settings:
 **What it is**: Non-technical founder communication style  
 **Where it goes**: Cursor Settings → User Rules  
 **What it contains**:
+- **📚 Documentation-first approach** (CRITICAL - read docs before starting)
 - Plain language communication standards
 - Complete code delivery requirements
 - Strategic development guidance
@@ -78,9 +81,14 @@ This folder contains two rule files optimized for Cursor Settings:
 ## How They Work Together
 
 When you work on this Airbnb app:
-1. **User Rules** tell AI: "Explain in plain language, give complete code, suggest next steps"
-2. **Project Rules** tell AI: "This is a cleaning app with 4-hour windows, use TypeScript, follow these patterns"
-3. **Combined**: AI acts as a strategic technical lead who speaks plainly and knows your app deeply
+1. **User Rules** tell AI: "Read docs first, explain in plain language, give complete code, suggest next steps"
+2. **Project Rules** tell AI: "This is a cleaning app with 4-hour windows, use TypeScript, follow these patterns, and here's the complete docs/ folder structure to reference"
+3. **Combined**: AI acts as a strategic technical lead who:
+   - ✅ Reads documentation before starting any work
+   - ✅ Uses docs as source of truth
+   - ✅ Speaks plainly without jargon
+   - ✅ Knows your app deeply through comprehensive documentation
+   - ✅ Proactively suggests what to build next based on roadmap docs
 
 ---
 
@@ -92,13 +100,26 @@ After applying both rules, start a new chat and try:
 "Add a button to the cleaner dashboard that shows today's cleaning count"
 ```
 
-**What you should see**:
-✅ AI confirms in plain language: "We're building a counter display..."
-✅ Complete working code (no TODOs)
-✅ Follows existing component patterns
-✅ Uses correct colors/spacing from design system
-✅ Suggests next step: "The logical next development step is..."
-✅ Mentions GitHub issue creation
+**What you should see (Documentation-First Behavior)**:
+✅ **Reads docs first**: "I checked `docs/AI-README.md` and `docs/manifests/COMPONENTS.md`..."
+✅ **Cites documentation**: "According to `docs/core/BUSINESS_RULES.md`, cleaners cannot see financial data..."
+✅ **Confirms in plain language**: "We're building a counter display so cleaners can see how many cleanings they have today"
+✅ **Architecture check**: "This integrates with: CleanerDashboard component and cleaningSessionService"
+✅ **Complete working code** (no TODOs)
+✅ **Follows existing patterns**: Uses same styling as other dashboard components
+✅ **Uses correct design system**: Colors, spacing, borderRadius from project rules
+✅ **Business rules enforced**: Doesn't show any financial information
+✅ **Testing steps**: Clear steps to verify it works
+✅ **Suggests next step**: "The logical next development step is [X] because [reason]"
+✅ **Mentions GitHub issue**: "I'll create issue: 'Cleaner - View Today's Job Count'"
+
+**What's Different With Documentation-First Approach**:
+- AI reads relevant docs BEFORE writing code
+- AI cites which docs it consulted
+- AI catches conflicts between request and documented patterns
+- AI knows what already exists (from manifests)
+- AI knows what to build next (from phase tracking)
+- AI follows established patterns automatically
 
 ---
 

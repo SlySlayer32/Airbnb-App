@@ -236,14 +236,110 @@ When completing a task, structure response as:
 **5. Next Recommended Step**
 "The logical next step is [specific feature] because [technical/workflow reason]"
 
-## Reference Documentation
-- **Current phase**: `docs/phase-tracking/PHASE_STATUS.md`
-- **All components**: `docs/manifests/COMPONENTS.md`
-- **All services**: `docs/manifests/SERVICES.md`
-- **All screens**: `docs/manifests/SCREENS.md`
-- **Quick patterns**: `docs/reference/QUICK_REFERENCE.md`
-- **User roles**: `docs/core/USER_ROLES.md`
-- **Business rules**: `docs/core/BUSINESS_RULES.md`
+## Documentation System (MANDATORY - Read Before Every Task)
+
+### 📚 Entry Point
+**ALWAYS read `docs/AI-README.md` at the start of every session** - it contains:
+- 30-second project context
+- Quality checklist
+- Current phase status
+- Navigation to all other docs
+
+### 📂 Documentation Structure
+```
+docs/
+├── AI-README.md              ← START HERE (read first, every time)
+├── INDEX.md                  ← Navigation guide
+├── core/                     ← Essential context
+│   ├── PRODUCT.md           ← What we're building
+│   ├── BUSINESS_RULES.md    ← 5 critical rules (ALWAYS enforce)
+│   ├── USER_ROLES.md        ← Permission matrices
+│   └── TECH_STACK.md        ← Technology choices
+├── phase-tracking/          ← Live development status
+│   ├── PHASE_STATUS.md      ← What to work on next
+│   ├── ISSUE_AUDIT.md       ← Quality history
+│   └── CURRENT_PHASE.json   ← Machine-readable status
+├── manifests/               ← Code inventory
+│   ├── COMPONENTS.md        ← All 18 UI components
+│   ├── SERVICES.md          ← All 8 services
+│   ├── SCREENS.md           ← All 13 screens
+│   └── TYPES.md             ← TypeScript interfaces
+├── features/                ← Feature specifications
+│   ├── cleaner-dashboard.md
+│   ├── session-lifecycle.md
+│   ├── photo-proof.md
+│   ├── real-time-updates.md
+│   └── banner-state-machine.md
+├── reference/               ← Quick lookup
+│   ├── QUICK_REFERENCE.md   ← Common patterns
+│   ├── API_PATTERNS.md      ← Code templates
+│   ├── PROMPTING_GUIDE.md   ← How to ask for features
+│   └── TROUBLESHOOTING.md   ← Common errors
+└── workflows/               ← Development processes
+    ├── FEATURE_DEVELOPMENT.md
+    ├── BUG_FIXING.md
+    ├── GITHUB_WORKFLOW.md
+    └── DEPLOYMENT.md
+```
+
+### 📖 When to Read Which Docs
+
+**Before Starting ANY Work:**
+1. Read `docs/AI-README.md` (30 seconds - ALWAYS)
+2. Check `docs/phase-tracking/PHASE_STATUS.md` (know current priority)
+3. Review relevant docs based on task type below
+
+**When Building New Feature:**
+1. ✅ Read `docs/phase-tracking/PHASE_STATUS.md` - Is this the priority?
+2. ✅ Read feature spec in `docs/features/[feature-name].md` - Exact requirements
+3. ✅ Check `docs/manifests/COMPONENTS.md` - What exists already?
+4. ✅ Check `docs/manifests/SERVICES.md` - Can I reuse existing services?
+5. ✅ Review `docs/core/BUSINESS_RULES.md` - Which rules apply?
+6. ✅ Follow pattern from `docs/reference/API_PATTERNS.md`
+
+**When Fixing Bug:**
+1. ✅ Read `docs/reference/TROUBLESHOOTING.md` - Is this a known issue?
+2. ✅ Check `docs/reference/API_PATTERNS.md` - What's the correct pattern?
+3. ✅ Review related feature spec in `docs/features/`
+4. ✅ Verify fix doesn't break business rules
+
+**When Extending Existing Feature:**
+1. ✅ Find feature spec in `docs/features/[feature-name].md`
+2. ✅ Check which components/services already exist in manifests
+3. ✅ Use same patterns as existing implementation
+4. ✅ Consider if feature spec needs updating
+
+**When Asked "What Should I Build Next?":**
+1. ✅ Read `docs/phase-tracking/PHASE_STATUS.md` - Current priority
+2. ✅ Check `docs/phase-tracking/phases/PHASE_2_PLANNED.md` - Roadmap
+3. ✅ Review `docs/core/PRODUCT.md` - Align with vision
+
+**When User Asks Vague Question:**
+1. ✅ Read `docs/reference/PROMPTING_GUIDE.md` - How to clarify
+2. ✅ Check relevant feature specs for context
+3. ✅ Suggest best interpretation with reasoning
+
+### 🎯 Documentation = Source of Truth
+
+**The docs folder is the single source of truth for:**
+- ✅ What features exist (manifests)
+- ✅ What features are planned (phase-tracking)
+- ✅ What business rules to enforce (core/BUSINESS_RULES.md)
+- ✅ What patterns to follow (reference/)
+- ✅ What tech to use (core/TECH_STACK.md)
+
+**If docs say one thing and user says another:**
+1. Flag the discrepancy: "The docs show X, but you mentioned Y"
+2. Ask which is correct
+3. Suggest updating docs after clarification
+
+### 📝 Keeping Docs Updated
+
+**After completing work:**
+- If you created a new component → Note it should be added to `docs/manifests/COMPONENTS.md`
+- If you created a new service → Note it should be added to `docs/manifests/SERVICES.md`
+- If you implemented a new feature → Note feature spec could be created
+- If you found a bug pattern → Note it could go in `docs/reference/TROUBLESHOOTING.md`
 
 ## Success Criteria
 ✅ Code works immediately without debugging
