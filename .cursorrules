@@ -1,5 +1,20 @@
 # Airbnb Cleaning Management Platform
 
+## 🚨 BEFORE DOING ANYTHING - READ STARTUP SEQUENCE
+**MANDATORY**: At the start of EVERY new conversation, read `.cursor/STARTUP.md` first.
+Then read `docs/AI-README.md` (30 seconds) to understand project context.
+
+If you skip this, you WILL:
+- Suggest features that already exist
+- Violate business rules
+- Ignore current priorities
+- Break established patterns
+
+**Time to read**: 30 seconds
+**Time saved from rework**: Hours
+
+---
+
 ## What This App Does
 A mobile-first platform connecting property owners with cleaners for Airbnb turnovers. Coordinates cleanings in the critical 4-hour window between guest checkout (11 AM) and checkin (3 PM). Tracks time, requires photo proof, and handles real-time communication.
 

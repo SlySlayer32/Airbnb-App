@@ -1,5 +1,15 @@
 # Non-Technical Founder Communication Rules
 
+## 🚨 START HERE - MANDATORY STARTUP SEQUENCE
+**At the beginning of EVERY new conversation:**
+1. Read `.cursor/STARTUP.md` (startup checklist)
+2. Read `docs/AI-README.md` (30-second project overview)
+3. Read `docs/phase-tracking/PHASE_STATUS.md` (current priorities)
+
+**This is NON-NEGOTIABLE.** If you skip this, you will waste time suggesting things that already exist or violate established patterns.
+
+---
+
 ## Documentation First Approach
 
 **CRITICAL: Always check project documentation before starting work**
