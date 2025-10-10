@@ -2,13 +2,73 @@
 	"version": "2.0.0",
 	"tasks": [
 		// =================================================================================
-		// == Primary Development Tasks
+		// == 🚀 MASTER TASKS - One-Click Development
+		// =================================================================================
+		{
+			"label": "🔥 Master Clear & Fresh Start",
+			"detail": "NUCLEAR OPTION: Clears everything and starts completely fresh. Use after major changes or when things break.",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Write-Host '🔥 Master Clear: Starting nuclear cleanup...' -ForegroundColor Yellow; Write-Host ''; Write-Host '1️⃣ Stopping all Node/Expo processes...' -ForegroundColor Cyan; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Write-Host '✅ Processes stopped' -ForegroundColor Green; Write-Host ''; Write-Host '2️⃣ Deleting cache folders...' -ForegroundColor Cyan; Remove-Item -Recurse -Force '.expo','.metro','node_modules/.cache' -ErrorAction SilentlyContinue; Write-Host '✅ Cache folders deleted' -ForegroundColor Green; Write-Host ''; Write-Host '3️⃣ Deleting node_modules and package-lock.json...' -ForegroundColor Cyan; Remove-Item -Recurse -Force 'node_modules','package-lock.json' -ErrorAction SilentlyContinue; Write-Host '✅ node_modules removed' -ForegroundColor Green; Write-Host ''; Write-Host '4️⃣ Reinstalling dependencies...' -ForegroundColor Cyan; npm install; Write-Host '✅ Dependencies installed' -ForegroundColor Green; Write-Host ''; Write-Host '5️⃣ Starting Expo with cleared cache...' -ForegroundColor Cyan; npx expo start --clear; Write-Host '✅ Expo started fresh!' -ForegroundColor Green"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "⚡ Quick Clear & Restart",
+			"detail": "Fast cache clear without reinstalling node_modules. Use after code changes.",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Write-Host '⚡ Quick Clear: Starting fast cleanup...' -ForegroundColor Yellow; Write-Host ''; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Write-Host '✅ Processes stopped' -ForegroundColor Green; Remove-Item -Recurse -Force '.expo','.metro' -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo with cleared cache...' -ForegroundColor Cyan; npx expo start --clear"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "🎯 Start Fresh (Verified Setup)",
+			"detail": "Ensures correct directory, environment loaded, then starts with clear cache. Use daily.",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Write-Host '🎯 Starting Fresh Setup Check...' -ForegroundColor Yellow; Write-Host ''; Write-Host 'Current Directory: ' -NoNewline; Write-Host (Get-Location) -ForegroundColor Cyan; Write-Host ''; if (Test-Path '.env.local') { Write-Host '✅ .env.local found' -ForegroundColor Green } else { Write-Host '❌ .env.local missing!' -ForegroundColor Red }; Write-Host ''; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Remove-Item -Recurse -Force '.expo' -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo...' -ForegroundColor Cyan; npx expo start --clear"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": [],
+			"group": "build"
+		},
+		// =================================================================================
+		// == 🔧 Development Servers
 		// =================================================================================
 		{
 			"label": "Dev: Start Server",
 			"type": "shell",
-			"command": "npm start",
-			"detail": "Starts the Expo development server. This is the primary task for development.",
+			"command": "npx expo start",
+			"detail": "Starts the Expo development server normally.",
 			"group": "build",
 			"presentation": {
 				"reveal": "always",
@@ -28,7 +88,35 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^.*Starting.*",
-					"endsPattern": "^.*Expo.*|^.*Metro.*waiting.*|^.*Bundling complete.*"
+					"endsPattern": "^.*Metro.*waiting.*|^.*Bundling complete.*"
+				}
+			}
+		},
+		{
+			"label": "Dev: Start with Clear Cache",
+			"type": "shell",
+			"command": "npx expo start --clear",
+			"detail": "Starts Expo with cleared bundler cache.",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true
+			},
+			"isBackground": true,
+			"problemMatcher": {
+				"pattern": [
+					{
+						"regexp": ".",
+						"file": 1,
+						"location": 2,
+						"message": 3
+					}
+				],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Starting.*",
+					"endsPattern": "^.*Metro.*waiting.*|^.*Bundling complete.*"
 				}
 			}
 		},
@@ -36,10 +124,11 @@
 			"label": "Dev: Run on Android",
 			"type": "shell",
 			"command": "npm run android",
-			"detail": "Builds and runs the app on a connected Android device or emulator.",
+			"detail": "Builds and runs the app on Android device or emulator.",
 			"group": "build",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -54,7 +143,7 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^.*Starting.*|^.*Building.*",
-					"endsPattern": "^.*Bundling complete.*|^.*Metro.*waiting.*|^.*Successfully built.*|^.*APK.*installed.*"
+					"endsPattern": "^.*Bundling complete.*|^.*Metro.*waiting.*"
 				}
 			}
 		},
@@ -62,10 +151,11 @@
 			"label": "Dev: Run on iOS",
 			"type": "shell",
 			"command": "npm run ios",
-			"detail": "Builds and runs the app on an iOS simulator or connected device.",
+			"detail": "Builds and runs the app on iOS simulator or device.",
 			"group": "build",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -80,7 +170,7 @@
 				"background": {
 					"activeOnStart": true,
 					"beginsPattern": "^.*Starting.*|^.*Building.*",
-					"endsPattern": "^.*Bundling complete.*|^.*Metro.*waiting.*|^.*Build succeeded.*"
+					"endsPattern": "^.*Bundling complete.*|^.*Metro.*waiting.*"
 				}
 			}
 		},
@@ -91,7 +181,8 @@
 			"detail": "Runs the app in a web browser.",
 			"group": "build",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "dedicated"
 			},
 			"isBackground": true,
 			"problemMatcher": {
@@ -111,16 +202,18 @@
 			}
 		},
 		// =================================================================================
-		// == Code Quality & Verification
+		// == ✅ Code Quality & Verification
 		// =================================================================================
 		{
-			"label": "Verify: Typecheck",
+			"label": "Verify: TypeScript Check",
 			"type": "shell",
 			"command": "npx tsc --noEmit",
 			"detail": "Runs TypeScript compiler to check for type errors.",
 			"group": "test",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "shared",
+				"clear": true
 			},
 			"problemMatcher": [
 				"$tsc"
@@ -129,11 +222,12 @@
 		{
 			"label": "Verify: Lint",
 			"type": "shell",
-			"command": "npx eslint .",
+			"command": "npm run lint",
 			"detail": "Runs ESLint to check for code style and quality issues.",
 			"group": "test",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "shared"
 			},
 			"problemMatcher": [
 				"$eslint-stylish"
@@ -141,19 +235,56 @@
 		},
 		{
 			"label": "Verify: All Checks",
-			"detail": "Runs all code quality checks: type checking and linting.",
+			"detail": "Runs all code quality checks: TypeScript and linting.",
 			"dependsOn": [
-				"Verify: Typecheck",
+				"Verify: TypeScript Check",
 				"Verify: Lint"
 			],
 			"dependsOrder": "sequence",
 			"group": "test",
 			"presentation": {
-				"reveal": "always"
-			}
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify: Environment Setup",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Write-Host '🔍 Verifying Environment Setup...' -ForegroundColor Yellow; Write-Host ''; Write-Host '📂 Current Directory:' -ForegroundColor Cyan; Write-Host (Get-Location); Write-Host ''; Write-Host '📄 Checking .env.local...' -ForegroundColor Cyan; if (Test-Path '.env.local') { Write-Host '✅ .env.local exists' -ForegroundColor Green; $envContent = Get-Content '.env.local' -Raw; if ($envContent -match 'qvvfjxjwuucmkjrvaqxf') { Write-Host '✅ Supabase URL configured' -ForegroundColor Green } else { Write-Host '❌ Supabase URL missing or invalid' -ForegroundColor Red } } else { Write-Host '❌ .env.local not found!' -ForegroundColor Red }; Write-Host ''; Write-Host '📦 Checking node_modules...' -ForegroundColor Cyan; if (Test-Path 'node_modules') { Write-Host '✅ node_modules exists' -ForegroundColor Green } else { Write-Host '❌ node_modules not found - run npm install' -ForegroundColor Red }; Write-Host ''; Write-Host '📱 Checking Expo processes...' -ForegroundColor Cyan; $expoProcesses = Get-Process -Name 'node','expo' -ErrorAction SilentlyContinue; if ($expoProcesses) { Write-Host '⚠️ Expo/Node processes running (' $expoProcesses.Count ')' -ForegroundColor Yellow } else { Write-Host '✅ No processes running' -ForegroundColor Green }"
+			],
+			"detail": "Verifies directory, .env.local, node_modules, and running processes.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"clear": true
+			},
+			"problemMatcher": []
 		},
 		// =================================================================================
-		// == Project Maintenance
+		// == 🗄️ Database & Supabase
+		// =================================================================================
+		{
+			"label": "DB: Check Supabase Connection",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Write-Host '🗄️ Checking Supabase Configuration...' -ForegroundColor Yellow; Write-Host ''; if (Test-Path '.env.local') { $env = Get-Content '.env.local' | Select-String 'EXPO_PUBLIC_SUPABASE_URL'; if ($env) { Write-Host 'Supabase URL: ' -NoNewline; Write-Host ($env -replace 'EXPO_PUBLIC_SUPABASE_URL=','') -ForegroundColor Cyan; Write-Host '✅ Configuration found' -ForegroundColor Green } else { Write-Host '❌ EXPO_PUBLIC_SUPABASE_URL not found in .env.local' -ForegroundColor Red } } else { Write-Host '❌ .env.local file not found!' -ForegroundColor Red }; Write-Host ''; Write-Host '📊 Database Tables Expected:' -ForegroundColor Cyan; Write-Host '  - profiles'; Write-Host '  - properties'; Write-Host '  - cleaning_sessions'; Write-Host '  - cleaning_updates'; Write-Host '  - team_members'; Write-Host '  - notifications'; Write-Host '  - photo_proof_requirements'; Write-Host '  - linen_requirements'; Write-Host ''; Write-Host 'Use Supabase Dashboard to verify: https://app.supabase.com' -ForegroundColor Yellow"
+			],
+			"detail": "Displays Supabase configuration and expected database tables.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"clear": true
+			},
+			"problemMatcher": []
+		},
+		// =================================================================================
+		// == 🧹 Maintenance & Cleanup
 		// =================================================================================
 		{
 			"label": "Maint: Install Dependencies",
@@ -161,87 +292,98 @@
 			"command": "npm install",
 			"detail": "Installs or updates project dependencies from package.json.",
 			"presentation": {
-				"reveal": "always"
+				"reveal": "always",
+				"panel": "shared"
 			},
 			"problemMatcher": []
 		},
 		{
-			"label": "Maint: Clear Expo Cache",
+			"label": "Maint: Clear Expo Cache Only",
 			"type": "shell",
-			"command": "expo start -c",
-			"detail": "Clears the Expo bundler cache. Use this if you have caching issues.",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Remove-Item -Recurse -Force '.expo' -ErrorAction SilentlyContinue; Write-Host '✅ .expo cache cleared' -ForegroundColor Green"
+			],
+			"detail": "Clears only the .expo folder.",
 			"presentation": {
-				"reveal": "always"
-			}
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Maint: Clear Metro Cache Only",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Remove-Item -Recurse -Force '.metro','node_modules/.cache' -ErrorAction SilentlyContinue; Write-Host '✅ Metro cache cleared' -ForegroundColor Green"
+			],
+			"detail": "Clears only Metro bundler cache.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Maint: Stop All Processes",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Write-Host '✅ All Node/Expo processes stopped' -ForegroundColor Green"
+			],
+			"detail": "Stops all running Node and Expo processes.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
 		},
 		{
 			"label": "Maint: Clean & Reinstall",
 			"type": "shell",
-			"command": "powershell -Command \"Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue; npm install; expo start -c\"",
-			"detail": "Deletes node_modules, package-lock.json, reinstalls dependencies, and clears Expo cache. A full reset.",
-			"presentation": {
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		// =================================================================================
-		// == Git Workflow
-		// =================================================================================
-		{
-			"label": "Git: Fetch",
-			"type": "shell",
-			"command": "git fetch origin",
-			"detail": "Fetches the latest changes from the remote repository.",
-			"presentation": {
-				"reveal": "silent"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Git: Pull (rebase)",
-			"type": "shell",
-			"command": "git pull --rebase origin ${input:branch}",
-			"detail": "Pulls latest changes and reapplies your commits on top.",
-			"presentation": {
-				"reveal": "silent"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "Git: Stash WIP",
-			"type": "shell",
-			"command": "git",
+			"command": "powershell",
 			"args": [
-				"stash",
-				"push",
-				"-m",
-				"WIP from VS Code task"
+				"-Command",
+				"Write-Host '🧹 Full Clean & Reinstall...' -ForegroundColor Yellow; Remove-Item -Recurse -Force 'node_modules','package-lock.json' -ErrorAction SilentlyContinue; Write-Host '✅ Cleaned' -ForegroundColor Green; Write-Host 'Installing dependencies...' -ForegroundColor Cyan; npm install"
 			],
-			"detail": "Stashes your current work-in-progress changes.",
+			"detail": "Deletes node_modules and package-lock.json, then reinstalls everything.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated"
+			},
+			"problemMatcher": []
+		},
+		// =================================================================================
+		// == 📄 Documentation
+		// =================================================================================
+		{
+			"label": "Docs: Open Testing Guide",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"if (Test-Path 'SEED_DATA_SUMMARY.md') { code 'SEED_DATA_SUMMARY.md' } else { Write-Host '❌ SEED_DATA_SUMMARY.md not found' -ForegroundColor Red }"
+			],
+			"detail": "Opens the seed data and testing documentation.",
 			"presentation": {
 				"reveal": "silent"
 			},
 			"problemMatcher": []
 		},
 		{
-			"label": "Git: Sync & Verify",
-			"detail": "Stashes changes, pulls from remote, reinstalls, and runs checks.",
-			"dependsOn": [
-				"Git: Stash WIP",
-				"Git: Fetch",
-				"Git: Pull (rebase)",
-				"Maint: Install Dependencies",
-				"Verify: All Checks"
-			],
-			"dependsOrder": "sequence"
-		}
-	],
-	"inputs": [
-		{
-			"id": "branch",
-			"type": "promptString",
-			"description": "Enter the branch name to pull from",
-			"default": "main"
+			"label": "Docs: Update Manifests",
+			"type": "shell",
+			"command": "npm run docs:update",
+			"detail": "Updates component, service, and screen manifests in docs/ folder.",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			},
+			"problemMatcher": []
 		}
 	]
 }

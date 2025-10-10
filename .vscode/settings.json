@@ -69,5 +69,59 @@
   },
   
   // Performance
-  "files.maxMemoryForLargeFilesMB": 4096
+  "files.maxMemoryForLargeFilesMB": 4096,
+  
+  // Airbnb App Specific Settings
+  "files.associations": {
+    "*.tsx": "typescriptreact",
+    "*.ts": "typescript",
+    ".env.local": "properties"
+  },
+  
+  // Task Settings
+  "task.problemMatchers.neverPrompt": {
+    "shell": true
+  },
+  "task.quickOpen.showAll": true,
+  
+  // Debug Settings
+  "debug.openDebug": "openOnFirstSessionStart",
+  "debug.internalConsoleOptions": "neverOpen",
+  "debug.console.fontSize": 14,
+  
+  // Better IntelliSense for React Native
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  
+  // Supabase/Database Reminders
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "SUPABASE",
+    "RLS",
+    "BUSINESS_RULE"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "SUPABASE": {
+      "icon": "database",
+      "foreground": "#3ECF8E",
+      "iconColour": "#3ECF8E"
+    },
+    "RLS": {
+      "icon": "shield",
+      "foreground": "#FF6B6B",
+      "iconColour": "#FF6B6B"
+    },
+    "BUSINESS_RULE": {
+      "icon": "law",
+      "foreground": "#FFD93D",
+      "iconColour": "#FFD93D"
+    }
+  },
+  
+  // Recommended Extensions Check
+  "extensions.ignoreRecommendations": false
 }

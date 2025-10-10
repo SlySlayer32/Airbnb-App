@@ -37,6 +37,28 @@
     "aaron-bond.better-comments",
     
     // Error lens (inline errors)
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    
+    // TODO tree (track TODOs, BUSINESS_RULEs, etc.)
+    "gruntfuggly.todo-tree",
+    
+    // SQLTools for Supabase
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    
+    // REST Client (for API testing)
+    "humao.rest-client",
+    
+    // Dotenv syntax highlighting
+    "mikestead.dotenv",
+    
+    // Color highlighting for React Native styles
+    "naumovs.color-highlight",
+    
+    // Import cost (see package sizes)
+    "wix.vscode-import-cost",
+    
+    // NPM Intellisense
+    "christian-kohler.npm-intellisense"
   ]
 }
