@@ -1,137 +1,85 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		// =================================================================================
-		// == 🐛 Debug Configurations - React Native / Expo
-		// =================================================================================
-		{
-			"name": "Debug: Android (Attach)",
-			"type": "reactnative",
-			"request": "attach",
-			"platform": "android",
-			"sourceMaps": true,
-			"outDir": "${workspaceFolder}/.expo",
-			"trace": "verbose"
-		},
-		{
-			"name": "Debug: iOS (Attach)",
-			"type": "reactnative",
-			"request": "attach",
-			"platform": "ios",
-			"sourceMaps": true,
-			"outDir": "${workspaceFolder}/.expo",
-			"trace": "verbose"
-		},
-		{
-			"name": "Debug: Expo Go (Android)",
-			"type": "reactnative",
-			"request": "launch",
-			"platform": "android",
-			"cwd": "${workspaceFolder}",
-			"enableDebug": true
-		},
-		{
-			"name": "Debug: Expo Go (iOS)",
-			"type": "reactnative",
-			"request": "launch",
-			"platform": "ios",
-			"cwd": "${workspaceFolder}",
-			"enableDebug": true
-		},
-		// =================================================================================
-		// == 🌐 Web Debugging
-		// =================================================================================
-		{
-			"name": "Debug: Web (Chrome)",
-			"type": "chrome",
-			"request": "launch",
-			"url": "http://localhost:19006",
-			"webRoot": "${workspaceFolder}",
-			"sourceMapPathOverrides": {
-				"webpack://*": "${webRoot}/*"
-			},
-			"preLaunchTask": "Dev: Start Server"
-		},
-		{
-			"name": "Debug: Web (Edge)",
-			"type": "msedge",
-			"request": "launch",
-			"url": "http://localhost:19006",
-			"webRoot": "${workspaceFolder}",
-			"sourceMapPathOverrides": {
-				"webpack://*": "${webRoot}/*"
-			},
-			"preLaunchTask": "Dev: Start Server"
-		},
-		// =================================================================================
-		// == 🚀 Launch Configurations
-		// =================================================================================
-		{
-			"name": "Launch: Android",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "android"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"skipFiles": ["<node_internals>/**"]
-		},
-		{
-			"name": "Launch: iOS",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "ios"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"skipFiles": ["<node_internals>/**"]
-		},
-		{
-			"name": "Launch: Web",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "web"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"skipFiles": ["<node_internals>/**"]
-		},
-		// =================================================================================
-		// == 🔍 Verification & Testing
-		// =================================================================================
-		{
-			"name": "Verify: TypeScript Check",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npx",
-			"runtimeArgs": ["tsc", "--noEmit"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"name": "Verify: Lint Project",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "lint"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		}
-	],
-	"compounds": [
-		{
-			"name": "🔥 Debug: Full Stack (Web + Server)",
-			"configurations": ["Debug: Web (Chrome)", "Dev: Start Server"],
-			"presentation": {
-				"hidden": false,
-				"group": "debug",
-				"order": 1
-			}
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Expo: Start",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: Start (Clear Cache)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--clear"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: Android",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--android"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: iOS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--ios"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "osx": {
+        "console": "integratedTerminal"
+      }
+    },
+    {
+      "name": "Expo: Web",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--web"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "TypeScript: Type Check",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/typescript/bin/tsc",
+      "args": ["--noEmit"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Attach to Packager",
+      "type": "reactnative",
+      "request": "attach",
+      "port": 8081,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Expo: Start & Type Check",
+      "configurations": ["Expo: Start", "TypeScript: Type Check"]
+    }
+  ]
 }

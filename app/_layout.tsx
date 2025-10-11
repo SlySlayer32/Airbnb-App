@@ -1,3 +1,4 @@
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { useFonts } from 'expo-font';
 import { Stack, router, usePathname } from 'expo-router';
@@ -25,7 +26,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
       const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
       const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
       const isDemoMode = !supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder');
-      
+
       if (isDemoMode) {
         // In demo mode, always show the dashboard
         if (pathname.startsWith('/auth') || pathname === '/onboarding') {
@@ -77,33 +78,35 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <StatusBar style="auto" />
-      <AuthGuard>
-        <Stack>
-          <Stack.Screen name="index" options={{ title: 'Dashboard', headerShown: false }} />
-          <Stack.Screen name="properties" options={{ title: 'Properties' }} />
-          <Stack.Screen name="team" options={{ title: 'Team' }} />
-          <Stack.Screen name="schedule" options={{ title: 'Schedule' }} />
-          <Stack.Screen name="invoices" options={{ title: 'Invoices' }} />
-          <Stack.Screen name="maintenance" options={{ title: 'Maintenance' }} />
-          <Stack.Screen name="reports" options={{ title: 'Reports' }} />
-          <Stack.Screen name="profile" options={{ title: 'Profile' }} />
-          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-          <Stack.Screen 
-            name="auth/login" 
-            options={{ headerShown: false, presentation: 'modal' }} 
-          />
-          <Stack.Screen 
-            name="auth/register" 
-            options={{ headerShown: false, presentation: 'modal' }} 
-          />
-          <Stack.Screen 
-            name="auth/forgot-password" 
-            options={{ headerShown: false, presentation: 'modal' }} 
-          />
-        </Stack>
-      </AuthGuard>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <StatusBar style="auto" />
+        <AuthGuard>
+          <Stack>
+            <Stack.Screen name="index" options={{ title: 'Dashboard', headerShown: false }} />
+            <Stack.Screen name="properties" options={{ title: 'Properties' }} />
+            <Stack.Screen name="team" options={{ title: 'Team' }} />
+            <Stack.Screen name="schedule" options={{ title: 'Schedule' }} />
+            <Stack.Screen name="invoices" options={{ title: 'Invoices' }} />
+            <Stack.Screen name="maintenance" options={{ title: 'Maintenance' }} />
+            <Stack.Screen name="reports" options={{ title: 'Reports' }} />
+            <Stack.Screen name="profile" options={{ title: 'Profile' }} />
+            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="auth/login"
+              options={{ headerShown: false, presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="auth/register"
+              options={{ headerShown: false, presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="auth/forgot-password"
+              options={{ headerShown: false, presentation: 'modal' }}
+            />
+          </Stack>
+        </AuthGuard>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

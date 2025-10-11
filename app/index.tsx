@@ -1,28 +1,29 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
-import DashboardStats from '@/components/DashboardStats';
-import QuickActions from '@/components/QuickActions';
-import RoleBasedWrapper from '@/components/RoleBasedWrapper';
 import CleanerDashboard from '@/components/CleanerDashboard';
+import DashboardStats from '@/components/DashboardStats';
+import DebugPanel from '@/components/DebugPanel';
+import QuickActions from '@/components/QuickActions';
+import { useAuth } from '@/contexts/AuthContext';
+import { router } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Dashboard() {
-  const { profile } = useAuth();
-
-  // Check if we're in demo mode
-  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-  const isDemoMode = !supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder');
+  const { profile, isDemoMode } = useAuth();
 
   // Show cleaner dashboard for cleaner role
   if (profile?.role === 'cleaner') {
-    return <CleanerDashboard />;
+    return (
+      <View style={{ flex: 1 }}>
+        <CleanerDashboard />
+        <DebugPanel />
+      </View>
+    );
   }
 
   // Show owner/co-host dashboard for other roles
   return (
-    <ScrollView style={styles.container}>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
       {isDemoMode && (
         <View style={styles.demoBanner}>
           <Text style={styles.demoBannerText}>
@@ -30,7 +31,7 @@ export default function Dashboard() {
           </Text>
         </View>
       )}
-      
+
       <View style={styles.header}>
         <Text style={styles.greeting}>
           Good morning, {profile?.full_name?.split(' ')[0] || 'User'}!
@@ -40,27 +41,29 @@ export default function Dashboard() {
           {profile?.role === 'co_host' && 'Property coordination'}
           {isDemoMode && ' (Demo Mode)'}
         </Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.profileButton}
           onPress={() => router.push('/profile')}
         >
           <Text style={styles.profileButtonText}>View Profile</Text>
         </TouchableOpacity>
       </View>
-      
+
       <DashboardStats />
       <QuickActions />
-      
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Recent Activity</Text>
         <Text style={styles.activityText}>
-          {isDemoMode 
+          {isDemoMode
             ? 'Welcome to your dashboard! This is demo mode. Configure Supabase to enable full functionality.'
             : 'Welcome to your dashboard! Start by adding your first property.'
           }
         </Text>
       </View>
-    </ScrollView>
+      </ScrollView>
+      <DebugPanel />
+    </View>
   );
 }
 

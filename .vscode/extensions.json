@@ -1,64 +1,27 @@
 {
   "recommendations": [
-    // Essential for React Native development
-    "msjsdiag.vscode-react-native",
-    
-    // Code formatting and quality
-    "esbenp.prettier-vscode",
+    // Essential
     "dbaeumer.vscode-eslint",
-    
-    // TypeScript support
+    "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
-    
-    // Git tools
-    "eamodio.gitlens",
-    "mhutchie.git-graph",
-    
-    // React/JSX support
+
+    // React Native / Expo
+    "msjsdiag.vscode-react-native",
     "dsznajder.es7-react-js-snippets",
-    
-    // Path intellisense
-    "christian-kohler.path-intellisense",
-    
-    // Auto rename tag
-    "formulahendry.auto-rename-tag",
-    
-    // Markdown support (for your documentation)
-    "yzhang.markdown-all-in-one",
-    
-    // GitHub Copilot (AI assistance)
-    "github.copilot",
-    "github.copilot-chat",
-    
-    // Expo tools
-    "expo.vscode-expo-tools",
-    
-    // Better comments
-    "aaron-bond.better-comments",
-    
-    // Error lens (inline errors)
+
+    // TypeScript
     "usernamehw.errorlens",
-    
-    // TODO tree (track TODOs, BUSINESS_RULEs, etc.)
+    "yoavbls.pretty-ts-errors",
+
+    // Utilities
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
     "gruntfuggly.todo-tree",
-    
-    // SQLTools for Supabase
-    "mtxr.sqltools",
-    "mtxr.sqltools-driver-pg",
-    
-    // REST Client (for API testing)
-    "humao.rest-client",
-    
-    // Dotenv syntax highlighting
-    "mikestead.dotenv",
-    
-    // Color highlighting for React Native styles
-    "naumovs.color-highlight",
-    
-    // Import cost (see package sizes)
-    "wix.vscode-import-cost",
-    
-    // NPM Intellisense
-    "christian-kohler.npm-intellisense"
-  ]
+    "wayou.vscode-todo-highlight",
+
+    // Code Quality
+    "streetsidesoftware.code-spell-checker",
+    "editorconfig.editorconfig"
+  ],
+  "unwantedRecommendations": []
 }

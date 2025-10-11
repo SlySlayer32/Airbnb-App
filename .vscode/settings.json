@@ -3,125 +3,93 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  
+  "editor.trimAutoWhitespace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+
   // TypeScript Settings
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  
-  // File Settings
+
+  // JavaScript Settings
+  "javascript.suggest.autoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // ESLint Settings
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+
+  // File Associations
+  "files.associations": {
+    "*.tsx": "typescriptreact",
+    "*.ts": "typescript",
+    "*.jsx": "javascriptreact",
+    "*.js": "javascript"
+  },
+
+  // Exclusions
   "files.exclude": {
-    "**/.git": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true,
     "**/.expo": true,
-    "**/.expo-shared": true
+    "**/.expo-shared": true,
+    "**/node_modules": true,
+    "**/.git": true
   },
-  "files.watcherExclude": {
-    "**/node_modules/**": true,
-    "**/.git/objects/**": true,
-    "**/.expo/**": true
-  },
-  
-  // Search Settings
   "search.exclude": {
     "**/node_modules": true,
     "**/.expo": true,
     "**/package-lock.json": true
   },
-  
-  // Expo/React Native Specific
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  
-  // Git Settings
-  "git.ignoreLimitWarning": true,
-  "git.autofetch": true,
-  
-  // Terminal Settings
-  "terminal.integrated.defaultProfile.windows": "PowerShell",
-  
-  // Emmet for React Native
+
+  // React Native / Expo Specific
   "emmet.includeLanguages": {
-    "typescript": "typescriptreact",
-    "javascript": "javascriptreact"
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
   },
-  
-  // Performance
-  "files.maxMemoryForLargeFilesMB": 4096,
-  
-  // Airbnb App Specific Settings
-  "files.associations": {
-    "*.tsx": "typescriptreact",
-    "*.ts": "typescript",
-    ".env.local": "properties"
-  },
-  
-  // Task Settings
-  "task.problemMatchers.neverPrompt": {
-    "shell": true
-  },
-  "task.quickOpen.showAll": true,
-  
-  // Debug Settings
-  "debug.openDebug": "openOnFirstSessionStart",
-  "debug.internalConsoleOptions": "neverOpen",
-  "debug.console.fontSize": 14,
-  
-  // Better IntelliSense for React Native
-  "javascript.suggest.autoImports": true,
-  "typescript.suggest.autoImports": true,
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  
-  // Supabase/Database Reminders
-  "todo-tree.general.tags": [
-    "BUG",
-    "HACK",
-    "FIXME",
-    "TODO",
-    "SUPABASE",
-    "RLS",
-    "BUSINESS_RULE"
+  "emmet.triggerExpansionOnTab": true,
+
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.shellArgs.windows": [
+    "-NoExit",
+    "-Command",
+    "Set-Location '${workspaceFolder}'"
   ],
-  "todo-tree.highlights.customHighlight": {
-    "SUPABASE": {
-      "icon": "database",
-      "foreground": "#3ECF8E",
-      "iconColour": "#3ECF8E"
-    },
-    "RLS": {
-      "icon": "shield",
-      "foreground": "#FF6B6B",
-      "iconColour": "#FF6B6B"
-    },
-    "BUSINESS_RULE": {
-      "icon": "law",
-      "foreground": "#FFD93D",
-      "iconColour": "#FFD93D"
-    }
+  "terminal.integrated.env.windows": {
+    "PROJECT_DIR": "${workspaceFolder}"
   },
-  
-  // Recommended Extensions Check
-  "extensions.ignoreRecommendations": false
+
+  // Git
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+
+  // Prettier (if installed)
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.tabWidth": 2,
+  "prettier.semi": true,
+
+  // Path Intellisense
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}"
+  }
 }
