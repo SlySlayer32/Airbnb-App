@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚨 **Critical Fix: Expo Router SSR Crash - App Not Loading (January 2025)**
+
+#### **Fixed App Stuck on "Welcome to Expo" Screen**
+The app was completely non-functional on web, showing the default Expo welcome screen instead of loading actual application screens.
+
+#### **Root Causes Identified**
+1. **react-native-dotenv Babel Plugin Conflict**: Plugin was interfering with Expo Router initialization
+2. **SSR Window Undefined Error**: Supabase AsyncStorage caused `ReferenceError: window is not defined` during server-side rendering
+
+#### **Changes Made**
+1. **Removed react-native-dotenv from `babel.config.js`**:
+   - Expo SDK 54+ natively supports `EXPO_PUBLIC_*` environment variables
+   - Plugin was causing conflicts with expo-router file-based routing
+
+2. **Simplified expo-router configuration in `app.json`**:
+   - Removed explicit `{ "root": "./app" }` configuration
+   - Let Expo SDK 54 auto-detect the app directory
+
+3. **Added SSR-safe storage adapter in `utils/supabase.ts`**:
+   - Web (client-side): Uses `localStorage`
+   - Web (server-side/SSR): Uses no-op storage (doesn't crash)
+   - Native (iOS/Android): Uses `AsyncStorage` as before
+
+4. **Deleted `env.d.ts`**: No longer needed without react-native-dotenv
+
+#### **Impact**
+- ✅ App now loads properly on web platform
+- ✅ Login screen displays correctly
+- ✅ AuthProvider and AuthGuard working
+- ✅ Real-time service initializes without errors
+- ✅ No SSR crashes
+
+#### **Documentation**
+- Created `docs/technical/EXPO_ROUTER_SSR_FIX.md` with complete technical details
+- See commit `fcde716` for implementation
+
+---
+
 ### 🔧 **Build System Fix: Complete Build & Module Resolution (October 2025)**
 
 #### **Fixed Multiple Critical Build Errors**
