@@ -4,14 +4,9 @@ const path = require('path');
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
-// Ensure Metro can resolve ESM/mjs files
-config.resolver.sourceExts = [...(config.resolver.sourceExts || []), 'mjs'];
-
-// Force Metro to use project-local resolution only
-config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
-
-// Prevent cross-project module resolution
-config.resolver.disableHierarchicalLookup = true;
+// Fix for Windows paths with spaces
+config.watchFolders = [path.resolve(__dirname)];
+config.resolver.platforms = ['ios', 'android', 'native', 'web'];
 
 // Add alias for @supabase/node-fetch to prevent dynamic import issues
 config.resolver.extraNodeModules = {
@@ -19,12 +14,19 @@ config.resolver.extraNodeModules = {
   '@supabase/node-fetch': path.resolve(__dirname, 'shims', 'node-fetch.js'),
 };
 
-// Clear Metro transform cache on each build
-config.resetCache = true;
-
-// Ensure proper module resolution
-config.resolver.nodeModulesPaths = [
-  path.resolve(__dirname, 'node_modules'),
-];
+// Fix file watching for Windows paths with spaces
+config.server = {
+  ...config.server,
+  port: 8081,
+  enhanceMiddleware: (middleware) => {
+    return (req, res, next) => {
+      // Handle Windows path issues
+      if (req.url && req.url.includes('%20')) {
+        req.url = decodeURIComponent(req.url);
+      }
+      return middleware(req, res, next);
+    };
+  },
+};
 
 module.exports = config;

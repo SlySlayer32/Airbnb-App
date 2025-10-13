@@ -1,0 +1,61 @@
+[
+  // =================================================================================
+  // == Custom Keybindings for Airbnb Cleaning Management App
+  // =================================================================================
+  
+  // Master Clear & Fresh Start - Ctrl+Shift+Alt+C
+  {
+    "key": "ctrl+shift+alt+c",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🔥 Master Clear & Fresh Start"
+  },
+  
+  // Quick Clear & Restart - Ctrl+Shift+Alt+R
+  {
+    "key": "ctrl+shift+alt+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "⚡ Quick Clear & Restart"
+  },
+  
+  // Start Fresh (Verified) - Ctrl+Shift+Alt+S
+  {
+    "key": "ctrl+shift+alt+s",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🎯 Start Fresh (Verified Setup)"
+  },
+  
+  // Stop All Processes - Ctrl+Shift+Alt+X
+  {
+    "key": "ctrl+shift+alt+x",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Maint: Stop All Processes"
+  },
+  
+  // TypeScript Check - Ctrl+Shift+Alt+T
+  {
+    "key": "ctrl+shift+alt+t",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Verify: TypeScript Check"
+  },
+  
+  // Verify Environment - Ctrl+Shift+Alt+E
+  {
+    "key": "ctrl+shift+alt+e",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Verify: Environment Setup"
+  },
+  
+  // Open Testing Guide - Ctrl+Shift+Alt+D
+  {
+    "key": "ctrl+shift+alt+d",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Docs: Open Testing Guide"
+  },
+  
+  // Quick Open Tasks Menu - Ctrl+Shift+Alt+P
+  {
+    "key": "ctrl+shift+alt+p",
+    "command": "workbench.action.tasks.runTask"
+  }
+]
+

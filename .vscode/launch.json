@@ -1,43 +1,85 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Expo: Android (npm run android)",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "android"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"name": "Expo: iOS (npm run ios)",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "ios"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"name": "Expo: Web (Chrome)",
-			"type": "chrome",
-			"request": "launch",
-			"url": "http://localhost:19006",
-			"webRoot": "${workspaceFolder}",
-			"preLaunchTask": "Dev: Start Server"
-		},
-		{
-			"name": "TypeScript: Check project",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npx",
-			"runtimeArgs": ["tsc", "--noEmit"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Expo: Start",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: Start (Clear Cache)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--clear"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: Android",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--android"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Expo: iOS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--ios"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "osx": {
+        "console": "integratedTerminal"
+      }
+    },
+    {
+      "name": "Expo: Web",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli",
+      "args": ["start", "--web"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "TypeScript: Type Check",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/typescript/bin/tsc",
+      "args": ["--noEmit"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Attach to Packager",
+      "type": "reactnative",
+      "request": "attach",
+      "port": 8081,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Expo: Start & Type Check",
+      "configurations": ["Expo: Start", "TypeScript: Type Check"]
+    }
+  ]
 }

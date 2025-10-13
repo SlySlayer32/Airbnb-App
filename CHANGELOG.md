@@ -7,7 +7,101 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### 📚 **MAJOR: Documentation Restructure - AI-Optimized Context System (January 2025)**
+### 🚨 **Critical Fix: Expo Router SSR Crash - App Not Loading (January 2025)**
+
+#### **Fixed App Stuck on "Welcome to Expo" Screen**
+The app was completely non-functional on web, showing the default Expo welcome screen instead of loading actual application screens.
+
+#### **Root Causes Identified**
+1. **react-native-dotenv Babel Plugin Conflict**: Plugin was interfering with Expo Router initialization
+2. **SSR Window Undefined Error**: Supabase AsyncStorage caused `ReferenceError: window is not defined` during server-side rendering
+
+#### **Changes Made**
+1. **Removed react-native-dotenv from `babel.config.js`**:
+   - Expo SDK 54+ natively supports `EXPO_PUBLIC_*` environment variables
+   - Plugin was causing conflicts with expo-router file-based routing
+
+2. **Simplified expo-router configuration in `app.json`**:
+   - Removed explicit `{ "root": "./app" }` configuration
+   - Let Expo SDK 54 auto-detect the app directory
+
+3. **Added SSR-safe storage adapter in `utils/supabase.ts`**:
+   - Web (client-side): Uses `localStorage`
+   - Web (server-side/SSR): Uses no-op storage (doesn't crash)
+   - Native (iOS/Android): Uses `AsyncStorage` as before
+
+4. **Deleted `env.d.ts`**: No longer needed without react-native-dotenv
+
+#### **Impact**
+- ✅ App now loads properly on web platform
+- ✅ Login screen displays correctly
+- ✅ AuthProvider and AuthGuard working
+- ✅ Real-time service initializes without errors
+- ✅ No SSR crashes
+
+#### **Documentation**
+- Created `docs/technical/EXPO_ROUTER_SSR_FIX.md` with complete technical details
+- See commit `fcde716` for implementation
+
+---
+
+### 🔧 **Build System Fix: Complete Build & Module Resolution (October 2025)**
+
+#### **Fixed Multiple Critical Build Errors**
+1. **Babel Template Error**: `@babel/template` throwing "Unexpected template param" error
+2. **Module Resolution Error**: "Unable to resolve @react-native/virtualized-lists" preventing Android builds
+
+#### **Root Causes Identified**
+- Deprecated Babel plugin `@babel/plugin-proposal-export-namespace-from` in config
+- Missing `@react-native/virtualized-lists` package (separated from React Native core)
+- Outdated Expo packages causing compatibility issues
+- Corrupted Metro bundler cache
+
+#### **Changes Made**
+1. **Updated `babel.config.js`**:
+   - Removed `@babel/plugin-proposal-export-namespace-from` plugin
+   - Plugin functionality is now included in modern ECMAScript standard and Expo preset
+
+2. **Installed Missing Dependencies**:
+   - Added `@react-native/virtualized-lists` package
+   - Required for FlatList, SectionList, and VirtualizedList components
+
+3. **Updated Expo Packages**:
+   - Updated `expo` from 54.0.12 to 54.0.13
+   - Updated `expo-font` to ~14.0.9
+   - Updated `expo-router` to ~6.0.11
+   - Ensures compatibility across Expo SDK 54
+
+4. **Dependency Cleanup**:
+   - Reinstalled all dependencies to ensure clean `node_modules`
+   - Verified all `@babel/*` packages are at consistent versions
+   - Cleared Metro bundler cache completely
+
+#### **Verification Steps**
+- ✅ TypeScript compilation successful (`npx tsc --noEmit`)
+- ✅ All Babel core packages at version 7.28.4
+- ✅ All `@babel/template` packages at version 7.27.2
+- ✅ React Native modules resolving correctly
+- ✅ No dependency conflicts detected
+- ✅ Metro bundler starts successfully with no errors
+- ✅ Android build completes without module resolution errors
+
+#### **Documentation Updates**
+- Added comprehensive troubleshooting sections to `TROUBLESHOOTING.md`:
+  - Babel template error with fix steps
+  - Module resolution error with fix steps
+  - Prevention strategies for both issues
+- Updated this CHANGELOG with complete fix details
+
+#### **Business Impact**
+- **Restored Development Workflow**: Developers can now run the app on Android without build errors
+- **Improved Reliability**: Cleaner Babel configuration and complete dependencies reduce future issues
+- **Better Documentation**: Team can quickly resolve similar issues using troubleshooting guide
+- **Future-Proofed**: Expo packages updated to latest stable versions for SDK 54
+
+---
+
+### �📚 **MAJOR: Documentation Restructure - AI-Optimized Context System (January 2025)**
 
 #### **New `.ai/` Documentation System**
 - **Created AI-First Documentation Hub**: Complete `.ai/` directory with 11 comprehensive files (143KB total)
@@ -100,7 +194,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔄 **MAJOR: Business Positioning Pivot & Documentation Restructure (September 25, 2025)**
 
 - **CRITICAL POSITIONING CHANGE**: Pivoted from "Airbnb cleaning management software" to "Uber for Home Services marketplace"
-- **Market Opportunity Expansion**: From $2.3B property management market to $500B+ home services market  
+- **Market Opportunity Expansion**: From $2.3B property management market to $500B+ home services market
 - **Revenue Model Evolution**: From SaaS subscriptions to hybrid commission + subscription marketplace model
 - **Documentation Archive**: Moved all outdated property management docs to `/docs/archive/` for reference
 - **New Executive Summary**: Complete rewrite reflecting marketplace positioning with live GPS tracking advantage
@@ -108,7 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 💰 **Revenue Model Innovation**
 
-- **Hybrid Commission Structure**: 15% (non-subscribers) down to 5% (tier 2 subscribers) + monthly subscriptions  
+- **Hybrid Commission Structure**: 15% (non-subscribers) down to 5% (tier 2 subscribers) + monthly subscriptions
 - **Competitive Advantage**: Lower commissions than TaskRabbit (20%), Handy (20%), Thumbtack (15-28%)
 - **Market Differentiation**: First platform with Uber-style real-time GPS tracking for home services
 - **Dual Revenue Streams**: Predictable subscription income + transaction volume growth
@@ -143,7 +237,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **9 Specialized Instruction Files**: Targeted guidance using `applyTo` patterns
   - `general-context.instructions.md` - Business communication and founder patterns
   - `components.instructions.md` - Component development and design system
-  - `services.instructions.md` - Service layer patterns and business logic  
+  - `services.instructions.md` - Service layer patterns and business logic
   - `screens.instructions.md` - Screen development and navigation
   - `types.instructions.md` - TypeScript definitions and interfaces
   - `debugging.instructions.md` - Testing and debugging guidance
@@ -200,7 +294,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.2.1] - 2025-09-22 - GitHub Actions & Supabase Setup
 
-### ⚙️ Infrastructure  
+### ⚙️ Infrastructure
 
 - **GitHub Actions Workflow**: Complete CI/CD pipeline setup for Expo React Native app
 - **Supabase Integration**: Enhanced backend service configuration

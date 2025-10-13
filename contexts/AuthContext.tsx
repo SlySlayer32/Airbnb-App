@@ -1,8 +1,9 @@
-import { supabase } from '../utils/supabase';
 import { Session, User } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { DEFAULT_MOCK_PROFILE, MockProfile } from '../data/mockProfiles';
+import { supabase } from '../utils/supabase';
 
-interface Profile {
+export interface Profile {
   id: string;
   email: string;
   full_name: string;
@@ -18,14 +19,18 @@ interface AuthContextType {
   profile: Profile | null;
   session: Session | null;
   loading: boolean;
+  isDemoMode: boolean;
   signUp: (email: string, password: string, fullName: string, role: string) => Promise<any>;
   signIn: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<any>;
   updateProfile: (updates: Partial<Profile>) => Promise<void>;
+  switchMockProfile: (profile: MockProfile) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const AUTH_TIMEOUT_MS = 5000; // 5 seconds max for auth initialization
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -40,31 +45,64 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     // Check if Supabase is properly configured
     const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-    
-    if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder')) {
-      console.warn('⚠️  Supabase not configured. Running in demo mode.');
+    const isConfigured = supabaseUrl && supabaseKey &&
+      !supabaseUrl.includes('placeholder') && !supabaseKey.includes('placeholder');
+
+    if (!isConfigured) {
+      // Demo mode - use mock profile
+      if (__DEV__) {
+        console.log('[AuthContext] Demo Mode: Using mock data');
+      }
+      setIsDemoMode(true);
+      setProfile(DEFAULT_MOCK_PROFILE);
       setLoading(false);
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
+    // Set timeout to prevent infinite loading
+    timeoutId = setTimeout(() => {
+      if (loading) {
+        if (__DEV__) {
+          console.warn('[AuthContext] Auth timeout - falling back to demo mode');
+        }
+        setIsDemoMode(true);
+        setProfile(DEFAULT_MOCK_PROFILE);
         setLoading(false);
       }
-    }).catch((error) => {
-      console.error('Error getting session:', error);
-      setLoading(false);
-    });
+    }, AUTH_TIMEOUT_MS);
+
+    // Get initial session with error handling
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        // Network error - fall back to demo mode
+        if (error.message?.includes('NetworkError') || error.message?.includes('Network request failed')) {
+          if (__DEV__) {
+            console.log('[AuthContext] Network error - using demo mode');
+          }
+          setIsDemoMode(true);
+          setProfile(DEFAULT_MOCK_PROFILE);
+        } else if (__DEV__) {
+          console.error('[AuthContext] Auth error:', error);
+        }
+        setLoading(false);
+      });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -79,7 +117,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchProfile = async (userId: string) => {
@@ -96,7 +137,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      if (__DEV__) {
+        console.error('[AuthContext] Error fetching profile:', error);
+      }
     } finally {
       setLoading(false);
     }
@@ -146,17 +189,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setProfile(prev => prev ? { ...prev, ...updates } : null);
   };
 
+  const switchMockProfile = (mockProfile: MockProfile) => {
+    if (!isDemoMode && !__DEV__) {
+      console.warn('Cannot switch profiles outside demo mode');
+      return;
+    }
+    setProfile(mockProfile);
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
       profile,
       session,
       loading,
+      isDemoMode,
       signUp,
       signIn,
       signOut,
       resetPassword,
-      updateProfile
+      updateProfile,
+      switchMockProfile
     }}>
       {children}
     </AuthContext.Provider>
