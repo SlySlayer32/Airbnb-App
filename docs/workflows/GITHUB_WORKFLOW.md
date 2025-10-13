@@ -40,7 +40,7 @@ git branch -d feature/your-feature-name
 - **`bugfix/*`** - Bug fixes (e.g., `bugfix/auth-error`)
 - **`hotfix/*`** - Emergency fixes (e.g., `hotfix/critical-crash`)
 
-📖 **Full documentation**: [BRANCHING_STRATEGY.md](./BRANCHING_STRATEGY.md)  
+📖 **Full documentation**: [BRANCHING_STRATEGY.md](./BRANCHING_STRATEGY.md)
 📋 **Quick reference**: [BRANCHING_QUICK_REFERENCE.md](../reference/BRANCHING_QUICK_REFERENCE.md)
 
 ---
