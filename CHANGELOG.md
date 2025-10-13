@@ -194,7 +194,7 @@ The app was completely non-functional on web, showing the default Expo welcome s
 ### 🔄 **MAJOR: Business Positioning Pivot & Documentation Restructure (September 25, 2025)**
 
 - **CRITICAL POSITIONING CHANGE**: Pivoted from "Airbnb cleaning management software" to "Uber for Home Services marketplace"
-- **Market Opportunity Expansion**: From $2.3B property management market to $500B+ home services market  
+- **Market Opportunity Expansion**: From $2.3B property management market to $500B+ home services market
 - **Revenue Model Evolution**: From SaaS subscriptions to hybrid commission + subscription marketplace model
 - **Documentation Archive**: Moved all outdated property management docs to `/docs/archive/` for reference
 - **New Executive Summary**: Complete rewrite reflecting marketplace positioning with live GPS tracking advantage
@@ -202,7 +202,7 @@ The app was completely non-functional on web, showing the default Expo welcome s
 
 ### 💰 **Revenue Model Innovation**
 
-- **Hybrid Commission Structure**: 15% (non-subscribers) down to 5% (tier 2 subscribers) + monthly subscriptions  
+- **Hybrid Commission Structure**: 15% (non-subscribers) down to 5% (tier 2 subscribers) + monthly subscriptions
 - **Competitive Advantage**: Lower commissions than TaskRabbit (20%), Handy (20%), Thumbtack (15-28%)
 - **Market Differentiation**: First platform with Uber-style real-time GPS tracking for home services
 - **Dual Revenue Streams**: Predictable subscription income + transaction volume growth
@@ -237,7 +237,7 @@ The app was completely non-functional on web, showing the default Expo welcome s
 - **9 Specialized Instruction Files**: Targeted guidance using `applyTo` patterns
   - `general-context.instructions.md` - Business communication and founder patterns
   - `components.instructions.md` - Component development and design system
-  - `services.instructions.md` - Service layer patterns and business logic  
+  - `services.instructions.md` - Service layer patterns and business logic
   - `screens.instructions.md` - Screen development and navigation
   - `types.instructions.md` - TypeScript definitions and interfaces
   - `debugging.instructions.md` - Testing and debugging guidance
@@ -294,7 +294,7 @@ The app was completely non-functional on web, showing the default Expo welcome s
 
 ## [v1.2.1] - 2025-09-22 - GitHub Actions & Supabase Setup
 
-### ⚙️ Infrastructure  
+### ⚙️ Infrastructure
 
 - **GitHub Actions Workflow**: Complete CI/CD pipeline setup for Expo React Native app
 - **Supabase Integration**: Enhanced backend service configuration
