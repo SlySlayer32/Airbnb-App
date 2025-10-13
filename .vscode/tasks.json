@@ -11,7 +11,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '🔥 Master Clear: Starting nuclear cleanup...' -ForegroundColor Yellow; Write-Host ''; Write-Host '1️⃣ Stopping all Node/Expo processes...' -ForegroundColor Cyan; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Write-Host '✅ Processes stopped' -ForegroundColor Green; Write-Host ''; Write-Host '2️⃣ Deleting cache folders...' -ForegroundColor Cyan; Remove-Item -Recurse -Force '.expo','.metro','node_modules/.cache' -ErrorAction SilentlyContinue; Write-Host '✅ Cache folders deleted' -ForegroundColor Green; Write-Host ''; Write-Host '3️⃣ Deleting node_modules and package-lock.json...' -ForegroundColor Cyan; Remove-Item -Recurse -Force 'node_modules','package-lock.json' -ErrorAction SilentlyContinue; Write-Host '✅ node_modules removed' -ForegroundColor Green; Write-Host ''; Write-Host '4️⃣ Reinstalling dependencies...' -ForegroundColor Cyan; npm install; Write-Host '✅ Dependencies installed' -ForegroundColor Green; Write-Host ''; Write-Host '5️⃣ Starting Expo with cleared cache...' -ForegroundColor Cyan; npx expo start --clear; Write-Host '✅ Expo started fresh!' -ForegroundColor Green"
+				"Write-Host 'Master Clear: Starting nuclear cleanup...' -ForegroundColor Yellow; Stop-Process -Name node,expo -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Write-Host 'Processes stopped' -ForegroundColor Green; Remove-Item -Recurse -Force .expo,.metro,node_modules/.cache -ErrorAction SilentlyContinue; Write-Host 'Cache folders deleted' -ForegroundColor Green; Remove-Item -Recurse -Force node_modules,package-lock.json -ErrorAction SilentlyContinue; Write-Host 'node_modules removed' -ForegroundColor Green; npm install --legacy-peer-deps; Write-Host 'Dependencies installed' -ForegroundColor Green; npx expo start --clear; Write-Host 'Expo started fresh!' -ForegroundColor Green"
 			],
 			"presentation": {
 				"reveal": "always",
@@ -32,7 +32,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '⚡ Quick Clear: Starting fast cleanup...' -ForegroundColor Yellow; Write-Host ''; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Write-Host '✅ Processes stopped' -ForegroundColor Green; Remove-Item -Recurse -Force '.expo','.metro' -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo with cleared cache...' -ForegroundColor Cyan; npx expo start --clear"
+				"Write-Host '⚡ Quick Clear: Starting fast cleanup...' -ForegroundColor Yellow; Write-Host ''; Stop-Process -Name node,expo -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Write-Host '✅ Processes stopped' -ForegroundColor Green; Remove-Item -Recurse -Force .expo,.metro -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo with cleared cache...' -ForegroundColor Cyan; npx expo start --clear"
 			],
 			"presentation": {
 				"reveal": "always",
@@ -50,7 +50,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '🎯 Starting Fresh Setup Check...' -ForegroundColor Yellow; Write-Host ''; Write-Host 'Current Directory: ' -NoNewline; Write-Host (Get-Location) -ForegroundColor Cyan; Write-Host ''; if (Test-Path '.env.local') { Write-Host '✅ .env.local found' -ForegroundColor Green } else { Write-Host '❌ .env.local missing!' -ForegroundColor Red }; Write-Host ''; Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Remove-Item -Recurse -Force '.expo' -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo...' -ForegroundColor Cyan; npx expo start --clear"
+				"Write-Host '🎯 Starting Fresh Setup Check...' -ForegroundColor Yellow; Write-Host ''; Write-Host 'Current Directory: ' -NoNewline; Write-Host (Get-Location) -ForegroundColor Cyan; Write-Host ''; if (Test-Path .env) { Write-Host '✅ .env found' -ForegroundColor Green } else { Write-Host '⚠️ .env missing - running in demo mode' -ForegroundColor Yellow }; Write-Host ''; Stop-Process -Name node,expo -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Remove-Item -Recurse -Force .expo -ErrorAction SilentlyContinue; Write-Host '✅ Cache cleared' -ForegroundColor Green; Write-Host ''; Write-Host 'Starting Expo...' -ForegroundColor Cyan; npx expo start --clear"
 			],
 			"presentation": {
 				"reveal": "always",
@@ -254,7 +254,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '🔍 Verifying Environment Setup...' -ForegroundColor Yellow; Write-Host ''; Write-Host '📂 Current Directory:' -ForegroundColor Cyan; Write-Host (Get-Location); Write-Host ''; Write-Host '📄 Checking .env.local...' -ForegroundColor Cyan; if (Test-Path '.env.local') { Write-Host '✅ .env.local exists' -ForegroundColor Green; $envContent = Get-Content '.env.local' -Raw; if ($envContent -match 'qvvfjxjwuucmkjrvaqxf') { Write-Host '✅ Supabase URL configured' -ForegroundColor Green } else { Write-Host '❌ Supabase URL missing or invalid' -ForegroundColor Red } } else { Write-Host '❌ .env.local not found!' -ForegroundColor Red }; Write-Host ''; Write-Host '📦 Checking node_modules...' -ForegroundColor Cyan; if (Test-Path 'node_modules') { Write-Host '✅ node_modules exists' -ForegroundColor Green } else { Write-Host '❌ node_modules not found - run npm install' -ForegroundColor Red }; Write-Host ''; Write-Host '📱 Checking Expo processes...' -ForegroundColor Cyan; $expoProcesses = Get-Process -Name 'node','expo' -ErrorAction SilentlyContinue; if ($expoProcesses) { Write-Host '⚠️ Expo/Node processes running (' $expoProcesses.Count ')' -ForegroundColor Yellow } else { Write-Host '✅ No processes running' -ForegroundColor Green }"
+				"Write-Host '🔍 Verifying Environment Setup...' -ForegroundColor Yellow; Write-Host ''; Write-Host '📂 Current Directory:' -ForegroundColor Cyan; Write-Host (Get-Location); Write-Host ''; Write-Host '📄 Checking .env file...' -ForegroundColor Cyan; if (Test-Path .env) { Write-Host '✅ .env exists' -ForegroundColor Green; $envContent = Get-Content .env -Raw; if ($envContent -match 'SUPABASE') { Write-Host '✅ Supabase configuration found' -ForegroundColor Green } else { Write-Host '⚠️ Supabase configuration not found' -ForegroundColor Yellow } } else { Write-Host '⚠️ .env not found - running in demo mode' -ForegroundColor Yellow }; Write-Host ''; Write-Host '📦 Checking node_modules...' -ForegroundColor Cyan; if (Test-Path node_modules) { Write-Host '✅ node_modules exists' -ForegroundColor Green } else { Write-Host '❌ node_modules not found - run npm install' -ForegroundColor Red }; Write-Host ''; Write-Host '📱 Checking Expo processes...' -ForegroundColor Cyan; $expoProcesses = Get-Process -Name node,expo -ErrorAction SilentlyContinue; if ($expoProcesses) { Write-Host '⚠️ Expo/Node processes running (' $expoProcesses.Count ')' -ForegroundColor Yellow } else { Write-Host '✅ No processes running' -ForegroundColor Green }"
 			],
 			"detail": "Verifies directory, .env.local, node_modules, and running processes.",
 			"presentation": {
@@ -273,7 +273,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '🗄️ Checking Supabase Configuration...' -ForegroundColor Yellow; Write-Host ''; if (Test-Path '.env.local') { $env = Get-Content '.env.local' | Select-String 'EXPO_PUBLIC_SUPABASE_URL'; if ($env) { Write-Host 'Supabase URL: ' -NoNewline; Write-Host ($env -replace 'EXPO_PUBLIC_SUPABASE_URL=','') -ForegroundColor Cyan; Write-Host '✅ Configuration found' -ForegroundColor Green } else { Write-Host '❌ EXPO_PUBLIC_SUPABASE_URL not found in .env.local' -ForegroundColor Red } } else { Write-Host '❌ .env.local file not found!' -ForegroundColor Red }; Write-Host ''; Write-Host '📊 Database Tables Expected:' -ForegroundColor Cyan; Write-Host '  - profiles'; Write-Host '  - properties'; Write-Host '  - cleaning_sessions'; Write-Host '  - cleaning_updates'; Write-Host '  - team_members'; Write-Host '  - notifications'; Write-Host '  - photo_proof_requirements'; Write-Host '  - linen_requirements'; Write-Host ''; Write-Host 'Use Supabase Dashboard to verify: https://app.supabase.com' -ForegroundColor Yellow"
+				"Write-Host '🗄️ Checking Supabase Configuration...' -ForegroundColor Yellow; Write-Host ''; if (Test-Path .env) { $env = Get-Content .env | Select-String EXPO_PUBLIC_SUPABASE_URL; if ($env) { Write-Host 'Supabase URL: ' -NoNewline; Write-Host ($env -replace 'EXPO_PUBLIC_SUPABASE_URL=','') -ForegroundColor Cyan; Write-Host '✅ Configuration found' -ForegroundColor Green } else { Write-Host '❌ EXPO_PUBLIC_SUPABASE_URL not found in .env' -ForegroundColor Red } } else { Write-Host '⚠️ .env file not found - running in demo mode' -ForegroundColor Yellow }; Write-Host ''; Write-Host '📊 Database Tables Expected:' -ForegroundColor Cyan; Write-Host '  - profiles'; Write-Host '  - properties'; Write-Host '  - cleaning_sessions'; Write-Host '  - cleaning_updates'; Write-Host '  - team_members'; Write-Host '  - notifications'; Write-Host '  - photo_proof_requirements'; Write-Host '  - linen_requirements'; Write-Host ''; Write-Host 'Use Supabase Dashboard to verify: https://app.supabase.com' -ForegroundColor Yellow"
 			],
 			"detail": "Displays Supabase configuration and expected database tables.",
 			"presentation": {
@@ -303,7 +303,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Remove-Item -Recurse -Force '.expo' -ErrorAction SilentlyContinue; Write-Host '✅ .expo cache cleared' -ForegroundColor Green"
+				"Remove-Item -Recurse -Force .expo -ErrorAction SilentlyContinue; Write-Host '✅ .expo cache cleared' -ForegroundColor Green"
 			],
 			"detail": "Clears only the .expo folder.",
 			"presentation": {
@@ -318,7 +318,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Remove-Item -Recurse -Force '.metro','node_modules/.cache' -ErrorAction SilentlyContinue; Write-Host '✅ Metro cache cleared' -ForegroundColor Green"
+				"Remove-Item -Recurse -Force .metro,node_modules/.cache -ErrorAction SilentlyContinue; Write-Host '✅ Metro cache cleared' -ForegroundColor Green"
 			],
 			"detail": "Clears only Metro bundler cache.",
 			"presentation": {
@@ -333,7 +333,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Stop-Process -Name 'node','expo' -Force -ErrorAction SilentlyContinue; Write-Host '✅ All Node/Expo processes stopped' -ForegroundColor Green"
+				"Stop-Process -Name node,expo -Force -ErrorAction SilentlyContinue; Write-Host '✅ All Node/Expo processes stopped' -ForegroundColor Green"
 			],
 			"detail": "Stops all running Node and Expo processes.",
 			"presentation": {
@@ -348,7 +348,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"Write-Host '🧹 Full Clean & Reinstall...' -ForegroundColor Yellow; Remove-Item -Recurse -Force 'node_modules','package-lock.json' -ErrorAction SilentlyContinue; Write-Host '✅ Cleaned' -ForegroundColor Green; Write-Host 'Installing dependencies...' -ForegroundColor Cyan; npm install"
+				"Write-Host '🧹 Full Clean & Reinstall...' -ForegroundColor Yellow; Remove-Item -Recurse -Force node_modules,package-lock.json -ErrorAction SilentlyContinue; Write-Host '✅ Cleaned' -ForegroundColor Green; Write-Host 'Installing dependencies...' -ForegroundColor Cyan; npm install"
 			],
 			"detail": "Deletes node_modules and package-lock.json, then reinstalls everything.",
 			"presentation": {
@@ -366,7 +366,7 @@
 			"command": "powershell",
 			"args": [
 				"-Command",
-				"if (Test-Path 'SEED_DATA_SUMMARY.md') { code 'SEED_DATA_SUMMARY.md' } else { Write-Host '❌ SEED_DATA_SUMMARY.md not found' -ForegroundColor Red }"
+				"if (Test-Path SEED_DATA_SUMMARY.md) { code SEED_DATA_SUMMARY.md } else { Write-Host '❌ SEED_DATA_SUMMARY.md not found' -ForegroundColor Red }"
 			],
 			"detail": "Opens the seed data and testing documentation.",
 			"presentation": {
