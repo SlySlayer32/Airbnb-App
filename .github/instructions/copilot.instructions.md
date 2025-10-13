@@ -4,49 +4,74 @@ applyTo: '**'
 
 # Airbnb Cleaning Management Platform - Master Instructions
 
-**📚 PRIMARY DOCUMENTATION**: See [`.ai/README.md`](../../.ai/README.md) for complete AI-optimized project documentation.
+**📚 PRIMARY DOCUMENTATION**: See [`docs/AI-README.md`](../../docs/AI-README.md) for complete AI-optimized project documentation.
 
 ## 🎯 Quick Start for AI Assistants
 
-1. **Read [`.ai/README.md`](../../.ai/README.md) first** - Complete project context
+1. **Read [`docs/AI-README.md`](../../docs/AI-README.md) first** - Complete project context (30 seconds)
 2. **Reference manifests** when working with code:
-   - [`.ai/COMPONENT_MANIFEST.md`](../../.ai/COMPONENT_MANIFEST.md) - 18 components
-   - [`.ai/SERVICE_MANIFEST.md`](../../.ai/SERVICE_MANIFEST.md) - 8 services
-   - [`.ai/SCREEN_MANIFEST.md`](../../.ai/SCREEN_MANIFEST.md) - 13 screens
-3. **Follow [`.ai/CONVENTIONS.md`](../../.ai/CONVENTIONS.md)** - Code patterns & design system
-4. **Use [`.ai/WORKFLOWS.md`](../../.ai/WORKFLOWS.md)** - Feature development processes
+   - [`docs/manifests/COMPONENTS.md`](../../docs/manifests/COMPONENTS.md) - 18 components
+   - [`docs/manifests/SERVICES.md`](../../docs/manifests/SERVICES.md) - 8 services  
+   - [`docs/manifests/SCREENS.md`](../../docs/manifests/SCREENS.md) - 13 screens
+   - [`docs/manifests/TYPES.md`](../../docs/manifests/TYPES.md) - TypeScript definitions
+3. **Follow patterns** in [`docs/reference/`](../../docs/reference/) - Code standards & templates
+4. **Use workflows** in [`docs/workflows/`](../../docs/workflows/) - Feature development processes
 
-## 📁 New Documentation System (`.ai/` Directory)
+## 📁 Documentation System (`docs/` Directory)
 
-The `.ai/` directory contains all technical documentation optimized for AI consumption:
+The `docs/` directory contains comprehensive technical documentation:
 
-- **README.md** - Project overview, tech stack, business rules, user roles
-- **QUICK_REFERENCE.md** - Commands, imports, styling, navigation patterns
-- **COMPONENT_MANIFEST.md** - Complete component inventory with examples
-- **SERVICE_MANIFEST.md** - Service API reference with all methods
-- **SCREEN_MANIFEST.md** - Screen directory with routes and purposes
-- **CONVENTIONS.md** - Code standards and design system
-- **WORKFLOWS.md** - Daily development processes
-- **PROMPTING_GUIDE.md** - AI communication templates
-- **GITHUB_WORKFLOW.md** - Git operations guide
-- **TROUBLESHOOTING.md** - Common issues and solutions
-- **MIGRATION_GUIDE.md** - Documentation structure migration reference
+### Core Context
+- **AI-README.md** - 30-second project overview (START HERE)
+- **core/PRODUCT.md** - What we're building and why
+- **core/BUSINESS_RULES.md** - 5 critical rules (ALWAYS enforce)
+- **core/USER_ROLES.md** - Permission matrices and capabilities
+- **core/TECH_STACK.md** - Technology choices and architecture
 
-## 🔄 Legacy Instructions (Maintained for Compatibility)
+### Current Status
+- **phase-tracking/PHASE_STATUS.md** - What to work on next
+- **phase-tracking/ISSUE_AUDIT.md** - Quality history
 
-Individual instruction files in this directory are maintained for GitHub Copilot compatibility but should be considered secondary to the `.ai/` system:
+### Code Inventory
+- **manifests/COMPONENTS.md** - All 18 UI components with examples
+- **manifests/SERVICES.md** - All 8 services with API reference
+- **manifests/SCREENS.md** - All 13 screens with routes
+- **manifests/TYPES.md** - TypeScript interfaces and patterns
 
-- `general-context.instructions.md` - Consolidated into `.ai/README.md`
-- `components.instructions.md` - Consolidated into `.ai/COMPONENT_MANIFEST.md` + `.ai/CONVENTIONS.md`
-- `services.instructions.md` - Consolidated into `.ai/SERVICE_MANIFEST.md` + `.ai/CONVENTIONS.md`
-- `screens.instructions.md` - Consolidated into `.ai/SCREEN_MANIFEST.md`
-- `types.instructions.md` - Consolidated into `.ai/CONVENTIONS.md`
-- `debugging.instructions.md` - Consolidated into `.ai/TROUBLESHOOTING.md`
-- `documentation.instructions.md` - Consolidated into `.ai/GITHUB_WORKFLOW.md`
-- `feature-development.instructions.md` - Consolidated into `.ai/WORKFLOWS.md`
-- `github-workflow.instructions.md` - Consolidated into `.ai/GITHUB_WORKFLOW.md`
+### Feature Specifications
+- **features/** - Detailed specs for each major feature
+  - `cleaner-dashboard.md`
+  - `session-lifecycle.md`
+  - `photo-proof.md`
+  - `real-time-updates.md`
+  - `banner-state-machine.md`
 
-**Note**: Also see `.cursor/rules/` for Cursor AI-specific instructions (similar content, different format).
+### Quick Reference
+- **reference/QUICK_REFERENCE.md** - Common patterns and commands
+- **reference/API_PATTERNS.md** - Code templates
+- **reference/PROMPTING_GUIDE.md** - How to ask for features
+- **reference/TROUBLESHOOTING.md** - Common errors and solutions
+
+### Workflows
+- **workflows/FEATURE_DEVELOPMENT.md** - Step-by-step feature process
+- **workflows/BUG_FIXING.md** - Systematic debugging approach
+- **workflows/GITHUB_WORKFLOW.md** - Git operations and PR process
+
+## 🔄 Instruction Files (This Directory)
+
+Individual instruction files in this directory provide focused guidance for specific file types:
+
+- `general-context.instructions.md` - App overview and communication rules
+- `components.instructions.md` - Component development patterns
+- `services.instructions.md` - Service layer patterns
+- `screens.instructions.md` - Screen and navigation patterns
+- `types.instructions.md` - TypeScript type patterns
+- `debugging.instructions.md` - Testing and debugging guidance
+- `documentation.instructions.md` - Documentation standards
+- `feature-development.instructions.md` - Feature implementation process
+- `github-workflow.instructions.md` - Git and GitHub operations
+
+**Note**: Also see [`.cursor/rules/`](../../.cursor/rules/) for Cursor AI-specific instructions (similar content, different format).
 
 ## Application Purpose & Business Context
 

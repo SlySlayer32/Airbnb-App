@@ -1,0 +1,400 @@
+---
+alwaysApply: true
+---
+# Project-Specific Conventions
+
+## 🎯 Patterns That Differ from Common Practices
+
+### 1. No ESLint - TypeScript Only
+**Standard Practice**: ESLint + Prettier for code formatting  
+**This Project**: TypeScript compiler (`tsc --noEmit`) for type checking only
+
+**Why**: Simplicity for non-technical founder. No config battles, just types.
+
+**Commands**:
+```bash
+npm run lint        # Runs tsc --noEmit (no ESLint)
+npm run type-check  # Same as lint
+```
+
+### 2. No Redux/Zustand - Context + useState
+**Standard Practice**: Global state management library  
+**This Project**: React Context for auth only, useState for everything else
+
+**Why**: App state is naturally local. Adding complexity when not needed = tech debt.
+
+**When to Use What**:
+```typescript
+// Auth state → Context
+const { user, profile } = useAuth();
+
+// UI state → useState
+const [loading, setLoading] = useState(false);
+
+// Multi-user live data → Supabase Realtime
+useEffect(() => {
+  const channel = realtimeService.subscribe('table', callback);
+  return () => realtimeService.unsubscribe(channel);
+}, []);
+```
+
+### 3. Services Export Functions, Not Classes
+**Standard Practice**: Class-based services with methods  
+**This Project**: Object with functions (plain JavaScript objects)
+
+**Pattern**:
+```typescript
+// Not this:
+class PropertyService {
+  async getProperties() { }
+}
+export default new PropertyService();
+
+// This:
+export const propertyService = {
+  async getProperties() { }
+};
+```
+
+**Why**: Simpler, no 'this' binding issues, easier to mock in tests
+
+### 4. All Types in One File
+**Standard Practice**: Types next to components/services  
+**This Project**: All types in `types/index.ts`
+
+**Why**: Single source of truth, easier to find, no circular dependency issues
+
+**Pattern**:
+```typescript
+// types/index.ts (800+ lines)
+export interface Property { }
+export interface CleaningSession { }
+export interface Profile { }
+// ... all other types
+```
+
+### 5. Component Naming with Role Prefix
+**Standard Practice**: Generic component names  
+**This Project**: `[Role][Feature]Component.tsx`
+
+**Examples**:
+```
+CleanerPropertyCard.tsx   # What cleaners see
+OwnerPropertyCard.tsx     # What owners see
+CleanerDashboard.tsx      # Cleaner's main screen
+RoleBasedWrapper.tsx      # Access control utility
+```
+
+**Why**: Instantly know who uses what, prevents "which card is this?" confusion
+
+### 6. Ionicons Only - No Mixed Icon Libraries
+**Standard Practice**: Mix FontAwesome, Material Icons, custom SVGs  
+**This Project**: Ionicons exclusively from `@expo/vector-icons`
+
+**Pattern**:
+```typescript
+import { Ionicons } from '@expo/vector-icons';
+
+<Ionicons name="checkmark-circle" size={24} color="#10b981" />
+```
+
+**Why**: Consistency, no bundle bloat, included with Expo
+
+### 7. Services Show User Alerts, Components Handle State
+**Standard Practice**: Components show all alerts  
+**This Project**: Services show error alerts, components handle loading/success
+
+**Pattern**:
+```typescript
+// In service
+catch (error) {
+  Alert.alert('Error', 'Could not load data');
+  throw error;
+}
+
+// In component
+try {
+  const data = await service.getData();
+  Alert.alert('Success', 'Loaded successfully');
+} catch (error) {
+  // Error already shown, just update state
+  setLoading(false);
+}
+```
+
+**Why**: Centralized error messages, components focus on UI
+
+### 8. Demo Mode Built-In
+**Standard Practice**: Require database for development  
+**This Project**: App works without Supabase using mock data
+
+**Pattern**:
+```typescript
+import { isDemoMode } from '@/utils/supabase';
+
+if (isDemoMode()) {
+  return mockData;
+}
+// Otherwise query Supabase
+```
+
+**Why**: Faster onboarding, easier to demo, development without backend access
+
+### 9. File-Based Routing, No Route Config
+**Standard Practice**: React Navigation with route configuration  
+**This Project**: Expo Router - file path = URL path
+
+**Pattern**:
+```
+app/index.tsx        → / (home)
+app/properties.tsx   → /properties
+app/auth/login.tsx   → /auth/login
+```
+
+**Why**: Intuitive, less code, matches web development, deep linking free
+
+### 10. Supabase Storage for Photos Only
+**Standard Practice**: Cloud storage (S3, Cloudinary) for all media  
+**This Project**: Supabase Storage exclusively for cleaning photos
+
+**Pattern**:
+```typescript
+// Upload
+const { data } = await supabase.storage
+  .from('cleaning-photos')
+  .upload(`${sessionId}/${filename}`, file);
+
+// Get public URL
+const url = supabase.storage
+  .from('cleaning-photos')
+  .getPublicUrl(`${sessionId}/${filename}`).data.publicUrl;
+```
+
+**Why**: Single platform (Supabase), simpler auth, RLS works same as database
+
+## 📐 Design System Discipline
+
+### Hardcoded Values Forbidden
+**Don't**:
+```typescript
+<View style={{ padding: 15, marginBottom: 12, borderRadius: 10 }} />
+```
+
+**Do**:
+```typescript
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,      // From spacing.lg
+    marginBottom: 12, // From spacing.md
+    borderRadius: 12, // From borderRadius.large
+  }
+});
+```
+
+**Design Tokens**:
+```typescript
+spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 }
+borderRadius = { small: 6, medium: 8, large: 12 }
+colors = { primary: '#007AFF', success: '#10b981', error: '#ef4444', ... }
+```
+
+### Shadow Consistency
+**Don't**: Vary shadow values  
+**Do**: Use one of three predefined shadows
+
+```typescript
+// Small shadow (subtle)
+shadowColor: '#000',
+shadowOffset: { width: 0, height: 1 },
+shadowOpacity: 0.05,
+shadowRadius: 2,
+elevation: 1,
+
+// Medium shadow (cards)
+shadowColor: '#000',
+shadowOffset: { width: 0, height: 2 },
+shadowOpacity: 0.1,
+shadowRadius: 4,
+elevation: 3,
+
+// Large shadow (modals)
+shadowColor: '#000',
+shadowOffset: { width: 0, height: 4 },
+shadowOpacity: 0.15,
+shadowRadius: 8,
+elevation: 5,
+```
+
+## 🔒 TypeScript Strictness
+
+### No 'any' Type Ever
+**This project**: Strict mode with zero 'any' tolerance
+
+```typescript
+// ❌ Never
+function doSomething(data: any) { }
+
+// ✅ Always
+function doSomething(data: CleaningSession) { }
+
+// ✅ If truly unknown
+function doSomething(data: unknown) {
+  if (typeof data === 'object' && data !== null) {
+    // Type guard to narrow
+  }
+}
+```
+
+### All Functions Fully Typed
+```typescript
+// ❌ Missing return type
+async function getSession(id: string) {
+  return await supabase.from('sessions').select().eq('id', id);
+}
+
+// ✅ Explicit return type
+async function getSession(id: string): Promise<CleaningSession | null> {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select()
+    .eq('id', id)
+    .single();
+  
+  if (error) throw error;
+  return data;
+}
+```
+
+## 🧪 Testing Philosophy
+
+### Current State: Manual Testing First
+**Standard Practice**: Write tests before shipping  
+**This Project**: Manual testing primary, automated tests aspirational
+
+**Why**: Small team, non-technical founder, rapid iteration
+
+**Manual Test Checklist**:
+- Test as property_owner
+- Test as cleaner
+- Test as co_host
+- Test in demo mode
+- Test with real Supabase
+- Test on iOS, Android, Web
+- Test edge cases (empty states, errors, slow network)
+
+**Future**: Add automated tests as team grows
+
+## 📝 Comment Philosophy
+
+### Comments Only for Non-Obvious "Why"
+**Don't**: Explain what code does  
+**Do**: Explain why you chose this approach
+
+```typescript
+// ❌ Bad comment
+// Gets the user's profile from the database
+const profile = await getProfile(userId);
+
+// ✅ Good comment
+// Use cached profile to avoid rate limiting (Supabase free tier = 100 req/min)
+const profile = getCachedProfile(userId);
+```
+
+### Business Rule Comments
+Mark critical business logic:
+
+```typescript
+// BUSINESS RULE: 4-hour cleaning window (11 AM - 3 PM)
+if (hour < 11 || hour >= 15) {
+  throw new Error('Cleanings must be between 11 AM and 3 PM');
+}
+
+// BUSINESS RULE: 24-hour cancellation notice
+const noticeHours = calculateNotice(scheduledTime);
+if (noticeHours < 24) {
+  showShortNoticeWarning();
+}
+```
+
+## 🚀 Performance Patterns
+
+### FlatList Required for Lists > 10 Items
+**Don't**: Use ScrollView for long lists  
+**Do**: Use FlatList with proper keys
+
+```typescript
+// ❌ Performance issue with 50+ items
+<ScrollView>
+  {properties.map(p => <PropertyCard key={p.id} property={p} />)}
+</ScrollView>
+
+// ✅ Virtualized rendering
+<FlatList
+  data={properties}
+  renderItem={({ item }) => <PropertyCard property={item} />}
+  keyExtractor={(item) => item.id}
+/>
+```
+
+### Debounce Search Inputs
+**Pattern**: 500ms delay before search
+
+```typescript
+const [searchTerm, setSearchTerm] = useState('');
+const [debouncedSearch, setDebouncedSearch] = useState('');
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(searchTerm);
+  }, 500);
+  
+  return () => clearTimeout(timer);
+}, [searchTerm]);
+
+useEffect(() => {
+  if (debouncedSearch) {
+    performSearch(debouncedSearch);
+  }
+}, [debouncedSearch]);
+```
+
+## 🎨 Styling Patterns
+
+### StyleSheet, Never Inline Styles
+**Don't**: Inline styles (performance cost on re-render)  
+**Do**: StyleSheet.create (optimized, type-safe)
+
+```typescript
+// ❌ Creates new object every render
+<View style={{ padding: 16, backgroundColor: '#fff' }} />
+
+// ✅ Created once, reused
+<View style={styles.container} />
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+});
+```
+
+### Conditional Styles with Array
+```typescript
+<View style={[
+  styles.button,
+  loading && styles.buttonDisabled,
+  isUrgent && styles.buttonUrgent
+]} />
+```
+
+## 🔑 Key Architectural Principles
+
+1. **Components → Services → Database** (never skip service layer)
+2. **Types in one place** (types/index.ts)
+3. **Demo mode always works** (mock data fallback)
+4. **Real-time for multi-user data** (sessions, notifications)
+5. **Role-based naming** (know who uses what)
+6. **No 'any' types** (strict TypeScript)
+7. **Services show errors** (components show success)
+8. **Design system values** (no magic numbers)

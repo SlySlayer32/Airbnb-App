@@ -1,0 +1,335 @@
+---
+alwaysApply: true
+---
+# Integration Points & Cross-Component Communication
+
+## 🔗 Service-to-Service Integration
+
+### Pattern: Services Call Each Other
+Services are NOT isolated - they integrate through direct calls:
+
+```typescript
+// In cleaningSessionService.ts
+import { notificationService } from './notificationService';
+
+async completeSession(sessionId: string) {
+  // Update session
+  const session = await this.updateSession(sessionId, { status: 'completed' });
+  
+  // Trigger notification to owner
+  await notificationService.create({
+    user_id: session.property.owner_id,
+    type: 'session_completed',
+    title: 'Cleaning Completed',
+    message: `${session.property.name} has been cleaned`,
+    priority: 'normal'
+  });
+  
+  return session;
+}
+```
+
+**Common Service Integration Patterns**:
+```
+cleaningSessionService → notificationService (alert users)
+cleaningSessionService → realtimeService (broadcast updates)
+photoProofService → cleaningSessionService (validate before complete)
+bannerStateService → cleaningUpdateService (fetch latest update)
+```
+
+## 🔄 Component-to-Service Communication
+
+### Standard Pattern
+Components call services, services return typed data:
+
+```typescript
+// In CleanerDashboard.tsx
+import { cleaningSessionService } from '@/services';
+import { CleaningSession } from '@/types';
+
+const [sessions, setSessions] = useState<CleaningSession[]>([]);
+
+useEffect(() => {
+  loadSessions();
+}, []);
+
+const loadSessions = async () => {
+  try {
+    const data = await cleaningSessionService.getTodaySessions();
+    setSessions(data);
+  } catch (error) {
+    // Error already shown by service
+  }
+};
+```
+
+**Never**: Call Supabase from components
+**Always**: Call services, let them handle database
+
+## 📡 Real-time Communication Flow
+
+### Pattern: Subscribe/Unsubscribe Pattern
+```typescript
+// In component
+import { realtimeService } from '@/services';
+
+useEffect(() => {
+  const channel = realtimeService.subscribe(
+    'cleaning_sessions',
+    (payload) => {
+      if (payload.eventType === 'UPDATE') {
+        // Update local state with new data
+        setSessions(prev => prev.map(s => 
+          s.id === payload.new.id ? payload.new : s
+        ));
+      }
+    }
+  );
+
+  // Cleanup on unmount
+  return () => {
+    realtimeService.unsubscribe(channel);
+  };
+}, []);
+```
+
+**Tables with Realtime**:
+- `cleaning_sessions` - Session status changes
+- `cleaning_updates` - Progress updates during cleaning
+- `notifications` - New alerts for users
+
+## 🎭 Role-Based Component Integration
+
+### Pattern: Conditional Rendering by Role
+```typescript
+import { useAuth } from '@/contexts/AuthContext';
+import RoleBasedWrapper from '@/components/RoleBasedWrapper';
+
+function Dashboard() {
+  const { profile } = useAuth();
+
+  return (
+    <View>
+      {/* Show to specific roles */}
+      <RoleBasedWrapper allowedRoles={['property_owner', 'co_host']}>
+        <FinancialSummary />
+      </RoleBasedWrapper>
+
+      {/* Conditional by role */}
+      {profile?.role === 'cleaner' ? (
+        <CleanerDashboard />
+      ) : (
+        <OwnerDashboard />
+      )}
+    </View>
+  );
+}
+```
+
+**Security Note**: UI hiding is not security - RLS in database is the real enforcement
+
+## 📸 Photo Integration Flow
+
+### Pattern: Photo Upload → Session Update
+```typescript
+// PhotoProofGate component enforces minimum photos
+<PhotoProofGate
+  sessionId={session.id}
+  onPhotosValidated={handleComplete}
+  minimumPhotos={3}
+/>
+
+// Internally:
+// 1. PhotoProofService.uploadPhoto() uploads to Supabase Storage
+// 2. Returns URL
+// 3. Stores URL in cleaning_session.photo_urls array
+// 4. Only calls onPhotosValidated when count >= minimumPhotos
+```
+
+**Storage Bucket**: `cleaning-photos` in Supabase
+**URL Format**: `https://xyz.supabase.co/storage/v1/object/public/cleaning-photos/session-id/photo-1.jpg`
+
+## 🔔 Notification Integration Points
+
+### When to Trigger Notifications
+```typescript
+// Session created
+cleaningSessionService.createSession() → notificationService.create()
+
+// Session cancelled
+cleaningSessionService.cancelSession() → notificationService.create()
+  → Check if short notice → priority: 'high'
+
+// Maintenance issue reported
+maintenanceService.createTicket() → notificationService.create()
+  → If urgent → priority: 'urgent'
+
+// Session completed
+cleaningSessionService.completeSession() → notificationService.create()
+```
+
+**Notification Types**:
+- `session_created` - New cleaning assigned
+- `session_cancelled` - Cleaning cancelled
+- `session_completed` - Cleaning done
+- `maintenance_urgent` - Urgent issue reported
+- `cleaner_arrived` - Cleaner started work
+
+## 🎨 Component-to-Component Communication
+
+### Pattern: Props Down, Events Up
+```typescript
+// Parent component
+<CleanerPropertyCard
+  property={property}
+  session={session}
+  onStartSession={handleStart}
+  onReportIssue={handleIssue}
+/>
+
+// Child component
+interface CleanerPropertyCardProps {
+  property: Property;
+  session?: CleaningSession;
+  onStartSession: (sessionId: string) => void;
+  onReportIssue: (propertyId: string) => void;
+}
+```
+
+**Never**: Share state between sibling components directly
+**Always**: Lift state to parent or use Context
+
+## 🗄️ Database Integration Pattern
+
+### Service Layer Queries Supabase
+```typescript
+// Standard query pattern in services
+const { data, error } = await supabase
+  .from('table_name')
+  .select(`
+    *,
+    related_table (id, name),
+    nested_relation (
+      id,
+      name,
+      another_relation (id, name)
+    )
+  `)
+  .eq('filter_field', value)
+  .order('created_at', { ascending: false });
+
+if (error) throw error;
+return data;
+```
+
+**Joins**: Use Supabase's relationship syntax, not manual joins
+**Filters**: Apply at query level for performance
+**Pagination**: Use `.range(start, end)` for large datasets
+
+## 🔐 Authentication Integration
+
+### Pattern: AuthContext Provides User State
+```typescript
+// Anywhere in app
+import { useAuth } from '@/contexts/AuthContext';
+
+function Component() {
+  const { user, profile, session, loading, isDemoMode } = useAuth();
+
+  if (loading) return <LoadingSpinner />;
+  if (isDemoMode) return <DemoModeBanner />;
+  if (!user) return <LoginPrompt />;
+
+  return <ProtectedContent role={profile.role} />;
+}
+```
+
+**Available Everywhere**: useAuth() hook works in any component inside AuthProvider
+
+## 🎯 Error Propagation Pattern
+
+### Services Handle Errors, Components React
+```typescript
+// In service
+catch (error) {
+  console.error('[ServiceName.method]', error);
+  Alert.alert('Error', 'User-friendly message here');
+  throw error; // Re-throw so component knows it failed
+}
+
+// In component
+try {
+  await service.doSomething();
+  // Success - update UI
+  Alert.alert('Success', 'Action completed');
+} catch (error) {
+  // Error already shown by service
+  // Just handle local UI state
+  setLoading(false);
+}
+```
+
+**Dual Alert**: Service shows user error, component handles loading state
+
+## 🚀 Critical Integration Gotchas
+
+### Demo Mode Awareness
+```typescript
+import { isDemoMode } from '@/utils/supabase';
+
+if (isDemoMode()) {
+  // Use mock data, skip actual database calls
+  return mockData;
+}
+// Otherwise proceed with real Supabase
+```
+
+**Affects**: All services, AuthContext, storage operations
+
+### Platform Differences
+```typescript
+import { Platform } from 'react-native';
+
+// iOS-specific behavior
+if (Platform.OS === 'ios') {
+  // Use iOS-specific APIs
+}
+
+// Web-specific behavior
+if (Platform.OS === 'web') {
+  // Use localStorage instead of AsyncStorage
+}
+```
+
+**Location**: Mainly in `utils/supabase.ts` for storage adapter
+
+### Navigation Context
+```typescript
+import { useRouter } from 'expo-router';
+
+// Only works inside navigation tree (_layout.tsx)
+const router = useRouter();
+router.push('/screen');
+```
+
+**Error if used outside**: "Cannot read property 'navigate' of undefined"
+
+## 📊 Data Flow Summary
+
+```
+User Action
+    ↓
+Component Handler
+    ↓
+Service Method
+    ↓
+Supabase Query/Update
+    ↓
+Real-time Broadcast (if applicable)
+    ↓
+Other Subscribed Components Update
+    ↓
+UI Re-renders
+```
+
+**Key Insight**: Changes flow through services, propagate via realtime, bubble up as state updates

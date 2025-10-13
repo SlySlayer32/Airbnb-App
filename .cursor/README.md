@@ -22,11 +22,50 @@ This folder contains rule files for Cursor in multiple formats:
 
 ---
 
-### 📋 `.cursor/rules/project-rules.mdc`
-**What it is**: Same as `.cursorrules` but in .mdc format  
+### 📋 `.cursor/rules/` Directory
+**What it is**: Modular rule files for specific aspects  
 **Where it is**: `.cursor/rules/` folder  
-**Status**: ✅ Active (`alwaysApply: true` makes it auto-load)  
-**Purpose**: Backup format for newer Cursor versions
+**Status**: ✅ All Active (`alwaysApply: true` in each file)
+
+**Files**:
+
+#### `project-rules.mdc`
+- Same as root `.cursorrules` but in .mdc format
+- Backup for newer Cursor versions
+- Main project overview and business rules
+
+#### `architecture.mdc` ⭐ NEW
+- Big picture system design (3-layer architecture)
+- Service boundaries and integration points
+- Critical data flows (session lifecycle, auth, real-time, photos)
+- Why behind architectural decisions
+- Security patterns (RLS, role-based access)
+
+#### `workflows.mdc` ⭐ NEW
+- Critical developer commands (start, build, test, deploy)
+- Debugging workflows for common issues
+- Feature development process
+- Git workflow patterns
+- Common gotchas and quick fixes
+- Environment setup requirements
+
+#### `integrations.mdc` ⭐ NEW
+- Service-to-service communication patterns
+- Component-to-service integration
+- Real-time subscription patterns
+- Role-based component integration
+- Photo upload flow
+- Notification trigger points
+- Error propagation patterns
+
+#### `conventions.mdc` ⭐ NEW
+- Project-specific patterns that differ from standards
+- No ESLint (TypeScript only)
+- No Redux (Context + useState)
+- All types in one file
+- Role-based component naming
+- Demo mode built-in
+- Service error handling pattern
 
 ---
 
