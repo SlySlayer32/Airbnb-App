@@ -3,10 +3,45 @@
 > Git operations and commit standards for non-technical users
 
 ## 📋 Table of Contents
+- [Branching Strategy](#branching-strategy)
 - [Basic Git Commands](#basic-git-commands)
 - [Commit Message Standards](#commit-message-standards)
 - [Pre-Push Checklist](#pre-push-checklist)
 - [Common Git Issues](#common-git-issues)
+
+---
+
+## 🌳 Branching Strategy
+
+**We use GitHub Flow** - a simple, branch-based workflow:
+
+### Quick Reference
+```bash
+# Start new feature
+git checkout main
+git pull origin main
+git checkout -b feature/your-feature-name
+
+# Make changes, then push
+git add .
+git commit -m "feat: Description"
+git push origin feature/your-feature-name
+
+# Create Pull Request on GitHub
+# After merge, clean up:
+git checkout main
+git pull origin main
+git branch -d feature/your-feature-name
+```
+
+### Branch Types
+- **`main`** - Production code (always deployable)
+- **`feature/*`** - New features (e.g., `feature/photo-proof`)
+- **`bugfix/*`** - Bug fixes (e.g., `bugfix/auth-error`)
+- **`hotfix/*`** - Emergency fixes (e.g., `hotfix/critical-crash`)
+
+📖 **Full documentation**: [BRANCHING_STRATEGY.md](./BRANCHING_STRATEGY.md)  
+📋 **Quick reference**: [BRANCHING_QUICK_REFERENCE.md](../reference/BRANCHING_QUICK_REFERENCE.md)
 
 ---
 
