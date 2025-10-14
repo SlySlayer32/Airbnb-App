@@ -9,14 +9,14 @@ This file ensures AI follows proper workflow from the very first message.
 **Execute these reads at conversation start:**
 
 ```
-1. READ: docs/AI-README.md (30-second overview)
-2. READ: docs/phase-tracking/PHASE_STATUS.md (current priority)
-3. SCAN: docs/manifests/ (know what exists)
+1. READ: docs/08-ai-context/ai-README.md (30-second overview)
+2. READ: docs/07-project-management/phase-status.md (current priority)
+3. SCAN: docs/04-codebase/ (know what exists)
 ```
 
 **Why:** Without this, you'll:
 - ❌ Suggest features that already exist
-- ❌ Ignore current phase priorities  
+- ❌ Ignore current phase priorities
 - ❌ Violate established patterns
 - ❌ Break business rules
 
@@ -26,26 +26,26 @@ This file ensures AI follows proper workflow from the very first message.
 Based on user's request, determine:
 
 ### **A) New Feature Request**
-- Read relevant feature spec in `docs/features/`
-- Check `docs/manifests/COMPONENTS.md` for existing components
-- Check `docs/manifests/SERVICES.md` for existing services
-- Review `docs/core/BUSINESS_RULES.md` for applicable rules
-- Follow patterns from `docs/reference/API_PATTERNS.md`
+- Read relevant feature spec in `docs/05-features/`
+- Check `docs/04-codebase/components.md` for existing components
+- Check `docs/04-codebase/services.md` for existing services
+- Review `docs/02-architecture/01-requirements.md` for applicable rules
+- Follow patterns from `docs/06-patterns/service-patterns.md`
 
 ### **B) Bug Fix**
-- Read `docs/reference/TROUBLESHOOTING.md` first
+- Read `docs/03-development/troubleshooting.md` first
 - Check if issue is documented
 - Review relevant feature spec
 - Verify fix doesn't break business rules
 
 ### **C) General Question**
-- Read `docs/reference/PROMPTING_GUIDE.md`
+- Read `docs/08-ai-context/prompting-guide.md`
 - Provide context-aware answer
 - Suggest related documentation
 
 ### **D) "What should I build next?"**
-- Read `docs/phase-tracking/PHASE_STATUS.md`
-- Check `docs/phase-tracking/phases/PHASE_2_PLANNED.md`
+- Read `docs/07-project-management/phase-status.md`
+- Check `docs/07-project-management/roadmap.md`
 - Suggest based on priority and dependencies
 
 ---
@@ -72,11 +72,11 @@ Follow workflow from `.cursorrules`:
 
 ## 🔴 CRITICAL: DON'T SKIP STEP 1
 Even if the user's request seems simple, ALWAYS:
-1. Read `docs/AI-README.md` first
+1. Read `docs/08-ai-context/ai-README.md` first
 2. Check phase status
 3. Then respond
 
-**Time investment:** 30 seconds  
+**Time investment:** 30 seconds
 **Benefit:** Avoid hours of rework from wrong assumptions
 
 ---
@@ -84,39 +84,39 @@ Even if the user's request seems simple, ALWAYS:
 ## 🧪 Self-Test Questions
 Before responding to ANY user request, ask yourself:
 
-1. "Have I read docs/AI-README.md in THIS conversation?"
+1. "Have I read docs/08-ai-context/ai-README.md in THIS conversation?"
    - If NO → Read it now
-   
+
 2. "Do I know what phase we're in?"
-   - If NO → Read docs/phase-tracking/PHASE_STATUS.md
-   
+   - If NO → Read docs/07-project-management/phase-status.md
+
 3. "Do I know what components/services already exist?"
-   - If NO → Scan docs/manifests/
-   
+   - If NO → Scan docs/04-codebase/
+
 4. "Am I about to suggest something that might already exist?"
    - If MAYBE → Check manifests first
 
 5. "Does this involve cleaning sessions, pricing, or photos?"
-   - If YES → Read docs/core/BUSINESS_RULES.md
+   - If YES → Read docs/02-architecture/01-requirements.md
 
 ---
 
 ## 📋 Quick Reference Checklist
 
 **Every new conversation:**
-- [ ] Read docs/AI-README.md
-- [ ] Read docs/phase-tracking/PHASE_STATUS.md
+- [ ] Read docs/08-ai-context/ai-README.md
+- [ ] Read docs/07-project-management/phase-status.md
 - [ ] Know: 18 components exist
-- [ ] Know: 8 services exist  
+- [ ] Know: 8 services exist
 - [ ] Know: 5 critical business rules
 
 **Before suggesting features:**
-- [ ] Check docs/manifests/COMPONENTS.md
-- [ ] Check docs/manifests/SERVICES.md
+- [ ] Check docs/04-codebase/components.md
+- [ ] Check docs/04-codebase/services.md
 - [ ] Read relevant feature spec
 
 **Before fixing bugs:**
-- [ ] Read docs/reference/TROUBLESHOOTING.md
+- [ ] Read docs/03-development/troubleshooting.md
 - [ ] Check known issues
 
 **Before answering questions:**
@@ -158,7 +158,7 @@ You're following this properly when:
 If you realize mid-conversation you skipped Step 1:
 1. STOP immediately
 2. Say: "Let me check the documentation first"
-3. Read docs/AI-README.md
+3. Read docs/08-ai-context/ai-README.md
 4. Read phase status
 5. THEN continue
 
@@ -166,7 +166,7 @@ Better to pause and read than continue wrong.
 
 ---
 
-**Last Updated:** October 10, 2025  
-**Enforcement:** MANDATORY at every conversation start  
+**Last Updated:** January 2025
+**Enforcement:** MANDATORY at every conversation start
 **Penalty:** Rework, confusion, duplicate features
 

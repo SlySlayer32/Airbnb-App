@@ -1,9 +1,9 @@
 /**
  * Documentation Validator
- * 
+ *
  * Validates documentation structure and cross-references
  * Ensures all required files exist and links are valid
- * 
+ *
  * Usage: node scripts/validate-docs.js
  */
 
@@ -13,30 +13,42 @@ const path = require('path');
 const DOCS_ROOT = path.join(__dirname, '../docs');
 
 /**
- * Required documentation files
+ * Required documentation files (new structure)
  */
 const REQUIRED_FILES = [
-  'AI-README.md',
+  'README.md',
   'DATABASE.md',
-  'core/PRODUCT.md',
-  'core/BUSINESS_RULES.md',
-  'core/USER_ROLES.md',
-  'core/TECH_STACK.md',
-  'phase-tracking/CURRENT_PHASE.json',
-  'phase-tracking/PHASE_STATUS.md',
-  'phase-tracking/ISSUE_AUDIT.md',
-  'manifests/COMPONENTS.md',
-  'manifests/SERVICES.md',
-  'manifests/SCREENS.md',
-  'manifests/TYPES.md',
-  'reference/QUICK_REFERENCE.md',
-  'reference/API_PATTERNS.md',
-  'reference/PROMPTING_GUIDE.md',
-  'reference/TROUBLESHOOTING.md',
-  'workflows/FEATURE_DEVELOPMENT.md',
-  'workflows/BUG_FIXING.md',
-  'workflows/GITHUB_WORKFLOW.md',
-  'workflows/DEPLOYMENT.md',
+  '01-introduction/overview.md',
+  '01-introduction/getting-started.md',
+  '01-introduction/quality-standards.md',
+  '02-architecture/01-requirements.md',
+  '02-architecture/03-solution-strategy.md',
+  '02-architecture/04-building-blocks.md',
+  '02-architecture/05-runtime-view.md',
+  '02-architecture/06-deployment.md',
+  '02-architecture/07-crosscutting-concepts.md',
+  '03-development/setup.md',
+  '03-development/workflows.md',
+  '03-development/commands.md',
+  '03-development/conventions.md',
+  '03-development/troubleshooting.md',
+  '04-codebase/components.md',
+  '04-codebase/services.md',
+  '04-codebase/screens.md',
+  '04-codebase/types.md',
+  '06-patterns/component-patterns.md',
+  '06-patterns/service-patterns.md',
+  '06-patterns/integration-patterns.md',
+  '06-patterns/testing-patterns.md',
+  '07-project-management/phase-status.md',
+  '07-project-management/phase-history.md',
+  '07-project-management/roadmap.md',
+  '07-project-management/issue-tracking.md',
+  '07-project-management/changelog.md',
+  '08-ai-context/ai-README.md',
+  '08-ai-context/startup-checklist.md',
+  '08-ai-context/prompting-guide.md',
+  '08-ai-context/validation-patterns.md',
 ];
 
 /**
@@ -48,37 +60,25 @@ function checkFileExists(relativePath) {
 }
 
 /**
- * Validate CURRENT_PHASE.json structure
+ * Validate CURRENT_PHASE.json structure (if exists)
  */
 function validatePhaseJSON() {
-  const phaseFile = path.join(DOCS_ROOT, 'phase-tracking/CURRENT_PHASE.json');
-  
+  const phaseFile = path.join(DOCS_ROOT, '07-project-management/phase-status.md');
+
   if (!fs.existsSync(phaseFile)) {
-    return { valid: false, error: 'File not found' };
+    return { valid: true, data: null, note: 'Phase status is now in markdown format' };
   }
-  
+
   try {
-    const content = JSON.parse(fs.readFileSync(phaseFile, 'utf-8'));
-    
-    const requiredFields = [
-      'project',
-      'current_phase',
-      'phase_name',
-      'completion_percentage',
-      'status',
-      'recommended_next_step'
-    ];
-    
-    const missing = requiredFields.filter(field => !(field in content));
-    
-    if (missing.length > 0) {
-      return { valid: false, error: `Missing fields: ${missing.join(', ')}` };
-    }
-    
-    return { valid: true, data: content };
-    
+    const content = fs.readFileSync(phaseFile, 'utf-8');
+
+    // Check for key phase indicators
+    const hasPhaseInfo = content.includes('Current Phase') || content.includes('Phase Status');
+
+    return { valid: true, data: { format: 'markdown', hasPhaseInfo } };
+
   } catch (error) {
-    return { valid: false, error: `Invalid JSON: ${error.message}` };
+    return { valid: false, error: `Error reading file: ${error.message}` };
   }
 }
 
@@ -88,10 +88,10 @@ function validatePhaseJSON() {
 function validateDocumentation() {
   console.log('🔍 Validating documentation structure...\n');
   console.log('='.repeat(50));
-  
+
   let errors = 0;
   let warnings = 0;
-  
+
   // Check required files
   console.log('\n📁 Checking required files...');
   REQUIRED_FILES.forEach(file => {
@@ -103,18 +103,22 @@ function validateDocumentation() {
       errors++;
     }
   });
-  
-  // Validate phase JSON
-  console.log('\n🔍 Validating CURRENT_PHASE.json...');
+
+  // Validate phase status
+  console.log('\n🔍 Validating phase status...');
   const phaseValidation = validatePhaseJSON();
   if (phaseValidation.valid) {
-    console.log(`   ✅ Valid JSON structure`);
-    console.log(`   📊 Phase ${phaseValidation.data.current_phase}: ${phaseValidation.data.completion_percentage}% complete`);
+    if (phaseValidation.data) {
+      console.log(`   ✅ Phase status file found`);
+      console.log(`   📊 Format: ${phaseValidation.data.format}`);
+    } else {
+      console.log(`   ℹ️  ${phaseValidation.note}`);
+    }
   } else {
     console.log(`   ❌ ${phaseValidation.error}`);
     errors++;
   }
-  
+
   // Check .cursorrules exists
   console.log('\n📋 Checking .cursorrules...');
   const cursorrulesExists = fs.existsSync(path.join(__dirname, '../.cursorrules'));
@@ -124,7 +128,7 @@ function validateDocumentation() {
     console.log('   ❌ .cursorrules missing');
     errors++;
   }
-  
+
   // Summary
   console.log('\n' + '='.repeat(50));
   console.log('\n📊 Validation Summary:');
@@ -132,7 +136,7 @@ function validateDocumentation() {
   console.log(`   Found: ${REQUIRED_FILES.length - errors}`);
   console.log(`   Missing: ${errors}`);
   console.log(`   Warnings: ${warnings}`);
-  
+
   if (errors === 0 && warnings === 0) {
     console.log('\n✅ Documentation structure is valid!\n');
     return true;

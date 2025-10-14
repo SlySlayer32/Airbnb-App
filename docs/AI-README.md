@@ -1,16 +1,37 @@
-# AI Development Guide - Start Here
+# ⚠️ DOCUMENTATION MOVED
 
-## 🎯 Quick Context (30 seconds)
-**Project**: Airbnb cleaning management platform  
-**Status**: Phase 1 complete (7/7 issues), Phase 2 planning  
-**Tech**: React Native + Expo + Supabase + TypeScript  
-**Users**: property_owner, cleaner, co_host  
+This file has been relocated as part of the documentation restructure.
 
-## 📚 Before Writing Any Code
-1. **`.cursorrules`** ← Master instructions (MUST read first)
-2. **`docs/core/PRODUCT.md`** ← What we're building and why
-3. **`docs/phase-tracking/PHASE_STATUS.md`** ← Current work focus
-4. **Relevant feature spec** in `docs/features/` ← Exact requirements
+## New Location
+→ **[docs/08-ai-context/ai-README.md](./08-ai-context/ai-README.md)**
+
+## Quick Navigation
+- **AI Entry Point**: [docs/08-ai-context/ai-README.md](./08-ai-context/ai-README.md) (30-second overview)
+- **Startup Checklist**: [docs/08-ai-context/startup-checklist.md](./08-ai-context/startup-checklist.md)
+- **Phase Status**: [docs/07-project-management/phase-status.md](./07-project-management/phase-status.md)
+- **Manifests**: [docs/04-codebase/](./04-codebase/)
+
+## Documentation Structure
+The documentation has been reorganized following arc42 and C4 Model principles:
+
+```
+docs/
+├── 01-introduction/          # Overview, getting started, quality standards
+├── 02-architecture/          # arc42 sections, C4 diagrams
+├── 03-development/          # Setup, workflows, commands, troubleshooting
+├── 04-codebase/            # Manifests (components, services, screens, types)
+├── 05-features/            # Feature specifications
+├── 06-patterns/            # Reusable code patterns
+├── 07-project-management/  # Phase tracking, roadmap, changelog
+└── 08-ai-context/          # AI-specific guidance (YOU ARE HERE)
+```
+
+## Main Entry Point
+→ **[docs/README.md](./README.md)** - Complete documentation hub
+
+---
+
+**Redirecting to**: [docs/08-ai-context/ai-README.md](./08-ai-context/ai-README.md)
 
 ## 🗂️ Project Structure
 ```
@@ -90,7 +111,7 @@ When you complete work, tell me:
 
 ---
 
-**Current Phase**: Phase 1 Complete (100%)  
-**Current Focus**: Planning Phase 2 features  
+**Current Phase**: Phase 1 Complete (100%)
+**Current Focus**: Planning Phase 2 features
 **Questions?** Reference `.cursorrules` for all coding standards
 
