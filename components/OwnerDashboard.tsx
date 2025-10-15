@@ -1,59 +1,19 @@
 import { useAuth } from '@/contexts/AuthContext';
-import { cleaningSessionService } from '@/services';
 import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
-import { CleaningSession } from '@/types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import DashboardStats from './DashboardStats';
 import QuickActions from './QuickActions';
-import TodayJobsSection from './TodayJobsSection';
-import TodoTasksSection from './TodoTasksSection';
 
-interface TodoTask {
-  id: string;
-  title: string;
-  isUrgent?: boolean;
-  isCompleted: boolean;
-}
-
-export default function CleanerDashboard() {
+export default function OwnerDashboard() {
   const { profile } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
   const [realtimeConnected, setRealtimeConnected] = useState(false);
-  const [todaySessions, setTodaySessions] = useState<CleaningSession[]>([]);
-  const [isLoadingSessions, setIsLoadingSessions] = useState(true);
-  const [tasks, setTasks] = useState<TodoTask[]>([
-    { id: '1', title: 'Pick up cleaning supplies from warehouse', isUrgent: true, isCompleted: false },
-    { id: '2', title: 'Submit timesheet for last week', isUrgent: false, isCompleted: false },
-    { id: '3', title: 'Check inventory before Office Complex job', isUrgent: true, isCompleted: false },
-    { id: '4', title: 'Confirm tomorrow\'s schedule', isUrgent: false, isCompleted: false },
-    { id: '5', title: 'Review eco-friendly products request for Tech Hub', isUrgent: false, isCompleted: false },
-  ]);
-
-  const loadTodaySessions = async () => {
-    try {
-      setIsLoadingSessions(true);
-      const sessions = await cleaningSessionService.getTodaySessions();
-      setTodaySessions(sessions);
-    } catch (error) {
-      console.error('[CleanerDashboard.loadTodaySessions]', error);
-    } finally {
-      setIsLoadingSessions(false);
-    }
-  };
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadTodaySessions();
+    // Add data refresh logic here
     setTimeout(() => setRefreshing(false), 1000);
-  };
-
-  const handleToggleTask = (taskId: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
-      )
-    );
   };
 
   const handleRealtimeError = useCallback((error: Error) => {
@@ -66,15 +26,9 @@ export default function CleanerDashboard() {
     const setupRealtime = async () => {
       try {
         const config: RealtimeSubscriptionConfig = {
-          onSessionUpdate: () => {
-            loadTodaySessions();
-          },
-          onSessionInsert: () => {
-            loadTodaySessions();
-          },
-          onSessionDelete: () => {
-            loadTodaySessions();
-          },
+          onSessionUpdate: () => {},
+          onSessionInsert: () => {},
+          onSessionDelete: () => {},
           onUpdateInsert: () => {},
           onError: handleRealtimeError
         };
@@ -95,11 +49,6 @@ export default function CleanerDashboard() {
     };
   }, [handleRealtimeError]);
 
-  // Load initial data
-  useEffect(() => {
-    loadTodaySessions();
-  }, []);
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -109,21 +58,18 @@ export default function CleanerDashboard() {
         }
       >
         <View style={styles.header}>
-          <Text style={styles.greeting}>Good morning, {profile?.full_name?.split(' ')[0] || 'Cleaner'}!</Text>
-          <Text style={styles.subtitle}>Your cleaning schedule for today</Text>
+          <Text style={styles.greeting}>Good morning, {profile?.full_name?.split(' ')[0] || 'Owner'}!</Text>
+          <Text style={styles.subtitle}>Manage your properties and cleanings</Text>
         </View>
 
         <DashboardStats />
 
-        <TodayJobsSection sessions={todaySessions} isLoading={isLoadingSessions} />
-
-        <TodoTasksSection tasks={tasks} onToggleTask={handleToggleTask} isLoading={false} />
-
         <QuickActions />
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            {realtimeConnected ? '● Live' : '○ Offline'}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          <Text style={styles.activityText}>
+            Welcome to your dashboard! Start by adding your first property or scheduling a cleaning.
           </Text>
         </View>
       </ScrollView>
@@ -141,7 +87,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 72, // Add space for hamburger button
+    paddingTop: 16,
     paddingBottom: 8,
   },
   greeting: {
@@ -178,13 +124,5 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     lineHeight: 22,
   },
-  footer: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
 });
+

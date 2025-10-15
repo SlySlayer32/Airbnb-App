@@ -1,3 +1,19 @@
+// Navigation Types
+export type UserRole = 'cleaner' | 'property_owner' | 'co_host';
+
+export interface NavigationItem {
+  id: string;
+  label: string;
+  icon: string;
+  route: string;
+  roles: UserRole[];
+}
+
+export interface SidebarState {
+  isOpen: boolean;
+  isPinned: boolean; // Future: allow pinning on tablet/web
+}
+
 export interface Property {
   id: string;
   name: string;
@@ -23,14 +39,14 @@ export interface EnhancedProperty {
   status: 'active' | 'occupied' | 'maintenance' | 'inactive';
   max_occupancy: number;
   property_type: 'apartment' | 'house' | 'condo' | 'villa' | 'studio';
-  
+
   // Access Information
   access_method: 'key_lockbox' | 'smart_lock' | 'doorman' | 'owner_present' | 'other';
   access_code?: string;
   access_instructions?: string;
   wifi_name?: string;
   wifi_password?: string;
-  
+
   // Property Features
   has_balcony: boolean;
   has_pool: boolean;
@@ -39,7 +55,7 @@ export interface EnhancedProperty {
   has_laundry: boolean;
   special_areas?: string[];
   parking_instructions?: string;
-  
+
   // Cleaning Logistics
   cleaning_supplies_location?: string;
   vacuum_location?: string;
@@ -47,11 +63,11 @@ export interface EnhancedProperty {
   default_checkin_time: string;
   default_checkout_time: string;
   estimated_cleaning_duration: number;
-  
+
   // Emergency Contact
   emergency_contact_name?: string;
   emergency_contact_phone?: string;
-  
+
   // Relations
   current_session?: CleaningSession;
   next_session?: CleaningSession;
@@ -105,40 +121,40 @@ export interface CleaningSession {
   scheduled_cleaning_time: string;
   session_type: 'checkout_clean' | 'checkin_prep' | 'maintenance_clean' | 'deep_clean' | 'inspection';
   status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
-  
+
   // Cancellation info
   cancelled_at?: string;
   cancelled_by?: string;
   cancellation_reason?: string;
   cancellation_notice_hours?: number;
-  
+
   // Special requests
   special_requests?: string;
   guest_notes?: string;
   custom_linen_requirements?: any;
   additional_cleaning_tasks?: string[];
   priority_areas?: string[];
-  
+
   // Status tracking
   cleaner_arrived_at?: string;
   cleaner_started_at?: string;
   cleaner_completed_at?: string;
   actual_guest_count?: number;
-  
+
   // Pause/Resume tracking
   cleaner_paused_at?: string;
   cleaner_resumed_at?: string;
   total_break_minutes?: number;
   is_currently_paused?: boolean;
-  
+
   // Photo requirements for completion validation
   photos_required?: boolean;
   photos_completed?: boolean;
   completion_photos?: string[];
-  
+
   // Dashboard-specific metadata (only present in getTodaySessions response)
   dashboard_metadata?: DashboardMetadata;
-  
+
   // Relations
   properties?: { name: string; owner_id: string };
   team_members?: { name: string; phone: string };

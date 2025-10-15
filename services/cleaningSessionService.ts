@@ -1,5 +1,5 @@
-import { supabase } from '../utils/supabase';
 import { CleaningSession } from '@/types';
+import { supabase } from '../utils/supabase';
 
 export const cleaningSessionService = {
   // Create a new cleaning session
@@ -49,7 +49,7 @@ export const cleaningSessionService = {
     cancellation_notice_hours: number;
   }): Promise<CleaningSession> {
     const now = new Date().toISOString();
-    
+
     const updates = {
       status: 'cancelled' as const,
       cancelled_at: now,
@@ -70,14 +70,14 @@ export const cleaningSessionService = {
         .select('*, properties(*)')
         .eq('id', sessionId)
         .single();
-      
+
       if (fetchError || !session) throw new Error('Session not found');
-      
+
       // 2. Validate business rules
       this.validateSessionStart(session, new Date());
-      
+
       const now = new Date().toISOString();
-      
+
       const updatedSession = await this.updateSessionStatus(sessionId, {
         status: 'in_progress',
         cleaner_arrived_at: now,
@@ -103,17 +103,17 @@ export const cleaningSessionService = {
     if (hour < 11 || hour >= 15) {
       throw new Error('Cleaning sessions must start between 11:00 AM and 3:00 PM');
     }
-    
+
     // Rule 2: Session must be in correct status
     if (!['scheduled', 'confirmed'].includes(session.status)) {
       throw new Error('Session cannot be started from current status');
     }
-    
+
     // Rule 3: Not already started
     if (session.cleaner_started_at) {
       throw new Error('Session has already been started');
     }
-    
+
     // Rule 4: Not too early (optional buffer)
     const sessionStart = new Date(session.scheduled_cleaning_time);
     const bufferMinutes = 30;
@@ -128,28 +128,28 @@ export const cleaningSessionService = {
     if (session.status !== 'in_progress') {
       throw new Error('Can only complete sessions that are in progress');
     }
-    
+
     // Rule 2: Minimum duration check (prevents accidental completions)
     const minDuration = 30; // minutes
     const elapsed = (Date.now() - new Date(session.cleaner_started_at).getTime()) / (1000 * 60);
     if (elapsed < minDuration) {
       throw new Error('Session must run for at least 30 minutes before completion');
     }
-    
+
     // Rule 3: Photo requirements
     if (session.photos_required && !completionData.photosComplete) {
       throw new Error('Photos are required before session can be completed');
     }
-    
+
     // Rule 3b: Mock photo requirements based on session data
     const guestCount = session.guest_count || 0;
     const propertyRooms = (session.properties as any)?.rooms || 0;
     const mockPhotosRequired = guestCount >= 3 || propertyRooms >= 3;
-    
+
     if (mockPhotosRequired && !completionData.photosComplete && (!completionData.photos || completionData.photos.length === 0)) {
       throw new Error('Photos are required for this session (3+ guests or 3+ rooms)');
     }
-    
+
     // Rule 4: Checklist requirements
     if (session.checklist_required && !completionData.checklistComplete) {
       throw new Error('Checklist must be completed before session can be finished');
@@ -161,7 +161,7 @@ export const cleaningSessionService = {
     return this.startCleaning(sessionId);
   },
 
-  // Alias for completeCleaning to match issue specification  
+  // Alias for completeCleaning to match issue specification
   async completeSession(sessionId: string, completionData: {
     photosComplete?: boolean;
     checklistComplete?: boolean;
@@ -175,7 +175,7 @@ export const cleaningSessionService = {
   // Pause an active cleaning session
   async pauseSession(sessionId: string, reason?: string): Promise<CleaningSession> {
     const now = new Date().toISOString();
-    
+
     // First, get the current session to validate state and calculate break time
     const { data: currentSession, error: fetchError } = await supabase
       .from('cleaning_sessions')
@@ -184,7 +184,7 @@ export const cleaningSessionService = {
       .single();
 
     if (fetchError) throw fetchError;
-    
+
     if (currentSession.status !== 'in_progress') {
       throw new Error('Only active sessions can be paused');
     }
@@ -208,7 +208,7 @@ export const cleaningSessionService = {
   // Resume a paused cleaning session
   async resumeSession(sessionId: string): Promise<CleaningSession> {
     const now = new Date().toISOString();
-    
+
     // First, get the current session to validate state and calculate break time
     const { data: currentSession, error: fetchError } = await supabase
       .from('cleaning_sessions')
@@ -217,7 +217,7 @@ export const cleaningSessionService = {
       .single();
 
     if (fetchError) throw fetchError;
-    
+
     if (currentSession.status !== 'in_progress') {
       throw new Error('Only active sessions can be resumed');
     }
@@ -258,7 +258,7 @@ export const cleaningSessionService = {
   }): Promise<CleaningSession> {
     try {
       const now = new Date().toISOString();
-      
+
       // Get current session to calculate final break time if paused
       const { data: currentSession, error: fetchError } = await supabase
         .from('cleaning_sessions')
@@ -267,12 +267,12 @@ export const cleaningSessionService = {
         .single();
 
       if (fetchError || !currentSession) throw new Error('Session not found');
-      
+
       // Validate business rules
       this.validateSessionCompletion(currentSession, completionData);
 
     let totalBreakMinutes = currentSession?.total_break_minutes || 0;
-    
+
     // If session is currently paused, add the final break time
     if (currentSession?.is_currently_paused && currentSession?.cleaner_paused_at) {
       const pauseTime = new Date(currentSession.cleaner_paused_at);
@@ -292,8 +292,8 @@ export const cleaningSessionService = {
     // Record completion event with proper lifecycle tracking
     const { cleaningUpdateService } = await import('./cleaningUpdateService');
     await cleaningUpdateService.recordSessionComplete(
-      sessionId, 
-      session.properties?.name, 
+      sessionId,
+      session.properties?.name,
       completionData.notes
     );
 
@@ -325,7 +325,11 @@ export const cleaningSessionService = {
       .eq('user_id', user.id)
       .single();
 
-    if (teamError) throw teamError;
+    if (teamError) {
+      console.warn('Could not get team member ID, subscribing to all sessions:', teamError);
+      // Return empty array if team member not found (cleaner might not be assigned yet)
+      return [];
+    }
 
     const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
@@ -336,12 +340,12 @@ export const cleaningSessionService = {
       .select(`
         *,
         properties (
-          name, 
-          address, 
-          access_method, 
-          access_code, 
-          access_instructions, 
-          wifi_name, 
+          name,
+          address,
+          access_method,
+          access_code,
+          access_instructions,
+          wifi_name,
           wifi_password,
           default_checkin_time,
           default_checkout_time,
@@ -366,30 +370,30 @@ export const cleaningSessionService = {
       const scheduledTime = new Date(session.scheduled_cleaning_time);
       const checkoutTime = new Date(session.checkout_time);
       const checkinTime = new Date(session.checkin_time);
-      
+
       // Calculate time-based metadata
       const currentTime = new Date();
       const timeUntilStart = scheduledTime.getTime() - currentTime.getTime();
       const timeUntilStartMinutes = Math.ceil(timeUntilStart / (1000 * 60));
-      
+
       // Cleaning window validation (11 AM - 3 PM)
       const cleaningWindowStart = new Date(scheduledTime);
       cleaningWindowStart.setHours(11, 0, 0, 0);
       const cleaningWindowEnd = new Date(scheduledTime);
       cleaningWindowEnd.setHours(15, 0, 0, 0);
-      
+
       const isWithinWindow = scheduledTime >= cleaningWindowStart && scheduledTime <= cleaningWindowEnd;
       const windowStatus = isWithinWindow ? 'valid' : 'outside_window';
-      
+
       // Progress indicators
       const hasStarted = !!session.cleaner_started_at;
       const hasCompleted = session.status === 'completed';
       const isOverdue = currentTime > scheduledTime && !hasStarted && session.status === 'scheduled';
-      
+
       // Calculate expected completion time
       const estimatedDuration = session.properties?.estimated_cleaning_duration || 120; // default 2 hours
       const expectedCompletionTime = new Date(scheduledTime.getTime() + (estimatedDuration * 60 * 1000));
-      
+
       return {
         ...session,
         // Dashboard-specific metadata
@@ -404,13 +408,13 @@ export const cleaningSessionService = {
           cleaning_window_start: cleaningWindowStart.toISOString(),
           cleaning_window_end: cleaningWindowEnd.toISOString(),
           // Status indicators for dashboard
-          status_indicator: hasCompleted ? 'completed' : 
-                           hasStarted ? 'in_progress' : 
-                           isOverdue ? 'overdue' : 
+          status_indicator: hasCompleted ? 'completed' :
+                           hasStarted ? 'in_progress' :
+                           isOverdue ? 'overdue' :
                            timeUntilStartMinutes <= 30 ? 'starting_soon' : 'scheduled',
           // Priority level for sorting/display
-          priority_level: isOverdue ? 'urgent' : 
-                         timeUntilStartMinutes <= 30 ? 'high' : 
+          priority_level: isOverdue ? 'urgent' :
+                         timeUntilStartMinutes <= 30 ? 'high' :
                          timeUntilStartMinutes <= 120 ? 'medium' : 'normal'
         }
       };
@@ -435,7 +439,7 @@ export const cleaningSessionService = {
 
     let dateFilter;
     const now = new Date();
-    
+
     switch (period) {
       case 'today':
         const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
@@ -468,12 +472,12 @@ export const cleaningSessionService = {
   // Calculate effective working time (excluding breaks)
   calculateEffectiveWorkingMinutes(session: CleaningSession): number {
     if (!session.cleaner_started_at) return 0;
-    
+
     const startTime = new Date(session.cleaner_started_at);
     const endTime = session.cleaner_completed_at ? new Date(session.cleaner_completed_at) : new Date();
     const totalMinutes = Math.floor((endTime.getTime() - startTime.getTime()) / (1000 * 60));
     const breakMinutes = session.total_break_minutes || 0;
-    
+
     return Math.max(0, totalMinutes - breakMinutes);
   },
 
@@ -482,11 +486,11 @@ export const cleaningSessionService = {
     if (session.status === 'completed' || session.status === 'cancelled') {
       return session.status;
     }
-    
+
     if (session.status === 'in_progress') {
       return session.is_currently_paused ? 'paused' : 'active';
     }
-    
+
     return 'scheduled';
   },
 

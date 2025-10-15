@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { ActivityIndicator, LogBox, Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Suppress network errors in demo mode
 LogBox.ignoreLogs([
@@ -78,35 +79,37 @@ export default function RootLayout() {
   }
 
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <StatusBar style="auto" />
-        <AuthGuard>
-          <Stack>
-            <Stack.Screen name="index" options={{ title: 'Dashboard', headerShown: false }} />
-            <Stack.Screen name="properties" options={{ title: 'Properties' }} />
-            <Stack.Screen name="team" options={{ title: 'Team' }} />
-            <Stack.Screen name="schedule" options={{ title: 'Schedule' }} />
-            <Stack.Screen name="invoices" options={{ title: 'Invoices' }} />
-            <Stack.Screen name="maintenance" options={{ title: 'Maintenance' }} />
-            <Stack.Screen name="reports" options={{ title: 'Reports' }} />
-            <Stack.Screen name="profile" options={{ title: 'Profile' }} />
-            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="auth/login"
-              options={{ headerShown: false, presentation: 'modal' }}
-            />
-            <Stack.Screen
-              name="auth/register"
-              options={{ headerShown: false, presentation: 'modal' }}
-            />
-            <Stack.Screen
-              name="auth/forgot-password"
-              options={{ headerShown: false, presentation: 'modal' }}
-            />
-          </Stack>
-        </AuthGuard>
-      </AuthProvider>
-    </ErrorBoundary>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ErrorBoundary>
+        <AuthProvider>
+          <StatusBar style="auto" />
+          <AuthGuard>
+            <Stack>
+              <Stack.Screen name="index" options={{ title: 'Dashboard', headerShown: false }} />
+              <Stack.Screen name="properties" options={{ title: 'Properties', headerShown: false }} />
+              <Stack.Screen name="team" options={{ title: 'Team', headerShown: false }} />
+              <Stack.Screen name="schedule" options={{ title: 'Schedule', headerShown: false }} />
+              <Stack.Screen name="invoices" options={{ title: 'Invoices', headerShown: false }} />
+              <Stack.Screen name="maintenance" options={{ title: 'Maintenance', headerShown: false }} />
+              <Stack.Screen name="reports" options={{ title: 'Reports', headerShown: false }} />
+              <Stack.Screen name="profile" options={{ title: 'Profile', headerShown: false }} />
+              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="auth/login"
+                options={{ headerShown: false, presentation: 'modal' }}
+              />
+              <Stack.Screen
+                name="auth/register"
+                options={{ headerShown: false, presentation: 'modal' }}
+              />
+              <Stack.Screen
+                name="auth/forgot-password"
+                options={{ headerShown: false, presentation: 'modal' }}
+              />
+            </Stack>
+          </AuthGuard>
+        </AuthProvider>
+      </ErrorBoundary>
+    </GestureHandlerRootView>
   );
 }
