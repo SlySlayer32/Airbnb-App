@@ -1,17 +1,21 @@
 # 🚨 MANDATORY STARTUP SEQUENCE
 ## Execute BEFORE responding to ANY request
 
+**⚠️ IMPORTANT**: This file is part of the startup sequence. For complete guidance, see:
+→ **`CURSOR_ROADMAP.md`** - Single source of truth for all AI behavior
+
 This file ensures AI follows proper workflow from the very first message.
 
 ---
 
-## STEP 1: Read Project Context (ALWAYS)
+## STEP 1: Read Essential Documentation (ALWAYS)
 **Execute these reads at conversation start:**
 
 ```
-1. READ: docs/08-ai-context/ai-README.md (30-second overview)
-2. READ: docs/07-project-management/phase-status.md (current priority)
-3. SCAN: docs/04-codebase/ (know what exists)
+1. READ: CURSOR_ROADMAP.md (complete AI guidance - 10-15 minutes)
+2. READ: docs/08-ai-context/ai-README.md (30-second overview)
+3. READ: docs/07-project-management/phase-status.md (current priority)
+4. SCAN: docs/04-codebase/ (know what exists)
 ```
 
 **Why:** Without this, you'll:
@@ -19,6 +23,8 @@ This file ensures AI follows proper workflow from the very first message.
 - ❌ Ignore current phase priorities
 - ❌ Violate established patterns
 - ❌ Break business rules
+- ❌ Miss vague input clarification opportunities
+- ❌ Reference copyrighted documentation
 
 ---
 

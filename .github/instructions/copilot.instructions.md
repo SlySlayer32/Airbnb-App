@@ -4,11 +4,19 @@ applyTo: '**'
 
 # Airbnb Cleaning Management Platform - Master Instructions
 
-**📚 PRIMARY DOCUMENTATION**: See [`docs/AI-README.md`](../../docs/AI-README.md) for complete AI-optimized project documentation.
+**📚 PRIMARY DOCUMENTATION**: 
+- **`CURSOR_ROADMAP.md`** - Single source of truth for all AI behavior
+- **`docs/AI-README.md`** - Complete AI-optimized project documentation
 
 ## 🎯 Quick Start for AI Assistants
 
-1. **Read [`docs/AI-README.md`](../../docs/AI-README.md) first** - Complete project context (30 seconds)
+1. **Read `CURSOR_ROADMAP.md` first** - Complete AI guidance (10-15 min)
+   - Vague input interpretation framework
+   - Production-grade code standards
+   - Copyright-safe documentation references
+   - Complete code templates and patterns
+
+2. **Read [`docs/AI-README.md`](../../docs/AI-README.md) second** - Project context (30 seconds)
 2. **Reference manifests** when working with code:
    - [`docs/manifests/COMPONENTS.md`](../../docs/manifests/COMPONENTS.md) - 18 components
    - [`docs/manifests/SERVICES.md`](../../docs/manifests/SERVICES.md) - 8 services  
