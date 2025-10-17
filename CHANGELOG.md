@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 📚 **DOCUMENTATION: Consolidated Cursor Rules & Documentation (October 2025)**
+
+#### **Single Source of Truth - CURSOR_ROADMAP.md**
+Created comprehensive roadmap consolidating all Cursor AI rules, instructions, and documentation into a single authoritative file.
+
+#### **Key Improvements**
+1. **Vague Input Interpretation Framework**: Systematic 5-question method to clarify ambiguous requests
+   - Who (user role)
+   - What problem (business need)
+   - Where (UI placement)
+   - Edge cases (error scenarios)
+   - Which rules (business rule applicability)
+
+2. **Production-Grade Code Standards**: Complete checklist ensuring all generated code includes:
+   - Type safety (no 'any' types)
+   - Error handling (try/catch, user-friendly messages)
+   - All states (loading, error, empty, success)
+   - Business rule enforcement
+   - Security & permissions
+   - Performance optimization
+   - Mobile responsiveness
+   - Accessibility
+
+3. **Copyright-Safe Documentation References**: Explicit approved sources list
+   - ✅ React Native, Expo, TypeScript, Supabase, MDN (all open source)
+   - ❌ Stack Overflow, proprietary content, copyrighted tutorials
+
+4. **Complete Code Templates**: Production-ready patterns for:
+   - Components (with all states handled)
+   - Services (with proper error handling)
+   - Screens (with loading/error/empty states)
+
+#### **Files Changed**
+- **Created**: `CURSOR_ROADMAP.md` - Single source of truth (40KB, comprehensive)
+- **Updated**: `.cursorrules` - Streamlined to reference roadmap (reduced from 366 to ~250 lines)
+- **Updated**: `.cursor/STARTUP.md` - Points to roadmap
+- **Updated**: `.github/instructions/copilot.instructions.md` - References roadmap
+- **Updated**: `CHANGELOG.md` - This entry
+
+#### **Kept Unchanged (By Design)**
+- Domain-specific instruction files (components, services, screens, types, debugging, etc.) - These remain focused on specific patterns
+- All `docs/` directory documentation - Remains as detailed reference material
+- `.cursor/rules/*.mdc` files - Cursor-specific rule files
+
+#### **Business Impact**
+- **Reduced AI Confusion**: Single authoritative source eliminates conflicting instructions
+- **Improved Code Quality**: Explicit production-grade standards enforce best practices
+- **Faster Development**: Vague input framework reduces clarification cycles
+- **Copyright Safety**: Clear documentation sourcing guidelines eliminate legal risks
+- **Better Maintainability**: Centralized updates vs. scattered file changes
+- **Consistent Architecture**: All generated code follows established patterns
+
+#### **Usage**
+AI assistants should now:
+1. Read `CURSOR_ROADMAP.md` at the start of every conversation (10-15 min)
+2. Use vague input framework when requests are unclear
+3. Apply production-grade checklist before providing code
+4. Reference only approved open-source documentation
+5. Follow complete code templates (not partial implementations)
+
+**Pull Request**: [Link when available]  
+**Related Issue**: Addresses vague input handling, copyright safety, and documentation consolidation
+
+---
+
 ### 🎯 **ENHANCEMENT: Enhanced Navigation with Haptic Feedback (January 2025)**
 
 #### **Improved Mobile Navigation Experience**
