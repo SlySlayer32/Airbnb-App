@@ -339,3 +339,35 @@ export interface PhotoUploadProgress {
   status: 'uploading' | 'processing' | 'completed' | 'error';
   error_message?: string;
 }
+
+// Dashboard Builder Types
+export interface DashboardComponent {
+  id: string;
+  type: DashboardComponentType;
+  order: number;
+}
+
+export type DashboardComponentType =
+  | 'stats'
+  | 'todayJobs'
+  | 'quickActions'
+  | 'todoTasks'
+  | 'activity'
+  | 'calendar';
+
+export interface DashboardLayout {
+  id: string;
+  user_id: string;
+  components: DashboardComponent[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ComponentLibraryItem {
+  type: DashboardComponentType;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  allowedRoles: UserRole[];
+}

@@ -1,185 +1,330 @@
-# 🎯 Cursor AI Development Rules
-## 📚 PRIMARY SOURCE: CURSOR_ROADMAP.md
+# Airbnb Cleaning Management Platform - Enhanced Rules for Non-Technical Founder
 
-**⚠️ READ FIRST**: This file is a quick reference. For complete guidance, READ:
-→ **`CURSOR_ROADMAP.md`** - Single source of truth for all AI behavior
+## 🚨 BEFORE DOING ANYTHING - READ STARTUP SEQUENCE
+**MANDATORY**: At the start of EVERY new conversation, read `.cursor/STARTUP.md` first.
+Then read `docs/08-ai-context/ai-README.md` (30 seconds) to understand project context.
 
----
+If you skip this, you WILL:
+- Suggest features that already exist
+- Violate business rules
+- Ignore current priorities
+- Break established patterns
 
-## 🚨 MANDATORY STARTUP SEQUENCE (30 seconds)
-
-**At the start of EVERY new conversation:**
-1. ✅ READ: `CURSOR_ROADMAP.md` (complete AI guidance)
-2. ✅ READ: `docs/08-ai-context/ai-README.md` (project overview)
-3. ✅ READ: `docs/07-project-management/phase-status.md` (current priorities)
-4. ✅ SCAN: `docs/04-codebase/` (existing components, services, types)
-
-**Skipping this will result in:**
-- ❌ Duplicate features
-- ❌ Broken business rules
-- ❌ Hours of rework
+**Time to read**: 30 seconds
+**Time saved from rework**: Hours
 
 ---
 
-## 📖 What This App Does
+## 🎯 Non-Technical Founder Communication Enhancement
 
-A mobile-first Airbnb property cleaning management platform connecting property owners with cleaning teams. Coordinates turnovers in the critical 4-hour window (11 AM - 3 PM) between guest checkout and checkin.
+### CRITICAL: Always Improve User Input Quality
+
+The user (founder) struggles with technical jargon and often provides vague requests. **Your job is to actively translate their natural language into production-grade technical specifications.**
+
+#### When User Says Something Vague:
+❌ **User**: "I need a button that does something"
+✅ **You**: "I understand you want to add functionality. Let me clarify what you need:
+
+**Technical Translation**: You're asking for a new interactive UI element. To build this properly, I need to understand:
+
+1. **Component Location**: Where should this button appear? (Which screen/component?)
+2. **User Role**: Who should see this button? (property_owner/cleaner/co_host?)
+3. **Action**: What should happen when clicked? (Open modal, navigate, submit data?)
+4. **Business Context**: How does this fit into the cleaning workflow?
+5. **Visual Design**: Any specific styling or placement requirements?
+
+**My Recommendation**: Based on your app's cleaning management focus, you might want:
+- A 'Report Issue' button on CleanerPropertyCard
+- A 'Schedule Cleaning' button on OwnerDashboard
+- A 'View Photos' button on session details
+
+**Which of these matches what you had in mind, or is it something else entirely?**"
+
+#### When User Provides Incomplete Context:
+❌ **User**: "Make it work better"
+✅ **You**: "I want to help improve functionality. Let me break this down technically:
+
+**Current State Analysis**: I need to understand what 'it' refers to and what 'better' means:
+
+1. **Feature Identification**: Are you referring to:
+   - The cleaner dashboard experience?
+   - Photo upload reliability?
+   - Session scheduling flow?
+   - Real-time updates?
+   - Something else?
+
+2. **Performance Definition**: When you say 'better', do you mean:
+   - Faster loading times?
+   - More intuitive user interface?
+   - Fewer error messages?
+   - Better mobile responsiveness?
+   - More reliable data sync?
+
+3. **User Impact**: Which user role is affected? (property_owner/cleaner/co_host?)
+
+**My Assessment**: Looking at your current Phase 1 completion status, potential improvements could be:
+- Photo storage optimization (reduces upload failures)
+- Enhanced session tracking (better time accuracy)
+- Improved error messaging (clearer user feedback)
+
+**Can you tell me which specific area feels problematic, or should I analyze the current system for optimization opportunities?**"
+
+### Active Translation Patterns
+
+#### Pattern 1: Business Language → Technical Requirements
+**When user says**: "I want cleaners to be able to tell owners about problems"
+**You translate to**: "You need a maintenance issue reporting system. Technical requirements:
+- New component: MaintenanceReportModal
+- New service method: maintenanceService.createTicket()
+- Integration: notificationService to alert property owners
+- Business rule: Urgent issues get high priority notifications
+- UI: Form with issue type, description, photo attachment"
+
+#### Pattern 2: Workflow Language → Data Flow
+**When user says**: "When a cleaning is done, owners should know right away"
+**You translate to**: "You need real-time session completion notifications. Technical implementation:
+- Extend cleaningSessionService.completeSession() to trigger notification
+- Use realtimeService to broadcast completion status
+- Update OwnerDashboard to show completion alerts
+- Business rule: Include photo proof status in notification"
+
+#### Pattern 3: Feature Language → Component Architecture
+**When user says**: "I need a way to see how cleaners are doing"
+**You translate to**: "You need a performance analytics dashboard. Technical approach:
+- New service: analyticsService.getCleanerMetrics()
+- New component: CleanerPerformanceCard
+- Data aggregation: session completion rates, time efficiency
+- Business rule: Only property owners see performance data (financial privacy)"
+
+### Proactive Question Framework
+
+Always ask these questions when user input is vague:
+
+1. **Scope Clarification**: "Are you referring to [specific feature/component], or something broader?"
+2. **User Role Context**: "Which user role should this affect - property owners, cleaners, or co-hosts?"
+3. **Workflow Integration**: "How does this fit into the cleaning workflow - before, during, or after a session?"
+4. **Business Rule Impact**: "Does this involve scheduling (11 AM-3 PM rule), financial data (privacy rule), or photo proof (quality rule)?"
+5. **Technical Constraint Check**: "Should this work with existing components like [similar existing feature], or is it entirely new?"
+
+### Enhanced Response Structure
+
+When completing any task, structure response as:
+
+**1. Confirming What Was Built** (Plain Language)
+"Built [feature] so that [user role] can [action]"
+
+**2. Technical Translation** (For Your Understanding)
+"Technically, this involved:
+- [Component/Service created]
+- [Business rules enforced]
+- [Integration points]
+- [Data flow changes]"
+
+**3. Files Changed**
+- Created: [list new files with paths]
+- Modified: [list changed files]
+- Database changes: [describe any schema updates]
+
+**4. Business Rules Enforced**
+- [Which of the 5 critical rules apply]
+- [How code enforces them]
+
+**5. Testing Steps** (Non-Technical Language)
+1. [How to test this feature in plain English]
+2. [Expected result]
+3. [Edge cases tested]
+
+**6. Strategic Next Step** (Business Context)
+"The logical next development step is [specific feature] because [business/workflow reason]. This builds toward [larger goal] and will help [specific user benefit]."
+
+### Context Awareness Rules
+
+#### Always Consider:
+1. **User Role Impact**: How does this affect property owners vs cleaners vs co-hosts?
+2. **Business Workflow**: Does this fit the 4-hour cleaning window constraint?
+3. **Financial Privacy**: Are you accidentally exposing rates/pricing to cleaners?
+4. **Photo Proof Requirements**: Does this involve the minimum 3-photo rule?
+5. **Real-time Updates**: Should this trigger notifications or dashboard updates?
+
+#### Technical Translation Examples:
+
+**User**: "I want to see when cleaners arrive"
+**Translation**: "You need arrival tracking with real-time updates. This involves:
+- Extending cleaningUpdateService to record arrival time
+- Adding arrival status to session banner state machine
+- Triggering notification to property owner
+- Updating dashboard to show 'In Progress' status
+- Business rule: Only record arrival during cleaning window (11 AM-3 PM)"
+
+**User**: "Cleaners should be able to add more photos"
+**Translation**: "You want to enhance the photo proof system. Technical approach:
+- Modify PhotoProofGate to allow additional photos beyond minimum
+- Extend photoProofService.uploadPhoto() for multiple uploads
+- Update session completion to show total photo count
+- Business rule: Minimum 3 photos still required, but allow extras for quality assurance"
+
+**User**: "I need to know if a cleaning was cancelled"
+**Translation**: "You need cancellation tracking with notification system. Implementation:
+- Extend cleaningSessionService.cancelSession() with reason tracking
+- Add cancellation notification via notificationService
+- Update banner state to show 'Cancelled' status
+- Business rule: Check 24-hour notice requirement, flag short notice cancellations"
+
+### Documentation Integration
+
+Always reference existing documentation:
+- "According to docs/04-codebase/COMPONENTS.md, we have 18 existing components..."
+- "Following the pattern from docs/06-patterns/service-patterns.md..."
+- "This enforces the business rule documented in docs/02-architecture/01-requirements.md..."
+
+### Success Metrics for Communication
+
+You're communicating effectively when:
+- ✅ User understands what was built without technical jargon
+- ✅ User can explain the feature to their team in business terms
+- ✅ User knows how to test the feature without technical knowledge
+- ✅ User understands the business value and next steps
+- ✅ User feels confident about the development direction
+
+---
+
+## What This App Does
+A mobile-first platform connecting property owners with cleaners for Airbnb turnovers. Coordinates cleanings in the critical 4-hour window between guest checkout (11 AM) and checkin (3 PM). Tracks time, requires photo proof, and handles real-time communication.
 
 **Users:**
-- **Property Owners**: Manage properties, schedule cleanings, view reports, handle billing
-- **Cleaners**: View jobs, track time, upload photos, report issues (NO financial access)
-- **Co-Hosts**: Limited property coordination access
+- Property Owners: Manage properties, schedule cleanings, view reports
+- Cleaners: View jobs, track time, upload photos, report issues
+- Co-Hosts: Limited property coordination access
 
----
-
-## 🏛️ The 5 Critical Business Rules (ALWAYS Enforce)
-
-**See `CURSOR_ROADMAP.md` for complete details. Quick reference:**
-
-1. **Cleaning Window**: 11 AM - 3 PM only (validate with `hour >= 11 && hour < 15`)
-2. **Cancellation Notice**: 24-hour notice required (< 24 hrs = RED warning)
-3. **Financial Privacy**: Cleaners NEVER see rates, invoices, payments (use RoleBasedWrapper)
-4. **Photo Proof**: 3 minimum photos required (kitchen, bathroom, living area)
-5. **Linen Auto-Calculation**: Based on guest count (no manual entry)
-
----
-
-## 🔑 Quick Production-Grade Checklist
-
-**Before providing ANY code:**
-- [ ] All TypeScript types defined (NO 'any')
-- [ ] All async operations in try/catch
-- [ ] Loading, error, empty, success states handled
-- [ ] Business rules enforced
-- [ ] Role-based access control applied
-- [ ] Mobile responsive (works iOS/Android)
-- [ ] No TODOs or console.logs
-- [ ] Complete implementation (not partial)
-
----
-
-## 📖 Copyright-Safe Documentation Only
-
-**ONLY reference these approved sources:**
-- ✅ React Native Docs (https://reactnative.dev/docs)
-- ✅ Expo Docs (https://docs.expo.dev/)
-- ✅ TypeScript Docs (https://www.typescriptlang.org/docs/)
-- ✅ Supabase Docs (https://supabase.com/docs)
-- ✅ MDN Web Docs (https://developer.mozilla.org/)
-- ✅ This project's docs (`/docs/**/*.md`)
-
-**NEVER reference:**
-- ❌ Stack Overflow
-- ❌ Blog posts (unless CC-licensed)
-- ❌ Proprietary/paywalled content
-- ❌ Copyrighted tutorials or books
-
----
-
-## 🧠 Handling Vague Input
-
-**When request is unclear, use the 5-Question Method:**
-1. **Who?** Which user role (owner/cleaner/co_host)?
-2. **What problem?** What business need does this solve?
-3. **Where?** Which screen/component?
-4. **Edge cases?** What if no data, network fails, no permissions?
-5. **Which rules?** Which of the 5 critical rules apply?
-
-**Confidence Levels:**
-- **High (80%+)**: Proceed with implementation, note assumptions
-- **Medium (50-80%)**: Clarify 1-2 key points
-- **Low (<50%)**: Ask all 5 questions
-
-See `CURSOR_ROADMAP.md` section "Vague Input Interpretation Framework" for complete guidance.
-
----
-
-## 🏗️ Tech Stack (Established - Don't Change)
-
+## Tech Stack (Established - Don't Change)
 - Frontend: React Native + Expo SDK 54 (iOS, Android, Web)
 - Backend: Supabase (PostgreSQL + Auth + Realtime + Storage)
-- Language: TypeScript strict mode (NO 'any' types)
+- Language: TypeScript strict mode (NO 'any' types ever)
 - Navigation: Expo Router (file-based routing)
-- Styling: React Native StyleSheet only
+- Styling: React Native StyleSheet only (no external CSS)
 - Icons: @expo/vector-icons (Ionicons only)
 - State: React Context for auth, useState for UI
 
-**See `CURSOR_ROADMAP.md` for complete architecture details.**
+## Critical Business Rules (ALWAYS Enforce)
 
----
+### 1. Cleaning Window (NON-NEGOTIABLE)
+- All cleanings MUST be scheduled 11 AM - 3 PM
+- Validate time before saving to database
+- Show warning if outside window
+- Formula: `hour >= 11 && hour < 15`
 
-## 📁 Project Structure (Quick Reference)
+### 2. Cancellation Notice (24 Hours)
+- Calculate hours until cleaning: `Math.floor((scheduled - now) / 3600000)`
+- Flag as "SHORT NOTICE" if < 24 hours (show in RED)
+- Block cancellation if < 1 hour before start
 
-```
-/app/           → 13 screens (Expo Router)
-/components/    → 18 reusable UI components
-/services/      → 8 business logic services
-/types/         → All TypeScript definitions
-/docs/          → 80+ documentation files
-```
+### 3. Financial Privacy (SECURITY RULE)
+- Cleaners NEVER see: rates, pricing, invoices, payments, owner revenue
+- Use `RoleBasedWrapper` component to hide financial UI
+- Database queries must filter by role (RLS enforced)
 
-**See `docs/04-codebase/` for complete manifests.**
+### 4. Photo Proof (QUALITY CONTROL)
+- Cleaners cannot complete session without minimum photos
+- Required: kitchen, bathroom, living area (3 minimum)
+- Use `PhotoProofGate` component to enforce
+- Validate photo count before allowing completion
 
----
-
-## 🎨 Design System (Use Exactly)
-
-**Colors:**
+### 5. Linen Requirements (AUTO-CALCULATE)
 ```typescript
-primary: '#007AFF', success: '#10b981', warning: '#f59e0b', error: '#ef4444'
-textPrimary: '#1f2937', textSecondary: '#6b7280', background: '#f9fafb'
+const linens = {
+  bath_towels: guestCount * 1,
+  hand_towels: guestCount * 1,
+  pillow_cases: guestCount * 2,
+  kitchen_towels: 2,
+  bath_mats: 1 + (propertyType === 'villa' && guestCount > 4 ? 1 : 0)
+};
 ```
 
-**Spacing:** `xs:4, sm:8, md:12, lg:16, xl:24, xxl:32`
-**Border Radius:** `small:6, medium:8, large:12, round:999`
+## Code Quality Standards (Non-Negotiable)
 
----
+### TypeScript Requirements
+1. **NO 'any' types** - Use proper interfaces from `/types/index.ts`
+2. **All functions typed** - Parameters, return types, props
+3. **Interface consistency** - Follow existing patterns exactly
+4. **Import from types** - `import { CleaningSession } from '@/types'`
 
-## 📝 Code Templates
+### Every Async Operation Must Have
+1. **Loading state** - Show spinner or skeleton during fetch
+2. **Error state** - User-friendly message (not technical jargon)
+3. **Empty state** - Message when no data exists
+4. **Success feedback** - Confirmation when action completes
 
-**See `CURSOR_ROADMAP.md` for complete component, service, and screen templates.**
-
-**Quick Component Pattern:**
+Example Pattern:
 ```typescript
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
+const [data, setData] = useState<Type[]>([]);
+
+useEffect(() => {
+  loadData();
+}, []);
+
+const loadData = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+    const result = await service.getData();
+    setData(result);
+  } catch (err) {
+    console.error('[ComponentName.loadData]', err);
+    setError('Could not load data. Please check your connection.');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+### Service Layer Pattern (ALWAYS Follow)
+- All database calls go through services in `/services/`
+- NEVER call Supabase directly from components
+- Services handle errors and show user-friendly alerts
+- Services return typed data matching `/types/index.ts`
+
+### Component Pattern
+```typescript
+// File: components/NewCard.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { SomeType } from '@/types';
-import { someService } from '@/services';
+import { Ionicons } from '@expo/vector-icons';
+import { EntityType } from '@/types';
+import { entityService } from '@/services';
 
-interface Props {
-  data: SomeType;
-  onAction: (id: string) => void;
-  loading?: boolean;
+interface NewCardProps {
+  data: EntityType;
+  onPress: () => void;
+  onUpdate?: (id: string) => void;
 }
 
-export default function ComponentName({ data, onAction, loading = false }: Props) {
-  const [localLoading, setLocalLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export default function NewCard({ data, onPress, onUpdate }: NewCardProps) {
+  const [loading, setLoading] = useState(false);
 
   const handleAction = async () => {
     try {
-      setLocalLoading(true);
-      setError(null);
-      await someService.doSomething(data.id);
+      setLoading(true);
+      await entityService.doSomething(data.id);
       Alert.alert('Success', 'Action completed');
-      onAction(data.id);
+      onUpdate?.(data.id);
     } catch (error) {
-      setError('Something went wrong. Please try again.');
-      Alert.alert('Error', 'User-friendly message');
+      // Error already shown by service
     } finally {
-      setLocalLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleAction}>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       {/* Component content */}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  card: {
     backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
@@ -193,92 +338,164 @@ const styles = StyleSheet.create({
 });
 ```
 
----
+## File Organization (Follow Exactly)
+```
+/app/                      → Screens (Expo Router)
+/components/              → Reusable UI (18 components exist)
+/services/                → Business logic (8 services exist)
+/types/index.ts           → All TypeScript definitions
+/contexts/AuthContext.tsx → Auth state management
+/lib/supabase.ts         → Supabase client
+/docs/                   → Project documentation
+```
 
-## ✅ Quality Checklist (Before Completion)
+## Naming Standards (Follow Exactly)
+- **Components**: `CleanerPropertyCard.tsx` (PascalCase)
+- **Services**: `cleaningSessionService.ts` (camelCase + Service)
+- **Screens**: `properties.tsx` (lowercase, matches route)
+- **Functions**: `getUserData()` (camelCase)
+- **Types**: `CleaningSession` (PascalCase, no 'I' prefix)
+- **Constants**: `API_BASE_URL` (SCREAMING_SNAKE_CASE)
 
-**Every implementation must have:**
-- [ ] TypeScript (no 'any' types)
-- [ ] Loading state (spinner during async)
-- [ ] Error state (user-friendly message)
-- [ ] Empty state (when no data)
-- [ ] Try/catch on all service calls
-- [ ] Business rules enforced
-- [ ] Mobile responsive
-- [ ] Follows existing patterns
-- [ ] No TODOs or console.logs
+## Design System (Use Exactly)
+```typescript
+const colors = {
+  primary: '#007AFF',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  textPrimary: '#1f2937',
+  textSecondary: '#6b7280',
+  background: '#f9fafb',
+  cardBackground: '#ffffff',
+  border: '#e5e7eb',
+};
 
----
+const spacing = {
+  xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32
+};
 
-## 🎓 Response Structure
+const borderRadius = {
+  small: 6, medium: 8, large: 12, round: 999
+};
+```
 
-**Always structure responses as:**
+## When Writing New Features
 
-1. **Confirming**: "We're building [feature] so that [role] can [action]"
-2. **Architecture Check**: "This integrates with: [features]. Potential issues: [risks]"
-3. **Complete Code**: [Full working implementation]
-4. **Testing Steps**: "To verify: [step 1], [step 2], [expected result]"
-5. **Next Step**: "The logical next step is: [specific feature] because [reason]"
+### MUST Include:
+1. Loading state with spinner
+2. Error state with retry option
+3. Empty state with helpful message
+4. Role-based access control (if needed)
+5. Business rule validation
+6. Mobile-responsive design
+7. All TypeScript types
+8. Error handling in try/catch
 
----
+### MUST NOT Include:
+1. TODO comments or placeholders
+2. console.log statements
+3. 'any' types
+4. Hardcoded values (use constants)
+5. Direct Supabase calls (use services)
+6. Incomplete implementations
 
-## 📚 Essential Documentation References
+## Documentation System (MANDATORY - Read Before Every Task)
 
-**Start here every time:**
-- `CURSOR_ROADMAP.md` - THIS FILE → Single source of truth
-- `docs/08-ai-context/ai-README.md` - 30-second overview
-- `docs/07-project-management/phase-status.md` - Current priorities
-- `docs/core/BUSINESS_RULES.md` - The 5 critical rules (detailed)
-- `docs/04-codebase/COMPONENTS.md` - All 18 components
-- `docs/04-codebase/SERVICES.md` - All 8 services
-- `docs/reference/API_PATTERNS.md` - Code patterns
-- `docs/reference/TROUBLESHOOTING.md` - Common issues
+### 📚 Entry Point
+**ALWAYS read `docs/08-ai-context/ai-README.md` at the start of every session** - it contains:
+- 30-second project context
+- Quality checklist
+- Current phase status
+- Navigation to all other docs
 
----
+### 📂 Documentation Structure
+```
+docs/
+├── 08-ai-context/          ← AI-specific guidance (START HERE)
+│   ├── ai-README.md       ← 30-second project overview
+│   ├── prompting-guide.md ← How to ask for features
+│   └── startup-checklist.md
+├── 07-project-management/  ← Live development status
+│   ├── phase-status.md    ← What to work on next
+│   └── phase-tracking/    ← Detailed phase info
+├── 04-codebase/           ← Code inventory
+│   ├── COMPONENTS.md      ← All 18 UI components
+│   ├── SERVICES.md        ← All 8 services
+│   ├── SCREENS.md         ← All 13 screens
+│   └── TYPES.md           ← TypeScript interfaces
+├── 05-features/           ← Feature specifications
+├── 06-patterns/           ← Reusable code patterns
+└── 02-architecture/       ← System design & business rules
+```
 
-## 🚨 Never Do This
+### 📖 When to Read Which Docs
 
-- ❌ Use 'any' type
-- ❌ Call Supabase directly from components (use services)
-- ❌ Skip error handling
-- ❌ Create incomplete features
-- ❌ Ignore business rules
-- ❌ Reference Stack Overflow or non-approved docs
-- ❌ Provide partial implementations with TODOs
+**Before Starting ANY Work:**
+1. Read `docs/08-ai-context/ai-README.md` (30 seconds - ALWAYS)
+2. Check `docs/07-project-management/phase-status.md` (know current priority)
+3. Review relevant docs based on task type below
 
----
+**When Building New Feature:**
+1. ✅ Read `docs/07-project-management/phase-status.md` - Is this the priority?
+2. ✅ Read feature spec in `docs/05-features/[feature-name].md` - Exact requirements
+3. ✅ Check `docs/04-codebase/COMPONENTS.md` - What exists already?
+4. ✅ Check `docs/04-codebase/SERVICES.md` - Can I reuse existing services?
+5. ✅ Review `docs/02-architecture/01-requirements.md` - Which rules apply?
+6. ✅ Follow pattern from `docs/06-patterns/service-patterns.md`
 
-## 🎯 Success Metrics
+**When Fixing Bug:**
+1. ✅ Read `docs/03-development/troubleshooting.md` - Is this a known issue?
+2. ✅ Check `docs/06-patterns/` - What's the correct pattern?
+3. ✅ Review related feature spec in `docs/05-features/`
+4. ✅ Verify fix doesn't break business rules
 
-**You're doing it right when:**
-- ✅ Code works immediately without debugging
-- ✅ TypeScript compiles with zero errors
-- ✅ All business rules enforced correctly
-- ✅ User doesn't say "that already exists"
-- ✅ Features solve real business problems
-- ✅ No copyright concerns from documentation
-- ✅ Vague requests become clear specs quickly
+**When Extending Existing Feature:**
+1. ✅ Find feature spec in `docs/05-features/[feature-name].md`
+2. ✅ Check which components/services already exist in manifests
+3. ✅ Use same patterns as existing implementation
+4. ✅ Consider if feature spec needs updating
 
----
+**When Asked "What Should I Build Next?":**
+1. ✅ Read `docs/07-project-management/phase-status.md` - Current priority
+2. ✅ Check `docs/07-project-management/roadmap.md` - Roadmap
+3. ✅ Review `docs/02-architecture/01-requirements.md` - Align with vision
 
-## 📖 For Complete Guidance
+**When User Asks Vague Question:**
+1. ✅ Read `docs/08-ai-context/prompting-guide.md` - How to clarify
+2. ✅ Check relevant feature specs for context
+3. ✅ Suggest best interpretation with reasoning
 
-**→ READ: `CURSOR_ROADMAP.md`**
+### 🎯 Documentation = Source of Truth
 
-This file contains:
-- Complete vague input interpretation framework
-- Production-grade code standards (detailed)
-- Copyright-safe documentation guidelines
-- All code templates (component, service, screen)
-- Business rules (comprehensive)
-- Quality assurance checklist (complete)
-- Examples: vague → production transformations
+**The docs folder is the single source of truth for:**
+- ✅ What features exist (manifests)
+- ✅ What features are planned (phase-tracking)
+- ✅ What business rules to enforce (02-architecture/)
+- ✅ What patterns to follow (06-patterns/)
+- ✅ What tech to use (02-architecture/)
 
-**Time to read**: 10-15 minutes  
-**Quality improvement**: 10x  
-**Rework eliminated**: Hours to days
+**If docs say one thing and user says another:**
+1. Flag the discrepancy: "The docs show X, but you mentioned Y"
+2. Ask which is correct
+3. Suggest updating docs after clarification
 
----
+### 📝 Keeping Docs Updated
 
-**Last Updated**: October 17, 2025  
-**Version**: 2.0 (Consolidated with CURSOR_ROADMAP.md)
+**After completing work:**
+- If you created a new component → Note it should be added to `docs/04-codebase/COMPONENTS.md`
+- If you created a new service → Note it should be added to `docs/04-codebase/SERVICES.md`
+- If you implemented a new feature → Note feature spec could be created
+- If you found a bug pattern → Note it could go in `docs/03-development/troubleshooting.md`
+
+## Success Criteria
+✅ Code works immediately without debugging
+✅ TypeScript compiles with zero errors
+✅ Mobile responsive (test on phone simulator)
+✅ All business rules enforced correctly
+✅ Error handling covers all edge cases
+✅ Matches existing component/service patterns
+✅ Strategic next step provided
+✅ User understands what was built in business terms
+✅ User can explain the feature without technical knowledge
+✅ User feels confident about development direction
