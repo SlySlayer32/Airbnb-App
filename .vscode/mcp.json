@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "gluestack-components": {
+            "command": "node",
+            "args": [
+                "E:\\Airbnb-App\\gluestack-mcp\\index.js"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            }
+        }
+    }
+}
