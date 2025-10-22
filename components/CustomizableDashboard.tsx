@@ -2,7 +2,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { dashboardLayoutService } from '@/services/dashboardLayoutService';
 import { DashboardComponent } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Import existing components (role-agnostic wrappers)
@@ -22,11 +22,7 @@ export default function CustomizableDashboard({ onOpenComponentLibrary }: Custom
     const [refreshing, setRefreshing] = useState(false);
     const [draggedComponent, setDraggedComponent] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadLayout();
-    }, [profile?.id]);
-
-    const loadLayout = async () => {
+    const loadLayout = useCallback(async () => {
         if (!profile?.id) return;
 
         try {
@@ -38,7 +34,11 @@ export default function CustomizableDashboard({ onOpenComponentLibrary }: Custom
         } finally {
             setLoading(false);
         }
-    };
+    }, [profile?.id]);
+
+    useEffect(() => {
+        loadLayout();
+    }, [loadLayout]);
 
     const handleRefresh = async () => {
         setRefreshing(true);

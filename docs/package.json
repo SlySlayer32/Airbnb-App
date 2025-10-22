@@ -1,15 +1,7 @@
 {
-  "name": "airbnb-property-manager",
+  "name": "reactnative_expo_nativewind",
   "main": "expo-router/entry",
   "version": "1.0.0",
-  "description": "Production-grade Airbnb property management app with cleaning, maintenance, and team coordination",
-  "keywords": ["expo", "react-native", "property-management", "airbnb", "cleaning", "maintenance"],
-  "author": "Airbnb Property Management Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-org/airbnb-property-manager.git"
-  },
   "scripts": {
     "start": "expo start",
     "dev": "expo start --clear",
@@ -48,18 +40,15 @@
     "analyze:bundle": "npx react-native-bundle-visualizer",
     "clean": "watchman watch-del-all && rm -rf node_modules && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro-* && npm install",
     "clean:android": "cd android && ./gradlew clean && cd ..",
-    "clean:ios": "cd ios && xcodebuild clean && cd ..",
-    "fix:dependencies": "node scripts/fix-dependencies.js",
-    "fix:dependencies:win": "scripts/fix-dependencies.bat",
-    "fix:dependencies:unix": "node scripts/fix-dependencies.js"
+    "clean:ios": "cd ios && xcodebuild clean && cd .."
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.2",
-    "@gluestack-ui/nativewind-utils": "^1.0.24",
-    "@gluestack-ui/themed": "^1.1.63",
     "@gorhom/bottom-sheet": "^5.2.2",
     "@hookform/resolvers": "^3.9.1",
+    "@gluestack-ui/nativewind-utils": "^1.0.24",
+    "@gluestack-ui/themed": "^1.1.63",
     "@legendapp/motion": "^2.4.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/netinfo": "^12.0.3",
@@ -100,8 +89,8 @@
     "lottie-react-native": "^7.4.0",
     "moti": "^0.29.0",
     "nativewind": "^4.1.23",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.54.2",
     "react-native": "0.81.4",
     "react-native-dotenv": "^3.4.11",
@@ -129,7 +118,7 @@
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
-    "@types/react": "~19.2.0",
+    "@types/react": "~19.1.10",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
     "detox": "^20.29.1",

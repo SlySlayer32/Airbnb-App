@@ -49,7 +49,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
         router.replace('/');
       }
     }
-  }, [user, profile, loading, pathname]);
+  }, [user?.id, profile?.id, profile?.onboarded, loading, pathname]);
 
   if (loading) {
     return (

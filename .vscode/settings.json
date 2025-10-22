@@ -1,132 +1,42 @@
 {
-  "todohighlight.isEnable": true,
-  "todohighlight.isCaseSensitive": true,
-  "todohighlight.keywords": [
-    {
-      "text": "TODO:",
-      "color": "#ffffff",
-      "backgroundColor": "#007AFF",
-      "overviewRulerColor": "#007AFF",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "FIXME:",
-      "color": "#ffffff",
-      "backgroundColor": "#ef4444",
-      "overviewRulerColor": "#ef4444",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "HACK:",
-      "color": "#ffffff",
-      "backgroundColor": "#f59e0b",
-      "overviewRulerColor": "#f59e0b",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "NOTE:",
-      "color": "#1f2937",
-      "backgroundColor": "#e5e7eb",
-      "overviewRulerColor": "#6b7280",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "REVIEW:",
-      "color": "#ffffff",
-      "backgroundColor": "#8b5cf6",
-      "overviewRulerColor": "#8b5cf6",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "DEBUG:",
-      "color": "#ffffff",
-      "backgroundColor": "#10b981",
-      "overviewRulerColor": "#10b981",
-      "borderRadius": "4px",
-      "isWholeLine": false
-    },
-    {
-      "text": "BUSINESS RULE:",
-      "color": "#ffffff",
-      "backgroundColor": "#dc2626",
-      "overviewRulerColor": "#dc2626",
-      "borderRadius": "4px",
-      "isWholeLine": true,
-      "fontWeight": "bold"
-    },
-    {
-      "text": "SECURITY:",
-      "color": "#ffffff",
-      "backgroundColor": "#7c2d12",
-      "overviewRulerColor": "#7c2d12",
-      "borderRadius": "4px",
-      "isWholeLine": true,
-      "fontWeight": "bold"
-    }
-  ],
-  "todohighlight.keywordsPattern": "TODO:|FIXME:|HACK:|NOTE:|REVIEW:|DEBUG:|BUSINESS RULE:|SECURITY:",
-  "todohighlight.defaultStyle": {
-    "color": "#ffffff",
-    "backgroundColor": "#6b7280",
-    "overviewRulerColor": "#6b7280",
-    "cursor": "pointer",
-    "borderRadius": "4px",
-    "isWholeLine": false
-  },
-  "todohighlight.include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.json",
-    "**/*.md"
-  ],
-  "todohighlight.exclude": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/.expo/**",
-    "**/ios/**",
-    "**/android/**",
-    "**/.vscode/**",
-    "**/.git/**",
-    "**/coverage/**",
-    "**/*.min.*",
-    "**/*.map",
-    "**/package-lock.json",
-    "**/yarn.lock"
-  ],
-  "todohighlight.maxFilesForSearch": 5120,
-  "todohighlight.toggleURI": false,
-  // Additional VS Code settings optimized for React Native + TypeScript development
-  "typescript.preferences.includePackageJsonAutoImports": "auto",
-  "typescript.suggest.autoImports": true,
-  "typescript.updateImportsOnFileMove.enabled": "always",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "emmet.includeLanguages": {
+    "typescript": "typescriptreact",
+    "javascript": "javascriptreact"
   },
   "files.associations": {
     "*.tsx": "typescriptreact",
     "*.ts": "typescript"
   },
-  "emmet.includeLanguages": {
-    "typescript": "html",
-    "typescriptreact": "html"
-  },
   "search.exclude": {
     "**/node_modules": true,
-    "**/dist": true,
-    "**/build": true,
+    "**/bower_components": true,
     "**/.expo": true,
-    "**/ios": true,
-    "**/android": true,
-    "**/coverage": true
-  }
+    "**/web-build": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.metro-cache": true
+  },
+  "files.exclude": {
+    "**/.expo": true,
+    "**/web-build": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.metro-cache": true
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "javascript.preferences.includePackageJsonAutoImports": "auto"
 }

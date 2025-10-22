@@ -1,5 +1,5 @@
 import * as Haptics from 'expo-haptics';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Animated, Dimensions, View } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
@@ -24,27 +24,30 @@ export default function SwipeGestureHandler({
   const lastGestureX = useRef(0);
   const [isGestureActive, setIsGestureActive] = useState(false);
 
-  const handleGestureEvent = Animated.event(
-    [{ nativeEvent: { translationX: translateX } }],
-    {
-      useNativeDriver: true,
-      listener: (event: any) => {
-        const { translationX, x } = event.nativeEvent;
-        // Show visual feedback when swiping from edge
-        if (Math.abs(translationX) > 10 && !isGestureActive) {
-          setIsGestureActive(true);
-          // Light haptic when gesture is recognized from edge
-          const isFromLeftEdge = x <= EDGE_THRESHOLD;
-          const isFromRightEdge = x >= screenWidth - EDGE_THRESHOLD;
-          if (isFromLeftEdge || isFromRightEdge) {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  const handleGestureEvent = useCallback(
+    Animated.event(
+      [{ nativeEvent: { translationX: translateX } }],
+      {
+        useNativeDriver: true,
+        listener: (event: any) => {
+          const { translationX, x } = event.nativeEvent;
+          // Show visual feedback when swiping from edge
+          if (Math.abs(translationX) > 10 && !isGestureActive) {
+            setIsGestureActive(true);
+            // Light haptic when gesture is recognized from edge
+            const isFromLeftEdge = x <= EDGE_THRESHOLD;
+            const isFromRightEdge = x >= screenWidth - EDGE_THRESHOLD;
+            if (isFromLeftEdge || isFromRightEdge) {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }
           }
         }
       }
-    }
+    ),
+    [isGestureActive, translateX]
   );
 
-  const handleStateChange = (event: any) => {
+  const handleStateChange = useCallback((event: any) => {
     const { state, translationX, x } = event.nativeEvent;
 
     if (state === State.BEGAN) {
@@ -92,7 +95,7 @@ export default function SwipeGestureHandler({
       translateX.setValue(0);
       setIsGestureActive(false);
     }
-  };
+  }, [isSidebarOpen, onSwipeRight, onSwipeLeft, translateX]);
 
   return (
     <View style={{ flex: 1 }}>

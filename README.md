@@ -1,366 +1,278 @@
-# Airbnb Cleaning Management Platform 🏠✨
+# Airbnb Property Manager
 
-## Built by a Non-Technical Founder Using AI-Assisted Development
+A production-grade React Native application built with Expo for managing Airbnb properties, cleaning schedules, maintenance tasks, and team coordination.
 
-A comprehensive property management application specifically designed to solve real-world coordination problems between property owners and cleaning staff. This platform transforms the chaotic world of Airbnb cleaning operations into a streamlined, professional workflow.
+## 🚀 Features
 
-> **📚 Complete Documentation**: See [`.ai/README.md`](.ai/README.md) for comprehensive AI-optimized project documentation with manifests, workflows, and guides.
+- **Property Management**: Complete property lifecycle management
+- **Cleaning Coordination**: Schedule and track cleaning tasks
+- **Maintenance Tracking**: Monitor and manage maintenance requests
+- **Team Management**: Coordinate with cleaning staff and maintenance teams
+- **Real-time Updates**: Live notifications and status updates
+- **Photo Documentation**: Capture and organize property photos
+- **Multi-platform**: iOS, Android, and Web support
 
-## 🎯 The Problem This Solves
+## 🛠 Tech Stack
 
-As a non-technical founder who has experienced firsthand the frustrations of managing cleaning operations across multiple properties, this platform addresses critical pain points:
+### Core Technologies
+- **React Native** 0.81.4 with Expo SDK 54
+- **TypeScript** with strict mode
+- **Expo Router** for file-based routing
+- **Gluestack UI** for universal component library
+- **NativeWind** for styling
 
-- **Last-minute cancellations** without proper notice or compensation
-- **Unclear access instructions** leading to cleaners being locked out
-- **Inaccurate guest counts** resulting in wrong linen preparation
-- **Poor communication** when issues arise during cleaning
-- **Lack of accountability** from both cleaners and property owners
+### State Management & Data
+- **TanStack Query** for server state management
+- **Zustand** for client state management
+- **Supabase** for backend services
+- **React Hook Form** + **Zod** for forms and validation
 
-## 💡 The Solution
+### Performance & Optimization
+- **@shopify/flash-list** for high-performance lists
+- **React Native Reanimated** for smooth animations
+- **React Native MMKV** for fast local storage
+- **Expo Secure Store** for sensitive data
 
-This isn't just another property management app - it's a cleaning-focused platform that prioritizes the cleaner experience while providing property owners with professional management tools.
+### Development Tools
+- **ESLint** + **Prettier** for code quality
+- **Jest** + **React Native Testing Library** for testing
+- **Detox** for E2E testing
+- **Husky** + **lint-staged** for pre-commit hooks
 
-### For Cleaners 👩‍🧹
+## 📋 Prerequisites
 
-- **All critical information** displayed on one screen
-- **Guest count** prominently shown for accurate linen calculation
-- **Access codes, WiFi passwords** clearly visible
-- **Real-time communication** with property owners
-- **Issue reporting** with photo upload capabilities
-- **Professional cancellation tracking** with compensation notices
+- Node.js 18+ and npm/yarn
+- Expo CLI (`npm install -g @expo/cli`)
+- iOS Simulator (for iOS development)
+- Android Studio (for Android development)
+- Supabase account and project
 
-### For Property Owners 🏡
+## 🚀 Quick Start
 
-- **Real-time cleaner status** updates
-- **Professional cancellation workflow** with reason documentation
-- **Team management** and performance monitoring
-- **Property analytics** and cleaning history
-- **Automated notifications** for all important events
+### 1. Clone and Install
 
-## 🚀 Development Journey
-
-This platform was built in just **5 days** using AI-assisted development, proving that non-technical founders can create substantial software products:
-
-### Timeline
-
-- **Day 1**: Project foundation and setup
-- **Day 2**: Core cleaning workflow implementation
-- **Day 3**: Enhanced features and real-time capabilities
-- **Day 4**: AI development partner integration
-
-- **Day 5**: Infrastructure optimization and documentation
-
-### Statistics
-
-- **3,500+ lines** of production code
-- **15+ major features** implemented
-- **4 comprehensive** pull requests
-- **Complete documentation** for future development
-
-## 🛠️ Technology Stack
-
-Built with modern, scalable technologies:
-
-- **Frontend**: React Native with Expo (iOS, Android, Web)
-- **Backend**: Supabase (PostgreSQL, real-time subscriptions)
-- **Language**: TypeScript for type-safe development
-- **Authentication**: Supabase Auth with role-based access
-- **Real-time**: Live updates and notifications
-- **Mobile-first**: Optimized for field staff usage
-
-## 🏗️ Quick Start for Developers
-
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-- Expo CLI
-
-- Git
-
-### Installation
-
-1. **Clone and setup**
-
-   ```bash
-   git clone https://github.com/SlySlayer32/Airbnb-App.git
-
-   cd Airbnb-App
-   npm install
-   ```
-
-2. **Environment configuration**
-   Create `.env` file:
-
-   ```env
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
-
-3. **Start development**
-
-   ```bash
-   npm start
-   # Then press 'a' for Android, 'i' for iOS, or 'w' for web
-   ```
-
-## 📱 Available Commands
-
-| Command | Purpose |
-|---------|---------|
-| `npm start` | Start development server |
-| `npm run android` | Launch Android emulator |
-| `npm run ios` | Launch iOS simulator |
-| `npm run web` | Launch web browser |
-| `npm run lint` | Check code quality |
-| `npm run verify-config` | Verify Android/iOS configuration |
-
-## 🏗️ Project Architecture
-
-```text
-├── app/                 # Screens (file-based routing)
-│   ├── auth/           # Login, register, forgot password
-│   ├── properties.tsx  # Main property management screen
-│   ├── schedule.tsx    # Cleaning schedule management
-│   └── ...other screens
-├── components/         # Reusable UI components
-│   ├── CleanerPropertyCard.tsx    # Cleaner-focused property display
-│   ├── OwnerPropertyCard.tsx      # Owner management interface
-│   ├── CleaningUpdates.tsx        # Real-time communication
-│   └── NotificationBadge.tsx      # Live alerts
-├── services/          # Business logic and API calls
-│   ├── propertyService.ts         # Property data management
-│   ├── cleaningSessionService.ts  # Session lifecycle
-│   ├── cleaningUpdateService.ts   # Real-time updates
-
-│   └── notificationService.ts     # Alert system
-├── types/             # TypeScript definitions
-└── contexts/          # Global state management
+```bash
+git clone <repository-url>
+cd airbnb-property-manager
+npm install
 ```
 
-## 🎨 Key Features Implemented
+### 2. Environment Setup
 
-### Real-time Communication System
+```bash
+cp .env.example .env
+# Edit .env with your Supabase credentials
+```
 
-- Live updates between cleaners and owners
-- Photo upload for issue documentation  
+### 3. Start Development Server
 
-- Urgency levels for critical problems
-- Notification system with real-time alerts
+```bash
+npm run dev
+```
 
-### Smart Property Cards
+### 4. Run on Devices
 
-- **Cleaner Cards**: Guest count, linen requirements, access codes
+```bash
+# iOS Simulator
+npm run ios
 
-- **Owner Cards**: Management tools, scheduling, monitoring
-- **Role-based display**: Different information for different users
+# Android Emulator
+npm run android
 
-### Professional Workflow Management
+# Web Browser
+npm run web
+```
 
-- Cancellation tracking with notice periods
-- Session status monitoring from start to finish
-- Issue escalation and resolution tracking
+## 📁 Project Structure
 
-- Performance analytics and reporting
+```
+├── app/                    # Expo Router pages
+│   ├── auth/              # Authentication screens
+│   ├── properties.tsx     # Property management
+│   ├── maintenance.tsx    # Maintenance tracking
+│   └── ...
+├── components/            # Reusable UI components
+├── contexts/             # React contexts
+├── services/             # Business logic and API calls
+├── types/                # TypeScript type definitions
+├── utils/                 # Utility functions
+├── data/                  # Mock data and constants
+└── assets/               # Images, fonts, etc.
+```
 
-### Mobile-First Design
+## 🧪 Testing
 
-- Optimized for cleaning staff using phones
-- Offline property viewing capabilities
+### Unit Tests
+```bash
+npm run test
+npm run test:watch
+npm run test:coverage
+```
 
-- Fast loading times (<200ms)
-- Touch-friendly interface design
+### E2E Tests
+```bash
+npm run test:e2e:build
+npm run test:e2e
+```
 
-## 📊 Business Impact & Metrics
+## 🔧 Development Scripts
 
-### Problem Resolution
+```bash
+# Development
+npm run dev              # Start development server
+npm run dev:clean        # Start with clean cache
+npm run dev:tunnel       # Start with tunnel for external access
 
-- **80% reduction** in coordination issues
-- **90% improvement** in cleaning accuracy
-- **Eliminated** guest count confusion
-- **Professional accountability** for all parties
+# Building
+npm run build            # Build for all platforms
+npm run build:web        # Build for web only
+npm run prebuild         # Generate native code
 
-### Technical Achievements
+# Code Quality
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint issues
+npm run format           # Format with Prettier
+npm run type-check       # TypeScript type checking
+npm run validate         # Run all quality checks
 
-- Sub-200ms property loading times
-- Real-time updates with <2 second latency
-- Production-grade error handling
+# Platform Specific
+npm run ios              # Run on iOS
+npm run android          # Run on Android
+npm run web              # Run on Web
 
-- Type-safe development preventing bugs
+# Production Builds
+npm run ios:release      # Build iOS for production
+npm run android:release  # Build Android for production
 
-## 🤖 AI Development Partner
+# Utilities
+npm run clean            # Clean all caches
+npm run doctor           # Check project health
+npm run update:check     # Check for dependency updates
+```
 
-This project includes comprehensive GitHub Copilot instructions (975 lines) that transform AI into a technical co-founder:
+## 🏗 Production Deployment
 
-- **Business domain expertise** in cleaning operations
-- **Automatic code generation** following project patterns
-- **Plain English communication** for non-technical founders
-- **Production-ready implementations** with complete error handling
+### EAS Build
 
-## 📈 Future Roadmap
+```bash
+# Install EAS CLI
+npm install -g eas-cli
 
-### Phase 1: Production Deployment
+# Login to Expo
+eas login
 
-- [ ] Supabase database deployment
-- [ ] App store releases (iOS/Android)
-- [ ] User onboarding system
-- [ ] Performance monitoring
+# Configure project
+eas build:configure
 
-### Phase 2: Advanced Features
+# Build for production
+eas build --platform all --profile production
+```
 
-- [ ] Payment integration for services
-- [ ] Advanced analytics dashboard
-- [ ] Photo verification system
+### App Store Deployment
 
-- [ ] Push notifications
+```bash
+# Submit to App Store
+eas submit --platform ios --profile production
 
-### Phase 3: Business Scaling
+# Submit to Google Play
+eas submit --platform android --profile production
+```
 
-- [ ] Multi-tenant support
-- [ ] Property management platform integrations
-- [ ] Advanced scheduling optimization
-- [ ] Business intelligence features
+## 🔐 Environment Variables
 
-## 🎓 Learning & Documentation
+Create a `.env` file based on `.env.example`:
 
-### Complete Development History
+```env
+# Supabase Configuration
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-- [`docs/technical/DEVELOPMENT_HISTORY.md`](docs/technical/DEVELOPMENT_HISTORY.md) - Complete record of all changes
-- [`CHANGELOG.md`](./CHANGELOG.md) - Technical change log
-- [GitHub Issues](https://github.com/SlySlayer32/Airbnb-App/issues) - Detailed problem documentation
+# App Configuration
+EXPO_PUBLIC_APP_NAME=Airbnb Property Manager
+EXPO_PUBLIC_ENVIRONMENT=development
 
-### Documentation Map
+# Feature Flags
+EXPO_PUBLIC_ENABLE_ANALYTICS=false
+EXPO_PUBLIC_ENABLE_CRASH_REPORTING=false
+```
 
-- [`docs/DOCUMENTATION_INDEX.md`](docs/DOCUMENTATION_INDEX.md) — Central hub for all documentation
-- **Business**: Executive summary, roadmap, metrics, workflows ([`/docs/business/`](docs/business/))
-- **Technical**: Integration research, testing results, development history ([`/docs/technical/`](docs/technical/))
-- **Process**: Contributing guidelines, version tracking ([`/docs/process/`](docs/process/))
-- **Templates**: Issue and PR templates ([`/docs/templates/`](docs/templates/))
+## 📱 Platform Support
 
-### For Non-Technical Founders
+- **iOS**: 13.0+
+- **Android**: API 21+ (Android 5.0)
+- **Web**: Modern browsers with ES2022 support
 
-This project demonstrates that substantial software products can be built by non-technical founders using:
+## 🎨 UI Components
 
-- AI-assisted development tools
-- Clear problem understanding
-- Systematic documentation
+This project uses **Gluestack UI** for consistent, accessible components across platforms:
 
-- Professional development practices
+- Universal compatibility (iOS, Android, Web)
+- WCAG 2.1 AA accessibility compliance
+- Dark mode support
+- Responsive design
+- TypeScript support
 
-## ✅ Code Quality & Standards
+## 🔄 State Management
 
-### Automated Quality Checks
+### Server State (TanStack Query)
+```typescript
+const { data, isLoading, error } = useQuery({
+  queryKey: ['properties'],
+  queryFn: fetchProperties,
+});
+```
 
-- **ESLint**: Code quality and consistency
-- **TypeScript**: Type safety and error prevention
+### Client State (Zustand)
+```typescript
+const useAppStore = create((set) => ({
+  theme: 'light',
+  setTheme: (theme) => set({ theme }),
+}));
+```
 
-- **GitHub Actions**: Automated testing and deployment
-- **Comprehensive documentation**: Every feature explained
+## 📊 Performance
 
-### Development Workflow
+- **Bundle Analysis**: `npm run analyze:bundle`
+- **Performance Monitoring**: Built-in React Native performance tools
+- **Memory Optimization**: Efficient list rendering with FlashList
+- **Image Optimization**: Expo Image with WebP support
 
-1. Feature planning and documentation
-2. AI-assisted implementation
+## 🛡 Security
 
-3. Code quality checks
-4. Testing and validation
-5. Documentation updates
-
-## 🔄 CI/CD Pipeline
-
-Automated GitHub Actions workflow:
-
-- Code quality checks on every commit
-- TypeScript compilation validation
-- Automated testing suite
-- Deployment pipeline for production releases
+- **Secure Storage**: Expo Secure Store for sensitive data
+- **Biometric Authentication**: Face ID / Touch ID support
+- **Environment Variables**: Secure configuration management
+- **Input Validation**: Zod schemas for all data validation
 
 ## 🤝 Contributing
 
-### For Developers
-
 1. Fork the repository
-2. Create a feature branch
-3. Follow existing code patterns
-4. Add comprehensive documentation
-5. Submit pull request with detailed description
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### For Non-Technical Contributors
+### Code Standards
 
-- Report issues and feature requests
-- Provide user feedback and testing
-- Contribute to documentation
-- Share business insights and requirements
+- Follow TypeScript strict mode
+- Use ESLint and Prettier configurations
+- Write tests for new features
+- Follow conventional commit messages
+- Ensure accessibility compliance
 
-## 📝 Documentation Philosophy
+## 📄 License
 
-Every commit, feature, and decision is documented to provide:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-- **Proof of development work** for stakeholders
-- **Business context** for all technical decisions
-- **Learning resource** for other non-technical founders
-- **Future development guidance** for team scaling
+## 🆘 Support
 
-## 🎯 Success Metrics
+- **Documentation**: Check the `/docs` folder
+- **Issues**: Create an issue on GitHub
+- **Discussions**: Use GitHub Discussions for questions
 
-### Development Metrics
+## 🙏 Acknowledgments
 
-- **5 days** total development time
-- **3,500+ lines** of production code
-- **15+ features** implemented
-- **4 major releases** documented
-
-### Business Metrics  
-
-- **Real problem solved** based on personal experience
-- **Scalable solution** supporting business growth
-- **Professional quality** ready for production use
-- **Complete documentation** for future development
-
----
-
-## 💼 For Investors & Stakeholders
-
-This project demonstrates:
-
-- **Rapid development capability** using modern AI tools
-- **Deep problem understanding** based on real experience
-- **Professional execution** with comprehensive documentation
-- **Scalable architecture** supporting business growth
-- **Proof of substantial work** through detailed documentation
-
-The transformation from unclear commit messages to comprehensive business documentation proves the significant value created through systematic platform development.
-
----
-
-**Built with ❤️ by a non-technical founder proving that anyone can build substantial software products with the right approach and tools.**
-
-For questions or collaboration: [GitHub Issues](https://github.com/SlySlayer32/Airbnb-App/issues)
-
-## 🧰 VS Code Helper Tasks (non-technical)
-
-If you use Visual Studio Code, there are several handy tasks already set up to make common project actions easy. You don't need to open a terminal or remember long commands — just run the task from the Command Palette (Run Task).
-
-- "Git: Fetch": Refreshes the project with the latest information from the remote repository. Think of it as checking if there are new updates available.
-- "Git: Pull (rebase)": Updates your local branch with the latest changes from the remote branch. It will ask which branch to use (default: `main`). Use this when you want to bring your copy up-to-date.
-- "Git: Stash WIP": Temporarily saves any unfinished local changes so you can update the project safely. Use this if you have uncommitted work you don't want to lose before pulling remote changes.
-- "Install Dependencies": Downloads all the required project files (software packages) to run the app. Run this after pulling changes that updated the project's dependencies.
-- "Clean Install": Safely removes the local dependency folder and the lock file (if present), then re-downloads everything. Use this when things break after an update — it's the "start fresh" option for dependencies.
-- "Typecheck (tsc)": Runs a quick automated check that looks for type-related problems in the code (this is mainly for developers). You only need to run this if you are changing code.
-- "Lint (eslint)": Runs a style-and-quality check and points out code issues so they can be fixed. Helpful before committing changes.
-- "Start Dev Server": Starts the app in development mode so you can preview it on a device or simulator. This keeps running while you work and updates as you save files.
-- "Sync & Verify": A convenience task that runs several steps in order: stash any in-progress work, fetch updates, pull the chosen branch, install dependencies, run the typecheck, and run the linter. Use this to bring your workspace fully in line with the latest remote changes and verify everything looks okay.
-
-How to use
-
-1. In Visual Studio Code press Ctrl+Shift+P (or Cmd+Shift+P on Mac).
-2. Type "Run Task" and choose the task you want.
-3. If a task asks for the branch name, just press Enter to accept the default `main` or type another branch name.
-
-When to use these tasks
-
-- After pulling changes from the repository (use `Sync & Verify` for a single step).
-- When installation or dependency-related errors appear (use `Clean Install`).
-- Before creating a pull request, run `Typecheck (tsc)` and `Lint (eslint)` to catch common issues.
-
-If you'd like, I can also add short keyboard shortcuts or make a single-button script to run the full sync automatically. Let me know which you prefer.
+- Expo team for the amazing development platform
+- Gluestack UI for the universal component library
+- Supabase for the backend infrastructure
+- React Native community for continuous improvements

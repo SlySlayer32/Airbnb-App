@@ -1,27 +1,11 @@
 {
   "recommendations": [
-    // Essential
-    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
     "ms-vscode.vscode-typescript-next",
-
-    // React Native / Expo
-    "msjsdiag.vscode-react-native",
-    "dsznajder.es7-react-js-snippets",
-
-    // TypeScript
-    "usernamehw.errorlens",
-    "yoavbls.pretty-ts-errors",
-
-    // Utilities
-    "christian-kohler.path-intellisense",
-    "eamodio.gitlens",
-    "gruntfuggly.todo-tree",
-    "wayou.vscode-todo-highlight",
-
-    // Code Quality
-    "streetsidesoftware.code-spell-checker",
-    "editorconfig.editorconfig"
-  ],
-  "unwantedRecommendations": []
+    "bradlc.vscode-tailwindcss",
+    "ms-vscode.vscode-json",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense"
+  ]
 }

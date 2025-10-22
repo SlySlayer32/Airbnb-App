@@ -1,5 +1,5 @@
 import { Session, User } from '@supabase/supabase-js';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_MOCK_PROFILE, MockProfile } from '../data/mockProfiles';
 import { supabase } from '../utils/supabase';
 
@@ -145,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signUp = async (email: string, password: string, fullName: string, role: string) => {
+  const signUp = useCallback(async (email: string, password: string, fullName: string, role: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -157,26 +157,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
     return { data, error };
-  };
+  }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
     return { data, error };
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-  };
+  }, []);
 
-  const resetPassword = async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email);
     return { data, error };
-  };
+  }, []);
 
-  const updateProfile = async (updates: Partial<Profile>) => {
+  const updateProfile = useCallback(async (updates: Partial<Profile>) => {
     if (!user) throw new Error('No user');
 
     const { error } = await supabase
@@ -187,30 +187,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error;
 
     setProfile(prev => prev ? { ...prev, ...updates } : null);
-  };
+  }, [user]);
 
-  const switchMockProfile = (mockProfile: MockProfile) => {
+  const switchMockProfile = useCallback((mockProfile: MockProfile) => {
     if (!isDemoMode && !__DEV__) {
       console.warn('Cannot switch profiles outside demo mode');
       return;
     }
     setProfile(mockProfile);
-  };
+  }, [isDemoMode]);
+
+  const contextValue = useMemo(() => ({
+    user,
+    profile,
+    session,
+    loading,
+    isDemoMode,
+    signUp,
+    signIn,
+    signOut,
+    resetPassword,
+    updateProfile,
+    switchMockProfile
+  }), [user, profile, session, loading, isDemoMode, signUp, signIn, signOut, resetPassword, updateProfile, switchMockProfile]);
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      profile,
-      session,
-      loading,
-      isDemoMode,
-      signUp,
-      signIn,
-      signOut,
-      resetPassword,
-      updateProfile,
-      switchMockProfile
-    }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
