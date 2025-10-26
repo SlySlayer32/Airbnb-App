@@ -203,3 +203,7 @@ pnpm-lock.yaml
 # Documentation that shouldn't be tracked
 CHANGELOG.md
 LICENSE
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

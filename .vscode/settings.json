@@ -38,5 +38,221 @@
     "**/.metro-cache": true
   },
   "typescript.preferences.includePackageJsonAutoImports": "auto",
-  "javascript.preferences.includePackageJsonAutoImports": "auto"
+  "javascript.preferences.includePackageJsonAutoImports": "auto",
+
+  // ========================================
+  // COMPLETE GITHUB COPILOT SETTINGS REFERENCE
+  // Source: https://code.visualstudio.com/docs/copilot/reference/copilot-settings
+  // ========================================
+
+  // ==========================================
+  // GENERAL SETTINGS
+  // ==========================================
+  "chat.commandCenter.enabled": true,
+  "workbench.settings.showAISearchToggle": true,
+  "workbench.commandPalette.experimental.askChatLocation": "chatView",
+  "search.searchView.semanticSearchBehavior": "manual",
+  "search.searchView.keywordSuggestions": false,
+
+  // ==========================================
+  // CODE EDITING SETTINGS
+  // ==========================================
+  "github.copilot.editor.enableCodeActions": true,
+  "github.copilot.renameSuggestions.triggerAutomatically": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false
+  },
+
+  // Next Edit Suggestions (NES)
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "editor.inlineSuggest.edits.allowCodeShifting": "always",
+  "editor.inlineSuggest.edits.renderSideBySide": "auto",
+  "github.copilot.nextEditSuggestions.fixes": true,
+  "editor.inlineSuggest.minShowDelay": 0,
+
+  // ==========================================
+  // CHAT SETTINGS
+  // ==========================================
+  "github.copilot.chat.localeOverride": "auto",
+  "github.copilot.chat.useProjectTemplates": true,
+  "github.copilot.chat.scopeSelection": false,
+  "github.copilot.chat.terminalChatLocation": "chatView",
+  "chat.detectParticipant.enabled": true,
+  "chat.checkpoints.enabled": true,
+  "chat.checkpoints.showFileChanges": false,
+  "chat.editRequests": "inline",
+
+  // Chat Editor Settings
+  "chat.editor.fontFamily": "default",
+  "chat.editor.fontSize": 14,
+  "chat.editor.fontWeight": "default",
+  "chat.editor.lineHeight": 0,
+  "chat.editor.wordWrap": "off",
+
+  // Chat Editing
+  "chat.editing.confirmEditRequestRemoval": true,
+  "chat.editing.confirmEditRequestRetry": true,
+  "chat.editing.autoAcceptDelay": 0,
+
+  // Chat Display
+  "chat.fontFamily": "default",
+  "chat.fontSize": 13,
+  "chat.notifyWindowOnConfirmation": true,
+  "chat.notifyWindowOnResponseReceived": true,
+
+  // Chat Tools & Terminal
+  "chat.tools.terminal.autoReplyToPrompts": false,
+  "chat.useAgentsMdFile": true,
+  "chat.math.enabled": false,
+
+  // Chat Code Search (Preview)
+  "github.copilot.chat.codesearch.enabled": false,
+
+  // Chat Experimental
+  "chat.emptyState.history.enabled": false,
+  "chat.sendElementsToChat.enabled": true,
+  "chat.useNestedAgentsMdFiles": false,
+  "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": true,
+
+  // ==========================================
+  // AGENT MODE SETTINGS
+  // ==========================================
+  "chat.agent.enabled": true,
+  "chat.agent.maxRequests": 25,
+  "github.copilot.chat.agent.autoFix": true,
+
+  // MCP (Model Context Protocol)
+  "chat.mcp.access": "all",
+  "chat.mcp.discovery.enabled": {},
+  "chat.mcp.gallery.enabled": false,
+
+  // Terminal Auto-Approve (Security: Keep commands requiring approval)
+  "chat.tools.terminal.autoApprove": {
+    "rm": false,
+    "rmdir": false,
+    "del": false,
+    "kill": false,
+    "curl": false,
+    "wget": false,
+    "eval": false,
+    "chmod": false,
+    "chown": false,
+    "/^Remove-Item\\b/i": false
+  },
+  "chat.tools.global.autoApprove": false,
+
+  // Agent Experimental
+  "chat.agent.thinkingStyle": "fixedScrolling",
+  "chat.mcp.autoStart": "newAndOutdated",
+  "chat.agent.todoList.position": "default",
+  "github.copilot.chat.newWorkspaceCreation.enabled": true,
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.chat.virtualTools.threshold": 128,
+
+  // ==========================================
+  // AGENT SESSIONS
+  // ==========================================
+  "chat.agentSessionsViewLocation": "view",
+
+  // ==========================================
+  // INLINE CHAT SETTINGS
+  // ==========================================
+  "inlineChat.finishOnType": false,
+  "inlineChat.holdToSpeech": true,
+  "editor.inlineSuggest.syntaxHighlightingEnabled": true,
+  "inlineChat.lineEmptyHint": false,
+  "inlineChat.lineNaturalLanguageHint": true,
+  "github.copilot.chat.editor.temporalContext.enabled": false,
+
+  // ==========================================
+  // CODE REVIEW SETTINGS
+  // ==========================================
+  "github.copilot.chat.reviewSelection.enabled": true,
+  "github.copilot.chat.reviewSelection.instructions": [],
+
+  // ==========================================
+  // CUSTOM INSTRUCTIONS SETTINGS
+  // ==========================================
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true
+  },
+  "github.copilot.chat.commitMessageGeneration.instructions": [],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [],
+
+  // ==========================================
+  // REUSABLE PROMPT FILES SETTINGS
+  // ==========================================
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true
+  },
+
+  // ==========================================
+  // CHAT MODE SETTINGS
+  // ==========================================
+  "chat.modeFilesLocations": {
+    ".github/chatmodes": true
+  },
+
+  // ==========================================
+  // DEBUGGING SETTINGS
+  // ==========================================
+  "github.copilot.chat.startDebugging.enabled": true,
+  "github.copilot.chat.copilotDebugCommand.enabled": true,
+
+  // ==========================================
+  // TESTING SETTINGS
+  // ==========================================
+  "github.copilot.chat.generateTests.codeLens": false,
+  "github.copilot.chat.setupTests.enabled": true,
+
+  // ==========================================
+  // NOTEBOOK SETTINGS
+  // ==========================================
+  "notebook.experimental.generate": true,
+  "github.copilot.chat.edits.newNotebook.enabled": true,
+  "github.copilot.chat.notebook.followCellExecution.enabled": false,
+
+  // ==========================================
+  // ACCESSIBILITY SETTINGS
+  // ==========================================
+  "inlineChat.accessibleDiffView": "auto",
+
+  // Accessibility Signals (Audio Cues)
+  "accessibility.signals.chatRequestSent": {
+    "sound": "auto",
+    "announcement": "auto"
+  },
+  "accessibility.signals.chatResponseReceived": {
+    "sound": "auto"
+  },
+  "accessibility.signals.chatEditModifiedFile": {
+    "sound": "auto"
+  },
+  "accessibility.signals.chatUserActionRequired": {
+    "sound": "auto",
+    "announcement": "auto"
+  },
+  "accessibility.signals.lineHasInlineSuggestion": {
+    "sound": "auto"
+  },
+  "accessibility.signals.nextEditSuggestion": {
+    "sound": "auto",
+    "announcement": "auto"
+  },
+
+  // Accessibility Verbosity
+  "accessibility.verboseChatProgressUpdates": true,
+  "accessibility.verbosity.inlineChat": true,
+  "accessibility.verbosity.inlineCompletions": true,
+  "accessibility.verbosity.panelChat": true,
+
+  // Accessibility Voice
+  "accessibility.voice.keywordActivation": "off",
+  "accessibility.voice.autoSynthesize": "off",
+  "accessibility.voice.speechTimeout": 1200
 }
