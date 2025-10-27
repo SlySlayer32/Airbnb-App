@@ -10,6 +10,9 @@ build/
 coverage/
 static/
 
+# Supabase CLI temp files
+supabase/.temp/
+
 # Environment variables
 .env
 .env.local
