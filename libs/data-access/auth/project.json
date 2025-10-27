@@ -1,10 +1,13 @@
 {
-  "name": "auth",
+  "name": "data-access-auth",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/data-access/auth/src",
   "projectType": "library",
   "tags": ["type:data-access", "scope:shared"],
   "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

@@ -1,5 +1,34 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "expo:start": {
+      "cache": false
+    },
+    "expo:build": {
+      "cache": true
+    },
+    "serve": {
+      "cache": false
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"],
+    "production": [
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.test.ts",
+      "!{projectRoot}/**/*.spec.tsx",
+      "!{projectRoot}/**/*.test.tsx"
+    ]
+  },
   "plugins": [
     {
       "plugin": "@nx/expo/plugin",
@@ -26,14 +55,29 @@
     {
       "plugin": "@nx/jest/plugin",
       "options": {
-        "targetName": "jest:test"
+        "targetName": "test"
       }
     }
   ],
   "generators": {
     "@nx/react": {
       "library": {
-        "unitTestRunner": "none"
+        "style": "none",
+        "unitTestRunner": "jest",
+        "bundler": "none",
+        "linter": "eslint",
+        "strict": true,
+        "pascalCaseFiles": false,
+        "routing": false
+      },
+      "component": {
+        "style": "none"
+      }
+    },
+    "@nx/js": {
+      "library": {
+        "unitTestRunner": "jest",
+        "strict": true
       }
     }
   }
