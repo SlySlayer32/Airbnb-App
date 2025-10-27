@@ -8,6 +8,7 @@ web-build/
 dist/
 build/
 coverage/
+static/
 
 # Environment variables
 .env
@@ -204,12 +205,10 @@ CHANGELOG.md
 LICENSE
 
 
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
-
-
-
+# Nx cache and workspace data
 .nx/cache
 .nx/workspace-data
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
+
+# Nx generated graph
+project-graph.html
+project-graph-current.html
