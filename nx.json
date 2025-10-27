@@ -21,7 +21,16 @@
     }
   },
   "namedInputs": {
-    "default": ["{projectRoot}/**/*"],
+    "default": [
+      "{projectRoot}/**/*",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.test.ts",
+      "!{projectRoot}/**/*.spec.tsx",
+      "!{projectRoot}/**/*.test.tsx",
+      "!{projectRoot}/node_modules",
+      "!{projectRoot}/dist",
+      "!{projectRoot}/coverage"
+    ],
     "production": [
       "!{projectRoot}/**/*.spec.ts",
       "!{projectRoot}/**/*.test.ts",
