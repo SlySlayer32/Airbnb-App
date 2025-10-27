@@ -1,4 +1,3 @@
 // UI-related custom hooks
 // This directory is prepared for future UI hooks implementation
-
-export {};
+// TODO: Implement UI hooks here as needed.
