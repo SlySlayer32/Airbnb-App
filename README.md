@@ -31,7 +31,7 @@ codebase is organized into a clear separation of concerns with strict module bou
 
 ### Core Technologies
 
-- **React Native** 0.81.4 with Expo SDK 54
+- **React Native** (see `package.json` for current version) with Expo SDK (see `package.json`)
 - **TypeScript** 5.8+ with ES2022 target
 - **Expo Router** for file-based routing
 - **NX** 22.0+ for monorepo orchestration
