@@ -135,6 +135,14 @@
   "chat.mcp.discovery.enabled": {},
   "chat.mcp.gallery.enabled": true,
 
+  // MCP Servers
+  "github.copilot.chat.mcp.servers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  },
+
   // Terminal Auto-Approve (Security: Keep commands requiring approval)
   "chat.tools.terminal.autoApprove": {
     "rm": false,
