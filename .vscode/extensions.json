@@ -6,6 +6,7 @@
     "bradlc.vscode-tailwindcss",
     "ms-vscode.vscode-json",
     "formulahendry.auto-rename-tag",
-    "christian-kohler.path-intellisense"
+    "christian-kohler.path-intellisense",
+    "firsttris.vscode-jest-runner"
   ]
 }

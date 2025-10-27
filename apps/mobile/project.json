@@ -1,0 +1,43 @@
+{
+  "name": "mobile",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mobile",
+  "projectType": "application",
+  "tags": ["type:app", "scope:mobile"],
+  "targets": {
+    "start": {
+      "executor": "@nx/expo:start",
+      "options": {
+        "port": 8081
+      }
+    },
+    "serve": {
+      "executor": "@nx/expo:serve",
+      "options": {
+        "port": 8081
+      }
+    },
+    "build": {
+      "executor": "@nx/expo:build",
+      "options": {}
+    },
+    "export": {
+      "executor": "@nx/expo:export",
+      "options": {
+        "platform": "all",
+        "outputDir": "dist/apps/mobile"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/mobile"],
+      "options": {
+        "jestConfig": "apps/mobile/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

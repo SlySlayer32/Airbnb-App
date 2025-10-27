@@ -127,7 +127,7 @@
   // MCP (Model Context Protocol)
   "chat.mcp.access": "all",
   "chat.mcp.discovery.enabled": {},
-  "chat.mcp.gallery.enabled": false,
+  "chat.mcp.gallery.enabled": true,
 
   // Terminal Auto-Approve (Security: Keep commands requiring approval)
   "chat.tools.terminal.autoApprove": {

@@ -207,3 +207,10 @@ LICENSE
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
+
+
+
+.nx/cache
+.nx/workspace-data
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

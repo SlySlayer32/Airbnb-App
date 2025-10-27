@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@airbnb/core-models": ["libs/core/models/src/index.ts"],
+      "@airbnb/core-utils": ["libs/core/utils/src/index.ts"],
+      "@airbnb/ui-components": ["libs/ui/components/src/index.ts"],
+      "@airbnb/data-access-api": ["libs/data-access/api/src/index.ts"],
+      "@airbnb/data-access-auth": ["libs/data-access/auth/src/index.ts"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    ".expo",
+    "web-build",
+    "dist",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
+}

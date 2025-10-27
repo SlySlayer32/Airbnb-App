@@ -2,8 +2,6 @@ module.exports = {
   root: true,
   extends: [
     'expo',
-    '@react-native',
-    '@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
@@ -88,5 +86,50 @@ module.exports = {
     'coverage/',
     '*.config.js',
     '*.config.ts',
+  ],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+      rules: {
+        '@nx/enforce-module-boundaries': [
+          'error',
+          {
+            enforceBuildableLibDependency: true,
+            allow: [],
+            depConstraints: [
+              {
+                sourceTag: 'type:app',
+                onlyDependOnLibsWithTags: [
+                  'type:feature',
+                  'type:ui',
+                  'type:data-access',
+                  'type:core',
+                ],
+              },
+              {
+                sourceTag: 'type:feature',
+                onlyDependOnLibsWithTags: [
+                  'type:ui',
+                  'type:data-access',
+                  'type:core',
+                ],
+              },
+              {
+                sourceTag: 'type:ui',
+                onlyDependOnLibsWithTags: ['type:core'],
+              },
+              {
+                sourceTag: 'type:data-access',
+                onlyDependOnLibsWithTags: ['type:core'],
+              },
+              {
+                sourceTag: 'type:core',
+                onlyDependOnLibsWithTags: [],
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
 };
