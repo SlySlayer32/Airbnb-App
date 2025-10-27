@@ -1,4 +1,4 @@
-import { Profile } from '@airbnb/core-models';
+import { Profile } from '@airbnb/core-domain-models';
 
 /**
  * Mock User Profiles for Development

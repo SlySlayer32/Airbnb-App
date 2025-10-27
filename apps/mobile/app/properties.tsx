@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { router } from 'expo-router';
-import { EnhancedProperty, mockEnhancedProperties } from '@airbnb/core-models';
+import { EnhancedProperty, mockEnhancedProperties } from '@airbnb/core-domain-models';
 import { propertyService } from '@airbnb/data-access-api';
 import { useAuth } from '@airbnb/data-access-auth';
 import {

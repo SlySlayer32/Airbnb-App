@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { CleaningSession } from '@airbnb/core-models';
+import { CleaningSession } from '@airbnb/core-domain-models';
 import { PhotoProofGate } from './PhotoProofGate';
 
 interface CleanerActiveSessionCardProps {

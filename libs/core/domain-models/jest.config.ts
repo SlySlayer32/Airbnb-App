@@ -1,10 +1,10 @@
 export default {
-  displayName: 'models',
+  displayName: 'domain-models',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/core/models',
+  coverageDirectory: '../../../coverage/libs/core/domain-models',
 };

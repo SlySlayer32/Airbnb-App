@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { DashboardComponent } from '@airbnb/core-models';
+import { DashboardComponent } from '@airbnb/core-domain-models';
 import { supabase } from './api';
 
 export const dashboardLayoutService = {

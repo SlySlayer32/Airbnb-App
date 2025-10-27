@@ -1,7 +1,7 @@
 import { useAuth } from '@airbnb/data-access-auth';
 import { cleaningSessionService } from '@/services';
 import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
-import { CleaningSession } from '@airbnb/core-models';
+import { CleaningSession } from '@airbnb/core-domain-models';
 import React, { useCallback, useEffect, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import DashboardStats from './DashboardStats';

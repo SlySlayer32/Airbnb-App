@@ -1,4 +1,4 @@
-import { CleaningSession } from '@airbnb/core-models';
+import { CleaningSession } from '@airbnb/core-domain-models';
 import { supabase } from './api';
 
 export const cleaningSessionService = {

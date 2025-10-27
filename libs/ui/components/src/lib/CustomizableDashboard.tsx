@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DashboardComponent } from '@airbnb/core-models';
+import { DashboardComponent } from '@airbnb/core-domain-models';
 import { dashboardLayoutService } from '@airbnb/data-access-api';
 import { useAuth } from '@airbnb/data-access-auth';
 // Import existing components (role-agnostic wrappers)

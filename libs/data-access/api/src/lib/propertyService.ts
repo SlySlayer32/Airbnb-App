@@ -1,4 +1,4 @@
-import { EnhancedProperty, LinenRequirement } from '@airbnb/core-models';
+import { EnhancedProperty, LinenRequirement } from '@airbnb/core-domain-models';
 import { supabase } from './api';
 
 export const propertyService = {

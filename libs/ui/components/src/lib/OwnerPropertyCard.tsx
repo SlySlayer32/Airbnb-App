@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { EnhancedProperty, CleaningSession } from '@airbnb/core-models';
+import { EnhancedProperty, CleaningSession } from '@airbnb/core-domain-models';
 import { cleaningSessionService } from '@/services';
 
 interface OwnerPropertyCardProps {
