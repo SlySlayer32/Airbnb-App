@@ -3,7 +3,7 @@ import {
   PhotoProofRequirement,
   PhotoProofStatus,
   PhotoProofValidation,
-} from '@airbnb/core-models';
+} from '@airbnb/core-domain-models';
 
 /**
  * Photo Proof Service - Manages photo requirements and validation for cleaning sessions

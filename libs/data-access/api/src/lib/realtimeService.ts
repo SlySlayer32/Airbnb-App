@@ -2,7 +2,7 @@ import {
   CleaningSession,
   RealtimeConnectionState,
   RealtimeSubscriptionConfig,
-} from '@airbnb/core-models';
+} from '@airbnb/core-domain-models';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 import { supabase } from './api';
 

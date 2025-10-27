@@ -3,7 +3,7 @@ import {
   BannerStateContext,
   BannerStateResult,
   CleaningSession,
-} from '@airbnb/core-models';
+} from '@airbnb/core-domain-models';
 
 export class BannerStateService {
   static calculateBannerState(context: BannerStateContext): BannerStateResult {

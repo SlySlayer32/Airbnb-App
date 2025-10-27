@@ -11,7 +11,7 @@ import {
 import { usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@airbnb/data-access-auth';
-import { getAllMockProfiles } from '@airbnb/core-models';
+import { getAllMockProfiles } from '@airbnb/core-domain-models';
 
 interface DebugInfo {
   timestamp: string;

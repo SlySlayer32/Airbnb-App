@@ -10,7 +10,7 @@ import {
   DEFAULT_MOCK_PROFILE,
   MockProfile,
   Profile,
-} from '@airbnb/core-models';
+} from '@airbnb/core-domain-models';
 import { supabase } from '@airbnb/data-access-api';
 import { Session, User } from '@supabase/supabase-js';
 

@@ -1,6 +1,21 @@
 # Airbnb Property Manager
 
-A production-grade React Native application built with Expo for managing Airbnb properties, cleaning schedules, maintenance tasks, and team coordination.
+> **Mobile-First Architecture**: A production-grade React Native application built with Expo and NX
+> monorepo for managing Airbnb properties, cleaning schedules, maintenance tasks, and team
+> coordination.
+
+## 🏗️ Architecture Overview
+
+This project follows **NX monorepo best practices** with a **mobile-only architecture**. The
+codebase is organized into a clear separation of concerns with strict module boundaries.
+
+### Core Principles
+
+- 🎯 **Mobile-First**: `apps/mobile` is the only runnable target (iOS & Android)
+- 📦 **Modular Design**: All shared code lives in `libs/*` with clear boundaries
+- 🔒 **Type Safety**: TypeScript with strict mode throughout
+- ⚡ **Performance**: Optimized for mobile with best practices
+- 🧪 **Testable**: Comprehensive testing strategy with Jest and Detox
 
 ## 🚀 Features
 
@@ -8,167 +23,416 @@ A production-grade React Native application built with Expo for managing Airbnb 
 - **Cleaning Coordination**: Schedule and track cleaning tasks
 - **Maintenance Tracking**: Monitor and manage maintenance requests
 - **Team Management**: Coordinate with cleaning staff and maintenance teams
-- **Real-time Updates**: Live notifications and status updates
+- **Real-time Updates**: Live notifications and status updates via Supabase
 - **Photo Documentation**: Capture and organize property photos
-- **Multi-platform**: iOS, Android, and Web support
+- **Customizable Dashboard**: Personalized views for different user roles
 
 ## 🛠 Tech Stack
 
 ### Core Technologies
-- **React Native** 0.81.4 with Expo SDK 54
-- **TypeScript** with strict mode
+
+- **React Native** (see `package.json` for current version) with Expo SDK (see `package.json`)
+- **TypeScript** 5.8+ with ES2022 target
 - **Expo Router** for file-based routing
+- **NX** 22.0+ for monorepo orchestration
 - **Gluestack UI** for universal component library
 - **NativeWind** for styling
 
 ### State Management & Data
+
 - **TanStack Query** for server state management
 - **Zustand** for client state management
-- **Supabase** for backend services
+- **Supabase** for backend services (auth, database, realtime)
 - **React Hook Form** + **Zod** for forms and validation
 
 ### Performance & Optimization
+
 - **@shopify/flash-list** for high-performance lists
 - **React Native Reanimated** for smooth animations
 - **React Native MMKV** for fast local storage
 - **Expo Secure Store** for sensitive data
 
 ### Development Tools
+
 - **ESLint** + **Prettier** for code quality
-- **Jest** + **React Native Testing Library** for testing
+- **Jest** + **React Native Testing Library** for unit/integration tests
 - **Detox** for E2E testing
 - **Husky** + **lint-staged** for pre-commit hooks
 
+## 📁 Project Structure
+
+```
+/
+├── apps/
+│   └── mobile/                 # 📱 Main mobile application (iOS & Android)
+│       ├── app/                # Expo Router file-based routing
+│       │   ├── auth/          # Authentication screens
+│       │   ├── _layout.tsx    # Root layout with navigation
+│       │   └── index.tsx      # Home/Dashboard screen
+│       ├── assets/            # Fonts, images, icons
+│       ├── app.json           # Expo configuration
+│       ├── eas.json           # EAS Build configuration
+│       └── metro.config.js    # Metro bundler configuration
+│
+├── libs/
+│   ├── core/                   # 🎯 Core business logic & models
+│   │   ├── domain-models/     # TypeScript types, interfaces, domain entities
+│   │   │   └── src/
+│   │   │       ├── lib/
+│   │   │       │   ├── models.ts       # Core domain models
+│   │   │       │   ├── types.ts        # Shared type definitions
+│   │   │       │   ├── mockData.ts     # Mock data for development
+│   │   │       │   └── mockProfiles.ts # User profile mocks
+│   │   │       └── index.ts
+│   │   │
+│   │   └── utils/             # Platform-agnostic utility functions
+│   │       └── src/
+│   │           ├── lib/utils.ts
+│   │           └── index.ts
+│   │
+│   ├── data-access/            # 🔌 Backend integrations & services
+│   │   ├── api/               # API clients and services
+│   │   │   └── src/
+│   │   │       ├── lib/
+│   │   │       │   ├── propertyService.ts
+│   │   │       │   ├── cleaningSessionService.ts
+│   │   │       │   ├── photoProofService.ts
+│   │   │       │   ├── dashboardLayoutService.ts
+│   │   │       │   └── realtimeService.ts
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── auth/              # Authentication logic
+│   │   │   └── src/
+│   │   │       ├── lib/auth.tsx
+│   │   │       └── index.ts
+│   │   │
+│   │   └── supabase/          # Supabase-specific integration
+│   │       └── src/           # (Prepared for future expansion)
+│   │
+│   └── ui/                     # 🎨 Shared UI components & design system
+│       ├── components/         # Reusable React Native components
+│       │   └── src/
+│       │       ├── lib/
+│       │       │   ├── CustomizableDashboard.tsx
+│       │       │   ├── PropertyCard.tsx
+│       │       │   ├── CleanerDashboard.tsx
+│       │       │   └── ... (30+ components)
+│       │       └── index.ts
+│       │
+│       ├── theme/              # Design tokens, color palette (future)
+│       └── hooks/              # UI-related custom hooks (future)
+│
+├── tools/                      # 🔧 NX workspace utilities
+│   └── scripts/
+│       └── eas-build-post-install.mjs
+│
+├── scripts/                    # 📜 CI/CD and maintenance scripts
+│   ├── fix-dependencies.js
+│   ├── precheck-docs.js
+│   └── ...
+│
+├── docs/                       # 📚 Documentation
+│   └── database-setup.sql      # Database schema and setup
+│
+├── config/                     # ⚙️ Configuration files
+│   └── gluestack-ui.config.ts  # Gluestack UI theme configuration
+│
+├── e2e/                        # 🧪 End-to-end tests (Detox)
+│   ├── config.json
+│   └── init.js
+│
+├── android/                    # 🤖 Android native build
+├── ios/                        # 🍎 iOS native build
+│
+├── nx.json                     # NX workspace configuration
+├── tsconfig.base.json          # TypeScript base configuration
+├── package.json                # Root package.json
+└── metro.config.js             # Root Metro configuration
+```
+
+## 🎯 Module Architecture
+
+### Path Aliases
+
+TypeScript path aliases for clean imports:
+
+```typescript
+// Core
+import { CleaningSession, Property } from '@airbnb/core-domain-models';
+import { formatDate } from '@airbnb/core-utils';
+// Data Access
+import { propertyService } from '@airbnb/data-access-api';
+import { useAuth } from '@airbnb/data-access-auth';
+// UI
+import { PropertyCard } from '@airbnb/ui-components';
+```
+
+### Module Boundaries
+
+NX enforces strict module boundaries with tags:
+
+- **Apps** (`type:app`, `scope:mobile`): Can import from any lib
+- **Core** (`type:core`, `scope:shared`): No dependencies on other libs
+- **Data Access** (`type:data-access`, `scope:shared`): Can depend on core
+- **UI** (`type:ui`, `scope:shared`): Can depend on core and data-access
+
+### Dependency Graph
+
+```
+apps/mobile
+    ↓
+    ├─→ libs/ui/components
+    ├─→ libs/data-access/api
+    ├─→ libs/data-access/auth
+    ├─→ libs/core/domain-models
+    └─→ libs/core/utils
+
+libs/ui/components
+    ↓
+    ├─→ libs/core/domain-models
+    └─→ libs/data-access/api
+
+libs/data-access/*
+    ↓
+    └─→ libs/core/domain-models
+
+libs/core/*
+    (no dependencies)
+```
+
 ## 📋 Prerequisites
 
-- Node.js 18+ and npm/yarn
-- Expo CLI (`npm install -g @expo/cli`)
-- iOS Simulator (for iOS development)
-- Android Studio (for Android development)
-- Supabase account and project
+- **Node.js** 18+ (check with `node --version`)
+- **Yarn** 1.22+ (specified in package.json)
+- **Expo CLI** (installed globally or via npx)
+- **iOS**: Xcode 14+ and iOS Simulator (macOS only)
+- **Android**: Android Studio with SDK 33+
+- **Supabase**: Account and project for backend services
 
 ## 🚀 Quick Start
 
 ### 1. Clone and Install
 
 ```bash
-git clone <repository-url>
-cd airbnb-property-manager
-npm install
+git clone https://github.com/SlySlayer32/Airbnb-App.git
+cd Airbnb-App
+yarn install
 ```
 
 ### 2. Environment Setup
 
 ```bash
 cp .env.example .env
-# Edit .env with your Supabase credentials
+# Edit .env with your Supabase credentials:
+# EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+# EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 3. Start Development Server
 
 ```bash
-npm run dev
+# Start Expo dev server
+yarn dev
+
+# Or use NX commands
+nx serve mobile
 ```
 
 ### 4. Run on Devices
 
 ```bash
-# iOS Simulator
-npm run ios
+# iOS Simulator (macOS only)
+yarn ios
+# or: nx run mobile:run-ios
 
 # Android Emulator
-npm run android
+yarn android
+# or: nx run mobile:run-android
 
-# Web Browser
-npm run web
+# Expo Go app (scan QR code)
+yarn start
 ```
 
-## 📁 Project Structure
+## 🔧 Development
 
-```
-├── app/                    # Expo Router pages
-│   ├── auth/              # Authentication screens
-│   ├── properties.tsx     # Property management
-│   ├── maintenance.tsx    # Maintenance tracking
-│   └── ...
-├── components/            # Reusable UI components
-├── contexts/             # React contexts
-├── services/             # Business logic and API calls
-├── types/                # TypeScript type definitions
-├── utils/                 # Utility functions
-├── data/                  # Mock data and constants
-└── assets/               # Images, fonts, etc.
-```
-
-## 🧪 Testing
-
-### Unit Tests
-```bash
-npm run test
-npm run test:watch
-npm run test:coverage
-```
-
-### E2E Tests
-```bash
-npm run test:e2e:build
-npm run test:e2e
-```
-
-## 🔧 Development Scripts
+### Common Commands
 
 ```bash
 # Development
-npm run dev              # Start development server
-npm run dev:clean        # Start with clean cache
-npm run dev:tunnel       # Start with tunnel for external access
+yarn dev                 # Start with clean cache
+yarn start               # Start Expo server
+nx serve mobile          # NX serve command
 
-# Building
-npm run build            # Build for all platforms
-npm run build:web        # Build for web only
-npm run prebuild         # Generate native code
+# Building & Testing
+yarn lint                # Run ESLint
+yarn lint:fix            # Auto-fix linting issues
+yarn type-check          # TypeScript type checking
+yarn test                # Run Jest tests
+yarn test:watch          # Watch mode
+yarn test:coverage       # Generate coverage report
+yarn test:e2e            # Run Detox E2E tests
 
-# Code Quality
-npm run lint             # Run ESLint
-npm run lint:fix         # Fix ESLint issues
-npm run format           # Format with Prettier
-npm run type-check       # TypeScript type checking
-npm run validate         # Run all quality checks
-
-# Platform Specific
-npm run ios              # Run on iOS
-npm run android          # Run on Android
-npm run web              # Run on Web
+# NX Commands
+nx graph                 # View dependency graph
+nx lint mobile           # Lint mobile app
+nx test mobile           # Test mobile app
+nx run-many -t lint      # Lint all projects
+nx affected:test         # Test affected projects
 
 # Production Builds
-npm run ios:release      # Build iOS for production
-npm run android:release  # Build Android for production
+yarn build               # Export for all platforms
+yarn prebuild            # Generate native code
+nx build mobile          # NX build command
 
-# Utilities
-npm run clean            # Clean all caches
-npm run doctor           # Check project health
-npm run update:check     # Check for dependency updates
+# EAS Builds (Expo Application Services)
+eas build --platform ios --profile production
+eas build --platform android --profile production
+eas submit --platform ios
+eas submit --platform android
 ```
 
-## 🏗 Production Deployment
+### Code Quality
 
-### EAS Build
+This project uses:
+
+- **ESLint**: Enforces code style and catches errors
+- **Prettier**: Automatic code formatting
+- **Husky**: Pre-commit hooks for quality checks
+- **lint-staged**: Run linters on staged files only
+
+Before committing:
 
 ```bash
-# Install EAS CLI
-npm install -g eas-cli
-
-# Login to Expo
-eas login
-
-# Configure project
-eas build:configure
-
-# Build for production
-eas build --platform all --profile production
+yarn validate   # Runs type-check + lint + format + tests
 ```
 
-### App Store Deployment
+### Adding New Libraries
+
+```bash
+# Generate a new library
+nx g @nx/react-native:lib my-lib --directory=libs/feature
+
+# Generate a new component
+nx g @nx/react-native:component Button --project=ui-components
+```
+
+## 📱 Mobile App Structure
+
+### Screens Organization (Future)
+
+The mobile app will be reorganized into:
+
+```
+apps/mobile/app/
+├── screens/          # Screen components
+│   ├── HomeScreen.tsx
+│   ├── PropertyScreen.tsx
+│   └── ...
+├── components/       # App-specific components
+├── navigation/       # Navigation configuration
+├── hooks/           # App-level custom hooks
+├── _layout.tsx      # Root layout
+└── index.tsx        # Entry screen
+```
+
+### Navigation
+
+Uses **Expo Router** for file-based routing:
+
+- File structure determines routes
+- Automatic deep linking
+- Type-safe navigation
+- Native navigation on iOS/Android
+
+## 🗄️ Backend & Database
+
+### Supabase Integration
+
+Supabase provides:
+
+- **Authentication**: Email/password, OAuth, magic links
+- **PostgreSQL Database**: Realtime database with RLS
+- **Storage**: File uploads and management
+- **Realtime**: WebSocket subscriptions
+- **Edge Functions**: Serverless functions
+
+Database schema in: `docs/database-setup.sql`
+
+### Environment Variables
+
+```env
+# Required
+EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+
+# Optional
+EXPO_PUBLIC_APP_NAME=Airbnb Property Manager
+EXPO_PUBLIC_ENVIRONMENT=development
+EXPO_PUBLIC_ENABLE_ANALYTICS=false
+EXPO_PUBLIC_ENABLE_CRASH_REPORTING=false
+```
+
+## 🧪 Testing Strategy
+
+### Unit & Integration Tests (Jest)
+
+```bash
+# Run all tests
+yarn test
+
+# Watch mode
+yarn test:watch
+
+# Coverage report
+yarn test:coverage
+
+# Test specific project
+nx test core-domain-models
+nx test ui-components
+```
+
+### E2E Tests (Detox)
+
+```bash
+# Build test app
+yarn test:e2e:build
+
+# Run E2E tests
+yarn test:e2e
+
+# iOS specific
+detox test --configuration ios.sim.debug
+
+# Android specific
+detox test --configuration android.emu.debug
+```
+
+## 📦 Build & Deployment
+
+### Development Builds
+
+```bash
+# iOS Development Build
+eas build --profile development --platform ios
+
+# Android Development Build
+eas build --profile development --platform android
+```
+
+### Production Builds
+
+```bash
+# iOS Production
+eas build --profile production --platform ios
+
+# Android Production
+eas build --profile production --platform android
+
+# Both platforms
+eas build --profile production --platform all
+```
+
+### App Store Submission
 
 ```bash
 # Submit to App Store
@@ -178,101 +442,82 @@ eas submit --platform ios --profile production
 eas submit --platform android --profile production
 ```
 
-## 🔐 Environment Variables
+## 🎨 Styling & Theming
 
-Create a `.env` file based on `.env.example`:
+### Gluestack UI
 
-```env
-# Supabase Configuration
-EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+Configuration in `config/gluestack-ui.config.ts`:
 
-# App Configuration
-EXPO_PUBLIC_APP_NAME=Airbnb Property Manager
-EXPO_PUBLIC_ENVIRONMENT=development
+- Custom color palette
+- Typography scale
+- Spacing system
+- Component variants
 
-# Feature Flags
-EXPO_PUBLIC_ENABLE_ANALYTICS=false
-EXPO_PUBLIC_ENABLE_CRASH_REPORTING=false
-```
+### NativeWind
 
-## 📱 Platform Support
+Tailwind CSS for React Native:
 
-- **iOS**: 13.0+
-- **Android**: API 21+ (Android 5.0)
-- **Web**: Modern browsers with ES2022 support
-
-## 🎨 UI Components
-
-This project uses **Gluestack UI** for consistent, accessible components across platforms:
-
-- Universal compatibility (iOS, Android, Web)
-- WCAG 2.1 AA accessibility compliance
-- Dark mode support
+- Utility-first styling
 - Responsive design
-- TypeScript support
+- Dark mode support
 
-## 🔄 State Management
+## 🔒 Security Best Practices
 
-### Server State (TanStack Query)
-```typescript
-const { data, isLoading, error } = useQuery({
-  queryKey: ['properties'],
-  queryFn: fetchProperties,
-});
-```
+- **Environment Variables**: Never commit `.env` files
+- **Secrets**: Use Expo Secure Store for sensitive data
+- **Authentication**: Supabase with Row Level Security (RLS)
+- **Input Validation**: Zod schemas for all forms
+- **HTTPS Only**: All API calls over secure connections
 
-### Client State (Zustand)
-```typescript
-const useAppStore = create((set) => ({
-  theme: 'light',
-  setTheme: (theme) => set({ theme }),
-}));
-```
+## 📖 Additional Documentation
 
-## 📊 Performance
-
-- **Bundle Analysis**: `npm run analyze:bundle`
-- **Performance Monitoring**: Built-in React Native performance tools
-- **Memory Optimization**: Efficient list rendering with FlashList
-- **Image Optimization**: Expo Image with WebP support
-
-## 🛡 Security
-
-- **Secure Storage**: Expo Secure Store for sensitive data
-- **Biometric Authentication**: Face ID / Touch ID support
-- **Environment Variables**: Secure configuration management
-- **Input Validation**: Zod schemas for all data validation
+- [NX Documentation](https://nx.dev)
+- [Expo Documentation](https://docs.expo.dev)
+- [React Native](https://reactnative.dev)
+- [Supabase Documentation](https://supabase.com/docs)
+- [TypeScript](https://www.typescriptlang.org/docs)
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes following the code style
+4. Run tests and linting (`yarn validate`)
+5. Commit your changes (commitlint enforces conventional commits)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-### Code Standards
+### Commit Convention
 
-- Follow TypeScript strict mode
-- Use ESLint and Prettier configurations
-- Write tests for new features
-- Follow conventional commit messages
-- Ensure accessibility compliance
+This project uses [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: add new property filter
+fix: resolve crash on Android
+docs: update README with new structure
+chore: update dependencies
+test: add tests for cleaning service
+refactor: reorganize mobile app structure
+```
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
-
-- **Documentation**: Check the `/docs` folder
-- **Issues**: Create an issue on GitHub
-- **Discussions**: Use GitHub Discussions for questions
-
 ## 🙏 Acknowledgments
 
-- Expo team for the amazing development platform
-- Gluestack UI for the universal component library
-- Supabase for the backend infrastructure
-- React Native community for continuous improvements
+- **Expo Team**: For the amazing development platform
+- **NX Team**: For powerful monorepo tools
+- **Gluestack UI**: For the universal component library
+- **Supabase**: For the backend infrastructure
+- **React Native Community**: For continuous improvements and support
+
+## 🆘 Support
+
+- **Issues**: [GitHub Issues](https://github.com/SlySlayer32/Airbnb-App/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/SlySlayer32/Airbnb-App/discussions)
+- **Documentation**: See `/docs` folder for detailed guides
+
+---
+
+**Built with ❤️ using React Native, Expo, and NX**

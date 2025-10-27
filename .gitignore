@@ -212,3 +212,4 @@ LICENSE
 # Nx generated graph
 project-graph.html
 project-graph-current.html
+project-graph-*.html

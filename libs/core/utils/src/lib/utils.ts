@@ -1,4 +1,4 @@
-import { ComponentLibraryItem, UserRole } from '@airbnb/core-models';
+import { ComponentLibraryItem, UserRole } from '@airbnb/core-domain-models';
 
 // Component Library Constants
 export const COMPONENT_LIBRARY: ComponentLibraryItem[] = [
