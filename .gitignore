@@ -196,7 +196,7 @@ yarn-error.*
 
 # Package manager files
 package-lock.json
-yarn.lock
+# yarn.lock - SHOULD be committed for reproducible builds in monorepo
 pnpm-lock.yaml
 
 # Documentation that shouldn't be tracked
