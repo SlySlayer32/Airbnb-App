@@ -1,0 +1,27 @@
+// Markdownlint configuration for consistent Markdown style
+// See: https://github.com/DavidAnson/markdownlint
+{
+  // General alignment with Prettier for Markdown
+  // Let Prettier handle wrapping; avoid noisy line-length errors
+  "MD013": {
+    "line_length": 100,
+    "code_blocks": false,
+    "tables": false,
+    "ignore_code_languages": ["mermaid"],
+  },
+
+  // Allow inline HTML when needed (docs often embed custom markup)
+  "MD033": false,
+
+  // List indentation: 2 spaces (common Prettier output)
+  "MD007": { "indent": 2 },
+
+  // Ordered list numbering: always start at 1
+  "MD029": { "style": "one" },
+
+  // Allow bare URLs since Prettier often preserves them
+  "MD034": false,
+
+  // Limit consecutive blank lines
+  "MD012": { "maximum": 1 },
+}

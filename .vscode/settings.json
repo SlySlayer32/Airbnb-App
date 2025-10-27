@@ -40,6 +40,12 @@
   "typescript.preferences.includePackageJsonAutoImports": "auto",
   "javascript.preferences.includePackageJsonAutoImports": "auto",
 
+  // Language-specific: ensure Prettier formats Markdown files
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
   // ========================================
   // COMPLETE GITHUB COPILOT SETTINGS REFERENCE
   // Source: https://code.visualstudio.com/docs/copilot/reference/copilot-settings
