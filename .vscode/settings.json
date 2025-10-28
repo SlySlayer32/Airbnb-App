@@ -112,10 +112,10 @@
   // Chat Tools & Terminal
   "chat.tools.terminal.autoReplyToPrompts": false,
   "chat.useAgentsMdFile": true,
-  "chat.math.enabled": false,
+  "chat.math.enabled": true,
 
   // Chat Code Search (Preview)
-  "github.copilot.chat.codesearch.enabled": false,
+  "github.copilot.chat.codesearch.enabled": true,
 
   // Chat Experimental
   "chat.emptyState.history.enabled": false,
