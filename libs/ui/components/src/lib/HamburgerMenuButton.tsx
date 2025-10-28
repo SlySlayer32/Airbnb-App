@@ -1,13 +1,16 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface HamburgerMenuButtonProps {
   isOpen: boolean;
   onPress: () => void;
 }
 
-export default function HamburgerMenuButton({ isOpen, onPress }: HamburgerMenuButtonProps) {
+export default function HamburgerMenuButton({
+  isOpen,
+  onPress,
+}: HamburgerMenuButtonProps) {
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -32,7 +35,9 @@ export default function HamburgerMenuButton({ isOpen, onPress }: HamburgerMenuBu
     <Pressable
       style={styles.container}
       onPress={onPress}
-      accessibilityLabel={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+      accessibilityLabel={
+        isOpen ? 'Close navigation menu' : 'Open navigation menu'
+      }
       accessibilityRole="button"
       accessibilityHint="Opens or closes the navigation menu"
     >
@@ -71,4 +76,3 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
-

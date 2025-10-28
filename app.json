@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.airbnb.propertymanager",
@@ -25,9 +23,7 @@
         "NSLocationWhenInUseUsageDescription": "This app needs location access to show nearby properties and services.",
         "NSMicrophoneUsageDescription": "This app needs microphone access for voice notes and communication features."
       },
-      "associatedDomains": [
-        "applinks:airbnb-property-manager.com"
-      ]
+      "associatedDomains": ["applinks:airbnb-property-manager.com"]
     },
     "android": {
       "package": "com.airbnb.propertymanager",
@@ -59,10 +55,7 @@
               "host": "airbnb-property-manager.com"
             }
           ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
+          "category": ["BROWSABLE", "DEFAULT"]
         }
       ]
     },

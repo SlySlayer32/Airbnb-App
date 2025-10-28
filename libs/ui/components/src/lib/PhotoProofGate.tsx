@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
   ActivityIndicator,
-  Image
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PhotoProofService } from '../services/photoProofService';
-import { 
-  PhotoProofRequirement, 
-  PhotoProofStatus, 
-  PhotoCaptureResult 
+import {
+  PhotoCaptureResult,
+  PhotoProofRequirement,
+  PhotoProofStatus,
 } from '../types';
 
 interface PhotoProofGateProps {
@@ -27,7 +27,7 @@ interface PhotoProofGateProps {
 
 /**
  * PhotoProofGate Component - Ensures cleaning completion with photo evidence
- * 
+ *
  * Business Purpose: Blocks session completion until required photos are captured,
  * providing property owners with visual proof of completed cleaning work.
  */
@@ -36,7 +36,7 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
   sessionType,
   propertyRooms,
   onPhotoProofComplete,
-  onCompleteSession
+  onCompleteSession,
 }) => {
   const [photoStatus, setPhotoStatus] = useState<PhotoProofStatus | null>(null);
   const [requirements, setRequirements] = useState<PhotoProofRequirement[]>([]);
@@ -52,17 +52,18 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
     try {
       setLoading(true);
       setError(null);
-      
+
       // Generate requirements for this session
-      const generatedRequirements = await PhotoProofService.generatePhotoRequirements(
-        sessionId, 
-        sessionType, 
-        propertyRooms
-      );
-      
+      const generatedRequirements =
+        await PhotoProofService.generatePhotoRequirements(
+          sessionId,
+          sessionType,
+          propertyRooms
+        );
+
       // Get current status
       const status = await PhotoProofService.getPhotoProofStatus(sessionId);
-      
+
       setRequirements(generatedRequirements);
       setPhotoStatus(status);
       onPhotoProofComplete(status.is_complete);
@@ -95,19 +96,23 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
 
         if (success) {
           // Update local state
-          const updatedRequirements = requirements.map(req => 
-            req.id === requirement.id 
+          const updatedRequirements = requirements.map(req =>
+            req.id === requirement.id
               ? { ...req, is_completed: true, photo_url: result.photo_url }
               : req
           );
-          
+
           setRequirements(updatedRequirements);
-          
+
           // Recalculate status
-          const totalRequired = updatedRequirements.filter(req => req.is_required).length;
-          const totalCompleted = updatedRequirements.filter(req => req.is_completed).length;
+          const totalRequired = updatedRequirements.filter(
+            req => req.is_required
+          ).length;
+          const totalCompleted = updatedRequirements.filter(
+            req => req.is_completed
+          ).length;
           const isComplete = totalCompleted >= totalRequired;
-          
+
           setPhotoStatus({
             session_id: sessionId,
             total_required: totalRequired,
@@ -116,11 +121,11 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
             missing_categories: updatedRequirements
               .filter(req => req.is_required && !req.is_completed)
               .map(req => req.category),
-            requirements: updatedRequirements
+            requirements: updatedRequirements,
           });
-          
+
           onPhotoProofComplete(isComplete);
-          
+
           Alert.alert(
             'Photo Captured!',
             `Photo for ${requirement.area_name} has been captured successfully.`
@@ -142,26 +147,24 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
   const handleCompleteSession = async () => {
     try {
       const validation = await PhotoProofService.validatePhotoProof(sessionId);
-      
+
       if (validation.can_complete_session) {
         Alert.alert(
           'Complete Session',
           'All required photos have been captured. Are you sure you want to complete this session?',
           [
             { text: 'Cancel', style: 'cancel' },
-            { 
-              text: 'Complete', 
+            {
+              text: 'Complete',
               style: 'default',
-              onPress: onCompleteSession
-            }
+              onPress: onCompleteSession,
+            },
           ]
         );
       } else {
-        Alert.alert(
-          'Photos Required',
-          validation.validation_message,
-          [{ text: 'OK' }]
-        );
+        Alert.alert('Photos Required', validation.validation_message, [
+          { text: 'OK' },
+        ]);
       }
     } catch (err) {
       setError('Failed to validate photo proof');
@@ -213,7 +216,10 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
       <View style={styles.errorContainer}>
         <Ionicons name="alert-circle-outline" size={48} color="#FF3B30" />
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadPhotoRequirements}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={loadPhotoRequirements}
+        >
           <Text style={styles.retryButtonText}>Retry</Text>
         </TouchableOpacity>
       </View>
@@ -232,28 +238,31 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
       {photoStatus && (
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View 
+            <View
               style={[
-                styles.progressFill, 
-                { width: `${Math.round((photoStatus.total_completed / photoStatus.total_required) * 100)}%` }
-              ]} 
+                styles.progressFill,
+                {
+                  width: `${Math.round((photoStatus.total_completed / photoStatus.total_required) * 100)}%`,
+                },
+              ]}
             />
           </View>
           <Text style={styles.progressText}>
-            {photoStatus.total_completed} of {photoStatus.total_required} photos captured
+            {photoStatus.total_completed} of {photoStatus.total_required} photos
+            captured
           </Text>
         </View>
       )}
 
       <ScrollView style={styles.requirementsList}>
-        {requirements.map((requirement) => (
+        {requirements.map(requirement => (
           <View key={requirement.id} style={styles.requirementCard}>
             <View style={styles.requirementHeader}>
               <View style={styles.requirementInfo}>
-                <Ionicons 
-                  name={getCategoryIcon(requirement.category)} 
-                  size={24} 
-                  color={getCategoryColor(requirement.category)} 
+                <Ionicons
+                  name={getCategoryIcon(requirement.category)}
+                  size={24}
+                  color={getCategoryColor(requirement.category)}
                 />
                 <View style={styles.requirementDetails}>
                   <Text style={styles.areaName}>{requirement.area_name}</Text>
@@ -262,7 +271,7 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
                   </Text>
                 </View>
               </View>
-              
+
               {requirement.is_completed ? (
                 <View style={styles.completedBadge}>
                   <Ionicons name="checkmark-circle" size={24} color="#34C759" />
@@ -272,7 +281,8 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
                 <TouchableOpacity
                   style={[
                     styles.captureButton,
-                    capturingPhoto === requirement.id && styles.captureButtonDisabled
+                    capturingPhoto === requirement.id &&
+                      styles.captureButtonDisabled,
                   ]}
                   onPress={() => capturePhoto(requirement)}
                   disabled={capturingPhoto === requirement.id}
@@ -291,8 +301,8 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
 
             {requirement.photo_url && (
               <View style={styles.photoPreview}>
-                <Image 
-                  source={{ uri: requirement.photo_url }} 
+                <Image
+                  source={{ uri: requirement.photo_url }}
                   style={styles.photoImage}
                   resizeMode="cover"
                 />
@@ -306,19 +316,21 @@ export const PhotoProofGate: React.FC<PhotoProofGateProps> = ({
         <TouchableOpacity
           style={[
             styles.completeButton,
-            (!photoStatus?.is_complete) && styles.completeButtonDisabled
+            !photoStatus?.is_complete && styles.completeButtonDisabled,
           ]}
           onPress={handleCompleteSession}
           disabled={!photoStatus?.is_complete}
         >
-          <Text style={[
-            styles.completeButtonText,
-            (!photoStatus?.is_complete) && styles.completeButtonTextDisabled
-          ]}>
+          <Text
+            style={[
+              styles.completeButtonText,
+              !photoStatus?.is_complete && styles.completeButtonTextDisabled,
+            ]}
+          >
             Complete Session
           </Text>
         </TouchableOpacity>
-        
+
         {!photoStatus?.is_complete && (
           <Text style={styles.completionHint}>
             Complete all required photos to finish the session

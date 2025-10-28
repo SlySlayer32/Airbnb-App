@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@airbnb/data-access-auth';
 import { getAllMockProfiles } from '@airbnb/core-domain-models';
+import { useAuth } from '@airbnb/data-access-auth';
 
 interface DebugInfo {
   timestamp: string;
@@ -19,7 +19,7 @@ interface DebugInfo {
     loading: boolean;
     user: boolean;
     profile: boolean;
-    profileRole?: string;
+    profileRole?: string | undefined;
   };
   environment: {
     supabaseConfigured: boolean;
@@ -31,7 +31,7 @@ interface DebugInfo {
   };
   system: {
     platform: string;
-    userAgent?: string;
+    userAgent?: string | undefined;
   };
 }
 

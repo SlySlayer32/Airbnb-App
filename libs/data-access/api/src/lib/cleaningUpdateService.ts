@@ -15,12 +15,12 @@ export interface CleaningUpdate {
     | 'session_resume'
     | 'session_complete';
   message: string;
-  photo_urls?: string[];
+  photo_urls?: string[] | undefined;
   requires_response: boolean;
   is_urgent: boolean;
   created_at: string;
-  user_name?: string;
-  user_role?: string;
+  user_name?: string | undefined;
+  user_role?: string | undefined;
 }
 
 export const cleaningUpdateService = {
@@ -29,9 +29,9 @@ export const cleaningUpdateService = {
     updateData: {
       update_type: CleaningUpdate['update_type'];
       message: string;
-      photo_urls?: string[];
-      requires_response?: boolean;
-      is_urgent?: boolean;
+      photo_urls?: string[] | undefined;
+      requires_response?: boolean | undefined;
+      is_urgent?: boolean | undefined;
     }
   ): Promise<CleaningUpdate> {
     const {

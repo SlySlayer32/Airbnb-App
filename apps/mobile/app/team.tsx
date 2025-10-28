@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import TeamMemberCard from '../components/TeamMemberCard';
 import { teamMembers } from '../data/mockData';
 
@@ -8,17 +15,30 @@ export default function TeamScreen() {
   const [filterRole, setFilterRole] = useState<string>('all');
 
   const filteredMembers = teamMembers.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         member.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filterRole === 'all' || member.role === filterRole;
     return matchesSearch && matchesFilter;
   });
 
   const roleFilters = [
     { key: 'all', label: 'All Team', count: teamMembers.length },
-    { key: 'cleaner', label: 'Cleaners', count: teamMembers.filter(m => m.role === 'cleaner').length },
-    { key: 'cohost', label: 'Co-hosts', count: teamMembers.filter(m => m.role === 'cohost').length },
-    { key: 'contractor', label: 'Contractors', count: teamMembers.filter(m => m.role === 'contractor').length },
+    {
+      key: 'cleaner',
+      label: 'Cleaners',
+      count: teamMembers.filter(m => m.role === 'cleaner').length,
+    },
+    {
+      key: 'cohost',
+      label: 'Co-hosts',
+      count: teamMembers.filter(m => m.role === 'cohost').length,
+    },
+    {
+      key: 'contractor',
+      label: 'Contractors',
+      count: teamMembers.filter(m => m.role === 'contractor').length,
+    },
   ];
 
   return (
@@ -30,21 +50,27 @@ export default function TeamScreen() {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-          {roleFilters.map((filter) => (
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtersContainer}
+        >
+          {roleFilters.map(filter => (
             <TouchableOpacity
               key={filter.key}
               style={[
                 styles.filterButton,
-                filterRole === filter.key && styles.filterButtonActive
+                filterRole === filter.key && styles.filterButtonActive,
               ]}
               onPress={() => setFilterRole(filter.key)}
             >
-              <Text style={[
-                styles.filterText,
-                filterRole === filter.key && styles.filterTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.filterText,
+                  filterRole === filter.key && styles.filterTextActive,
+                ]}
+              >
                 {filter.label} ({filter.count})
               </Text>
             </TouchableOpacity>
@@ -62,13 +88,9 @@ export default function TeamScreen() {
         <Text style={styles.resultsText}>
           {filteredMembers.length} team members
         </Text>
-        
-        {filteredMembers.map((member) => (
-          <TeamMemberCard
-            key={member.id}
-            member={member}
-            onPress={() => {}}
-          />
+
+        {filteredMembers.map(member => (
+          <TeamMemberCard key={member.id} member={member} onPress={() => {}} />
         ))}
       </View>
     </ScrollView>

@@ -32,10 +32,7 @@ module.exports = {
     '!**/.expo/**',
     '!**/web-build/**',
   ],
-  testMatch: [
-    '**/__tests__/**/*.test.ts?(x)',
-    '**/?(*.)+(spec|test).ts?(x)',
-  ],
+  testMatch: ['**/__tests__/**/*.test.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.expo/',
@@ -44,12 +41,7 @@ module.exports = {
     '/coverage/',
   ],
   coverageDirectory: 'coverage',
-  coverageReporters: [
-    'text',
-    'lcov',
-    'html',
-    'json-summary',
-  ],
+  coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
   coverageThreshold: {
     global: {
       branches: 70,
@@ -73,5 +65,3 @@ module.exports = {
     },
   },
 };
-
-

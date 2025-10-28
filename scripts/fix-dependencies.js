@@ -21,7 +21,7 @@ function runCommand(command, description, options = {}) {
     execSync(command, {
       stdio: 'inherit',
       shell: isWindows,
-      ...options
+      ...options,
     });
     console.log(`✅ ${description} completed\n`);
   } catch (error) {
@@ -57,7 +57,9 @@ function safeRemove(target, description) {
 
 // Check if we're in the right directory
 if (!fs.existsSync('package.json')) {
-  console.error('❌ package.json not found. Please run this script from the project root.');
+  console.error(
+    '❌ package.json not found. Please run this script from the project root.'
+  );
   process.exit(1);
 }
 
@@ -74,13 +76,19 @@ safeRemove('pnpm-lock.yaml', 'Removing pnpm-lock.yaml');
 console.log('🧹 Clearing caches...');
 
 // Clear npm cache
-runCommand('npm cache clean --force', 'Clearing npm cache', { continueOnError: true });
+runCommand('npm cache clean --force', 'Clearing npm cache', {
+  continueOnError: true,
+});
 
 // Clear yarn cache if yarn is available
-runCommand('yarn cache clean', 'Clearing yarn cache', { continueOnError: true });
+runCommand('yarn cache clean', 'Clearing yarn cache', {
+  continueOnError: true,
+});
 
 // Clear Expo cache
-runCommand('npx expo install --fix', 'Fixing Expo dependencies', { continueOnError: true });
+runCommand('npx expo install --fix', 'Fixing Expo dependencies', {
+  continueOnError: true,
+});
 
 // Clear Metro cache
 const metroCacheDir = path.join(os.homedir(), '.metro');
@@ -92,11 +100,21 @@ safeRemove(expoCacheDir, 'Clearing Expo cache');
 
 // Clear React Native cache
 if (isWindows) {
-  runCommand('rmdir /s /q %TEMP%\\react-*', 'Clearing React Native temp files', { continueOnError: true });
-  runCommand('rmdir /s /q %TEMP%\\metro-*', 'Clearing Metro temp files', { continueOnError: true });
+  runCommand(
+    'rmdir /s /q %TEMP%\\react-*',
+    'Clearing React Native temp files',
+    { continueOnError: true }
+  );
+  runCommand('rmdir /s /q %TEMP%\\metro-*', 'Clearing Metro temp files', {
+    continueOnError: true,
+  });
 } else {
-  runCommand('rm -rf $TMPDIR/react-*', 'Clearing React Native temp files', { continueOnError: true });
-  runCommand('rm -rf $TMPDIR/metro-*', 'Clearing Metro temp files', { continueOnError: true });
+  runCommand('rm -rf $TMPDIR/react-*', 'Clearing React Native temp files', {
+    continueOnError: true,
+  });
+  runCommand('rm -rf $TMPDIR/metro-*', 'Clearing Metro temp files', {
+    continueOnError: true,
+  });
 }
 
 // Install dependencies
@@ -105,7 +123,9 @@ runCommand('npm install', 'Installing npm dependencies');
 
 // Verify installation
 console.log('🔍 Verifying installation...');
-runCommand('npm run type-check', 'Running TypeScript type check', { continueOnError: true });
+runCommand('npm run type-check', 'Running TypeScript type check', {
+  continueOnError: true,
+});
 
 // Additional verification
 runCommand('npx expo doctor', 'Running Expo doctor', { continueOnError: true });
@@ -114,13 +134,21 @@ console.log('🎉 Dependency cleanup completed successfully!');
 console.log('\n📋 Next steps:');
 console.log('1. Run "npm run dev" to start the development server');
 console.log('2. Run "npm run validate" to check everything is working');
-console.log('3. If you encounter any issues, run "npm run doctor" for diagnostics');
+console.log(
+  '3. If you encounter any issues, run "npm run doctor" for diagnostics'
+);
 console.log('\n🔧 Platform-specific notes:');
 if (isWindows) {
-  console.log('- Windows: If you encounter permission errors, try running as Administrator');
-  console.log('- Windows: Make sure Windows Defender isn\'t blocking the operations');
+  console.log(
+    '- Windows: If you encounter permission errors, try running as Administrator'
+  );
+  console.log(
+    "- Windows: Make sure Windows Defender isn't blocking the operations"
+  );
 } else if (isMac) {
-  console.log('- macOS: If you encounter permission errors, check your npm permissions');
+  console.log(
+    '- macOS: If you encounter permission errors, check your npm permissions'
+  );
 } else {
   console.log('- Linux: Make sure you have proper file permissions');
 }

@@ -1,8 +1,15 @@
-import { useAuth } from '@airbnb/data-access-auth';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
-import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '@airbnb/data-access-auth';
 
 interface NavigationItem {
   id: string;
@@ -19,13 +26,37 @@ interface NavigationSidebarProps {
 
 const navigationItems: NavigationItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: 'home-outline', route: '/' },
-  { id: 'schedule', label: 'Schedule', icon: 'calendar-outline', route: '/schedule' },
-  { id: 'properties', label: 'Properties', icon: 'business-outline', route: '/properties' },
-  { id: 'maintenance', label: 'Maintenance', icon: 'construct-outline', route: '/maintenance' },
-  { id: 'profile', label: 'Profile', icon: 'person-outline', route: '/profile' },
+  {
+    id: 'schedule',
+    label: 'Schedule',
+    icon: 'calendar-outline',
+    route: '/schedule',
+  },
+  {
+    id: 'properties',
+    label: 'Properties',
+    icon: 'business-outline',
+    route: '/properties',
+  },
+  {
+    id: 'maintenance',
+    label: 'Maintenance',
+    icon: 'construct-outline',
+    route: '/maintenance',
+  },
+  {
+    id: 'profile',
+    label: 'Profile',
+    icon: 'person-outline',
+    route: '/profile',
+  },
 ];
 
-export default function NavigationSidebar({ isOpen, onClose, currentRoute }: NavigationSidebarProps) {
+export default function NavigationSidebar({
+  isOpen,
+  onClose,
+  currentRoute,
+}: NavigationSidebarProps) {
   const router = useRouter();
   const { profile } = useAuth();
   const slideAnim = useRef(new Animated.Value(-280)).current;
@@ -104,7 +135,9 @@ export default function NavigationSidebar({ isOpen, onClose, currentRoute }: Nav
           accessibilityLabel="Dismiss navigation"
           accessibilityRole="button"
         >
-          <Animated.View style={[styles.overlayContent, { opacity: overlayOpacity }]} />
+          <Animated.View
+            style={[styles.overlayContent, { opacity: overlayOpacity }]}
+          />
         </Pressable>
       )}
 
@@ -118,7 +151,10 @@ export default function NavigationSidebar({ isOpen, onClose, currentRoute }: Nav
         ]}
         accessibilityRole="menu"
       >
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           {/* User Profile Section */}
           <View style={styles.profileSection}>
             <View style={styles.avatarContainer}>
@@ -127,14 +163,19 @@ export default function NavigationSidebar({ isOpen, onClose, currentRoute }: Nav
             <Text style={styles.userName} numberOfLines={1}>
               {profile?.full_name || 'User'}
             </Text>
-            <View style={[styles.roleBadge, { backgroundColor: getRoleBadgeColor(profile?.role) }]}>
+            <View
+              style={[
+                styles.roleBadge,
+                { backgroundColor: getRoleBadgeColor(profile?.role) },
+              ]}
+            >
               <Text style={styles.roleText}>{getRoleLabel(profile?.role)}</Text>
             </View>
           </View>
 
           {/* Navigation Items */}
           <View style={styles.navSection}>
-            {navigationItems.map((item) => {
+            {navigationItems.map(item => {
               const isActive = currentRoute === item.route;
               return (
                 <Pressable
@@ -151,7 +192,12 @@ export default function NavigationSidebar({ isOpen, onClose, currentRoute }: Nav
                       color={isActive ? '#007AFF' : '#e5e7eb'}
                       style={styles.navIcon}
                     />
-                    <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>
+                    <Text
+                      style={[
+                        styles.navLabel,
+                        isActive && styles.navLabelActive,
+                      ]}
+                    >
                       {item.label}
                     </Text>
                   </View>
@@ -271,4 +317,3 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 2,
   },
 });
-

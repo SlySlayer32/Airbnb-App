@@ -7,6 +7,7 @@ This library was generated with [Nx](https://nx.dev).
 ## Purpose
 
 Foundation layer library containing:
+
 - TypeScript interfaces and types
 - Data models
 - Mock data for development

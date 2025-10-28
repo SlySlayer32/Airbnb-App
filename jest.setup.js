@@ -35,7 +35,9 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 jest.mock('./utils/supabase', () => ({
   supabase: {
     auth: {
-      getSession: jest.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+      getSession: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
       onAuthStateChange: jest.fn(() => ({
         data: { subscription: { unsubscribe: jest.fn() } },
       })),
@@ -62,4 +64,3 @@ global.console = {
   warn: jest.fn(),
   error: jest.fn(),
 };
-

@@ -1,7 +1,15 @@
-import { CleaningSession } from '@airbnb/core-domain-models';
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { CleaningSession } from '@airbnb/core-domain-models';
 import TodayJobCard from './TodayJobCard';
 
 interface TodayJobsSectionProps {
@@ -9,12 +17,19 @@ interface TodayJobsSectionProps {
   isLoading: boolean;
 }
 
-export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSectionProps) {
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
-  const [modalType, setModalType] = useState<'directions' | 'access' | 'requirements' | null>(null);
+export default function TodayJobsSection({
+  sessions,
+  isLoading,
+}: TodayJobsSectionProps) {
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
+    null
+  );
+  const [modalType, setModalType] = useState<
+    'directions' | 'access' | 'requirements' | null
+  >(null);
 
   const handleDirections = (sessionId: string) => {
-    const session = sessions.find((s) => s.id === sessionId);
+    const session = sessions.find(s => s.id === sessionId);
     if (!session) return;
 
     const property = (session as any).properties || (session as any).property;
@@ -33,7 +48,7 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
   };
 
   const handleAccessInfo = (sessionId: string) => {
-    const session = sessions.find((s) => s.id === sessionId);
+    const session = sessions.find(s => s.id === sessionId);
     if (!session) return;
 
     setSelectedSessionId(sessionId);
@@ -41,7 +56,7 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
   };
 
   const handleRequirements = (sessionId: string) => {
-    const session = sessions.find((s) => s.id === sessionId);
+    const session = sessions.find(s => s.id === sessionId);
     if (!session) return;
 
     setSelectedSessionId(sessionId);
@@ -53,7 +68,7 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
     setModalType(null);
   };
 
-  const selectedSession = sessions.find((s) => s.id === selectedSessionId);
+  const selectedSession = sessions.find(s => s.id === selectedSessionId);
 
   if (isLoading) {
     return (
@@ -87,12 +102,21 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>TODAY'S JOBS</Text>
-          <Text style={styles.subtitle}>{sessions.length} job{sessions.length !== 1 ? 's' : ''} scheduled</Text>
+          <Text style={styles.subtitle}>
+            {sessions.length} job{sessions.length !== 1 ? 's' : ''} scheduled
+          </Text>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.scrollView}
+        >
           {sessions.map((session, index) => (
-            <View key={session.id} style={[styles.cardWrapper, index === 0 && styles.firstCard]}>
+            <View
+              key={session.id}
+              style={[styles.cardWrapper, index === 0 && styles.firstCard]}
+            >
               <TodayJobCard
                 session={session}
                 isNextJob={index === 0}
@@ -106,7 +130,12 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
       </View>
 
       {/* Access Info Modal */}
-      <Modal visible={modalType === 'access'} transparent animationType="slide" onRequestClose={closeModal}>
+      <Modal
+        visible={modalType === 'access'}
+        transparent
+        animationType="slide"
+        onRequestClose={closeModal}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -116,51 +145,71 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
               </Pressable>
             </View>
 
-            {selectedSession && (() => {
-              const property = (selectedSession as any).properties || (selectedSession as any).property;
-              return (
-                <ScrollView style={styles.modalBody}>
-                  <Text style={styles.propertyName}>{property?.name || 'Property'}</Text>
-
-                  <View style={styles.infoSection}>
-                    <Text style={styles.sectionLabel}>Access Method</Text>
-                    <Text style={styles.infoText}>
-                      {property?.access_method?.replace('_', ' ').toUpperCase() || 'N/A'}
+            {selectedSession &&
+              (() => {
+                const property =
+                  (selectedSession as any).properties ||
+                  (selectedSession as any).property;
+                return (
+                  <ScrollView style={styles.modalBody}>
+                    <Text style={styles.propertyName}>
+                      {property?.name || 'Property'}
                     </Text>
-                  </View>
 
-                  {property?.access_code && (
                     <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Access Code</Text>
-                      <Text style={styles.infoText}>{property.access_code}</Text>
+                      <Text style={styles.sectionLabel}>Access Method</Text>
+                      <Text style={styles.infoText}>
+                        {property?.access_method
+                          ?.replace('_', ' ')
+                          .toUpperCase() || 'N/A'}
+                      </Text>
                     </View>
-                  )}
 
-                  {property?.access_instructions && (
-                    <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Instructions</Text>
-                      <Text style={styles.infoText}>{property.access_instructions}</Text>
-                    </View>
-                  )}
+                    {property?.access_code && (
+                      <View style={styles.infoSection}>
+                        <Text style={styles.sectionLabel}>Access Code</Text>
+                        <Text style={styles.infoText}>
+                          {property.access_code}
+                        </Text>
+                      </View>
+                    )}
 
-                  {property?.wifi_name && (
-                    <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>WiFi Network</Text>
-                      <Text style={styles.infoText}>{property.wifi_name}</Text>
-                      {property.wifi_password && (
-                        <Text style={styles.infoText}>Password: {property.wifi_password}</Text>
-                      )}
-                    </View>
-                  )}
-                </ScrollView>
-              );
-            })()}
+                    {property?.access_instructions && (
+                      <View style={styles.infoSection}>
+                        <Text style={styles.sectionLabel}>Instructions</Text>
+                        <Text style={styles.infoText}>
+                          {property.access_instructions}
+                        </Text>
+                      </View>
+                    )}
+
+                    {property?.wifi_name && (
+                      <View style={styles.infoSection}>
+                        <Text style={styles.sectionLabel}>WiFi Network</Text>
+                        <Text style={styles.infoText}>
+                          {property.wifi_name}
+                        </Text>
+                        {property.wifi_password && (
+                          <Text style={styles.infoText}>
+                            Password: {property.wifi_password}
+                          </Text>
+                        )}
+                      </View>
+                    )}
+                  </ScrollView>
+                );
+              })()}
           </View>
         </View>
       </Modal>
 
       {/* Requirements Modal */}
-      <Modal visible={modalType === 'requirements'} transparent animationType="slide" onRequestClose={closeModal}>
+      <Modal
+        visible={modalType === 'requirements'}
+        transparent
+        animationType="slide"
+        onRequestClose={closeModal}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -170,65 +219,86 @@ export default function TodayJobsSection({ sessions, isLoading }: TodayJobsSecti
               </Pressable>
             </View>
 
-            {selectedSession && (() => {
-              const property = (selectedSession as any).properties || (selectedSession as any).property;
-              return (
-                <ScrollView style={styles.modalBody}>
-                  <Text style={styles.propertyName}>{property?.name || 'Property'}</Text>
+            {selectedSession &&
+              (() => {
+                const property =
+                  (selectedSession as any).properties ||
+                  (selectedSession as any).property;
+                return (
+                  <ScrollView style={styles.modalBody}>
+                    <Text style={styles.propertyName}>
+                      {property?.name || 'Property'}
+                    </Text>
 
-                  <View style={styles.infoSection}>
-                    <Text style={styles.sectionLabel}>Guest Count</Text>
-                    <Text style={styles.infoText}>{selectedSession.guest_count || 'N/A'} guests</Text>
-                  </View>
-
-                  {selectedSession.linen_requirements && typeof selectedSession.linen_requirements === 'object' && (
                     <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Linen Requirements</Text>
+                      <Text style={styles.sectionLabel}>Guest Count</Text>
                       <Text style={styles.infoText}>
-                        • {selectedSession.guest_count * 1} bath towels
-                      </Text>
-                      <Text style={styles.infoText}>
-                        • {selectedSession.guest_count * 1} hand towels
-                      </Text>
-                      <Text style={styles.infoText}>
-                        • {selectedSession.guest_count * 2} pillow cases
-                      </Text>
-                      <Text style={styles.infoText}>
-                        • 2 kitchen towels
-                      </Text>
-                      <Text style={styles.infoText}>
-                        • 1 bath mat
+                        {selectedSession.guest_count || 'N/A'} guests
                       </Text>
                     </View>
-                  )}
 
-                  {property?.special_areas && Array.isArray(property.special_areas) && property.special_areas.length > 0 && (
-                    <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Special Areas</Text>
-                      {property.special_areas.map((area: string, index: number) => (
-                        <Text key={index} style={styles.infoText}>
-                          • {area}
+                    {selectedSession.linen_requirements &&
+                      typeof selectedSession.linen_requirements ===
+                        'object' && (
+                        <View style={styles.infoSection}>
+                          <Text style={styles.sectionLabel}>
+                            Linen Requirements
+                          </Text>
+                          <Text style={styles.infoText}>
+                            • {selectedSession.guest_count * 1} bath towels
+                          </Text>
+                          <Text style={styles.infoText}>
+                            • {selectedSession.guest_count * 1} hand towels
+                          </Text>
+                          <Text style={styles.infoText}>
+                            • {selectedSession.guest_count * 2} pillow cases
+                          </Text>
+                          <Text style={styles.infoText}>
+                            • 2 kitchen towels
+                          </Text>
+                          <Text style={styles.infoText}>• 1 bath mat</Text>
+                        </View>
+                      )}
+
+                    {property?.special_areas &&
+                      Array.isArray(property.special_areas) &&
+                      property.special_areas.length > 0 && (
+                        <View style={styles.infoSection}>
+                          <Text style={styles.sectionLabel}>Special Areas</Text>
+                          {property.special_areas.map(
+                            (area: string, index: number) => (
+                              <Text key={index} style={styles.infoText}>
+                                • {area}
+                              </Text>
+                            )
+                          )}
+                        </View>
+                      )}
+
+                    {property?.cleaning_supplies_location && (
+                      <View style={styles.infoSection}>
+                        <Text style={styles.sectionLabel}>
+                          Supplies Location
                         </Text>
-                      ))}
-                    </View>
-                  )}
+                        <Text style={styles.infoText}>
+                          {property.cleaning_supplies_location}
+                        </Text>
+                      </View>
+                    )}
 
-                  {property?.cleaning_supplies_location && (
-                    <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Supplies Location</Text>
-                      <Text style={styles.infoText}>{property.cleaning_supplies_location}</Text>
-                    </View>
-                  )}
-
-                  {selectedSession.special_requests && (
-                    <View style={styles.infoSection}>
-                      <Text style={styles.sectionLabel}>Additional Notes</Text>
-                      <Text style={styles.infoText}>{selectedSession.special_requests}</Text>
-                    </View>
-                  )}
-                </ScrollView>
-              );
-            })()}
+                    {selectedSession.special_requests && (
+                      <View style={styles.infoSection}>
+                        <Text style={styles.sectionLabel}>
+                          Additional Notes
+                        </Text>
+                        <Text style={styles.infoText}>
+                          {selectedSession.special_requests}
+                        </Text>
+                      </View>
+                    )}
+                  </ScrollView>
+                );
+              })()}
           </View>
         </View>
       </Modal>
@@ -334,4 +404,3 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
-

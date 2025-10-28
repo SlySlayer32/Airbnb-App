@@ -1,11 +1,11 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface TodoTaskItemProps {
   id: string;
   title: string;
-  isUrgent?: boolean;
+  isUrgent?: boolean | undefined;
   isCompleted: boolean;
   onToggle: (id: string) => void;
 }
@@ -21,7 +21,11 @@ export default function TodoTaskItem({
     <Pressable
       style={[styles.container, isCompleted && styles.completedContainer]}
       onPress={() => onToggle(id)}
-      accessibilityLabel={isCompleted ? `Mark ${title} as incomplete` : `Mark ${title} as complete`}
+      accessibilityLabel={
+        isCompleted
+          ? `Mark ${title} as incomplete`
+          : `Mark ${title} as complete`
+      }
       accessibilityRole="checkbox"
       accessibilityState={{ checked: isCompleted }}
     >
@@ -30,7 +34,10 @@ export default function TodoTaskItem({
       </View>
 
       <View style={styles.content}>
-        <Text style={[styles.title, isCompleted && styles.titleCompleted]} numberOfLines={2}>
+        <Text
+          style={[styles.title, isCompleted && styles.titleCompleted]}
+          numberOfLines={2}
+        >
           {title}
         </Text>
         {isUrgent && (
@@ -101,4 +108,3 @@ const styles = StyleSheet.create({
     color: '#dc2626',
   },
 });
-

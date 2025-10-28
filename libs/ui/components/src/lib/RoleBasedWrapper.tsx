@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '@airbnb/data-access-auth';
 
 interface RoleBasedWrapperProps {
@@ -8,10 +8,10 @@ interface RoleBasedWrapperProps {
   fallback?: React.ReactNode;
 }
 
-export default function RoleBasedWrapper({ 
-  children, 
-  allowedRoles, 
-  fallback 
+export default function RoleBasedWrapper({
+  children,
+  allowedRoles,
+  fallback,
 }: RoleBasedWrapperProps) {
   const { profile } = useAuth();
 
@@ -22,12 +22,14 @@ export default function RoleBasedWrapper({
   const hasAccess = allowedRoles.includes(profile.role);
 
   if (!hasAccess) {
-    return fallback || (
-      <View style={styles.restrictedContainer}>
-        <Text style={styles.restrictedText}>
-          Access restricted to your role
-        </Text>
-      </View>
+    return (
+      fallback || (
+        <View style={styles.restrictedContainer}>
+          <Text style={styles.restrictedText}>
+            Access restricted to your role
+          </Text>
+        </View>
+      )
     );
   }
 

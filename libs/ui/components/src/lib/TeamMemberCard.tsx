@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TeamMember } from '../types';
 
 interface TeamMemberCardProps {
@@ -7,13 +7,20 @@ interface TeamMemberCardProps {
   onPress: () => void;
 }
 
-export default function TeamMemberCard({ member, onPress }: TeamMemberCardProps) {
+export default function TeamMemberCard({
+  member,
+  onPress,
+}: TeamMemberCardProps) {
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'cleaner': return '#10b981';
-      case 'cohost': return '#3b82f6';
-      case 'contractor': return '#f59e0b';
-      default: return '#6b7280';
+      case 'cleaner':
+        return '#10b981';
+      case 'cohost':
+        return '#3b82f6';
+      case 'contractor':
+        return '#f59e0b';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -37,7 +44,12 @@ export default function TeamMemberCard({ member, onPress }: TeamMemberCardProps)
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.name}>{member.name}</Text>
-          <View style={[styles.role, { backgroundColor: getRoleColor(member.role) }]}>
+          <View
+            style={[
+              styles.role,
+              { backgroundColor: getRoleColor(member.role) },
+            ]}
+          >
             <Text style={styles.roleText}>{member.role}</Text>
           </View>
         </View>

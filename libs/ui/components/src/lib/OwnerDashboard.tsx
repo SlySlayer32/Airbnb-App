@@ -1,7 +1,16 @@
-import { useAuth } from '@airbnb/data-access-auth';
-import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {
+  realtimeService,
+  RealtimeSubscriptionConfig,
+} from '@/services/realtimeService';
+import { useAuth } from '@airbnb/data-access-auth';
 import DashboardStats from './DashboardStats';
 import QuickActions from './QuickActions';
 
@@ -30,7 +39,7 @@ export default function OwnerDashboard() {
           onSessionInsert: () => {},
           onSessionDelete: () => {},
           onUpdateInsert: () => {},
-          onError: handleRealtimeError
+          onError: handleRealtimeError,
         };
 
         await realtimeService.subscribe(config);
@@ -58,8 +67,12 @@ export default function OwnerDashboard() {
         }
       >
         <View style={styles.header}>
-          <Text style={styles.greeting}>Good morning, {profile?.full_name?.split(' ')[0] || 'Owner'}!</Text>
-          <Text style={styles.subtitle}>Manage your properties and cleanings</Text>
+          <Text style={styles.greeting}>
+            Good morning, {profile?.full_name?.split(' ')[0] || 'Owner'}!
+          </Text>
+          <Text style={styles.subtitle}>
+            Manage your properties and cleanings
+          </Text>
         </View>
 
         <DashboardStats />
@@ -69,7 +82,8 @@ export default function OwnerDashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
           <Text style={styles.activityText}>
-            Welcome to your dashboard! Start by adding your first property or scheduling a cleaning.
+            Welcome to your dashboard! Start by adding your first property or
+            scheduling a cleaning.
           </Text>
         </View>
       </ScrollView>
@@ -125,4 +139,3 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
 });
-

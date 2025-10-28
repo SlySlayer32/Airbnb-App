@@ -76,6 +76,10 @@ export default function OnboardingScreen() {
 
   const step = onboardingSteps[currentStep];
 
+  if (!step) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
