@@ -24,15 +24,7 @@ module.exports = function (api) {
         {
           root: ['./'],
           alias: {
-            '@': './',
-            '@/components': './components',
-            '@/contexts': './contexts',
-            '@/services': './services',
-            '@/types': './types',
-            '@/utils': './utils',
-            '@/app': './app',
-            '@/data': './data',
-            '@/constants': './constants',
+            ...require('tsconfig-paths-jest')(require('./tsconfig.json')),
           },
         },
       ],

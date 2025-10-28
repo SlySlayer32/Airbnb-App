@@ -4,11 +4,11 @@
     "slug": "airbnb-property-manager",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "../../assets/images/icon.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "airbnb-property-manager",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "../../assets/images/splash-icon.png",
+      "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -29,7 +29,7 @@
       "package": "com.airbnb.propertymanager",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "../../assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -62,7 +62,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "../../assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
@@ -80,7 +80,7 @@
       [
         "expo-notifications",
         {
-          "icon": "../../assets/images/notification-icon.png",
+          "icon": "./assets/images/notification-icon.png",
           "color": "#ffffff",
           "defaultChannel": "default"
         }
