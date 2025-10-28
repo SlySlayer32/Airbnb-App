@@ -124,6 +124,7 @@ export default function ProfileScreen() {
             <View style={styles.profileRoleContainer}>
               {['Property Owner', 'Cleaner', 'Co-Host'].map((label, index) => {
                 const value = ['property_owner', 'cleaner', 'co_host'][index];
+                if (!value) return null;
                 return (
                   <TouchableOpacity
                     key={value}

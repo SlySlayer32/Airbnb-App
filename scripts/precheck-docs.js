@@ -3,7 +3,7 @@
 /**
  * Pre-check script to validate that required documentation scripts exist
  * before running npm scripts.
- * 
+ *
  * Usage: node scripts/precheck-docs.js
  */
 
@@ -13,10 +13,7 @@ const path = require('path');
 const PROJECT_ROOT = path.join(__dirname, '..');
 const SCRIPTS_DIR = path.join(PROJECT_ROOT, 'scripts');
 
-const REQUIRED_SCRIPTS = [
-  'update-manifests.js',
-  'validate-docs.js',
-];
+const REQUIRED_SCRIPTS = ['update-manifests.js', 'validate-docs.js'];
 
 console.log('🔍 Checking documentation scripts...\n');
 
@@ -24,7 +21,7 @@ let allScriptsPresent = true;
 
 REQUIRED_SCRIPTS.forEach(script => {
   const scriptPath = path.join(SCRIPTS_DIR, script);
-  
+
   if (fs.existsSync(scriptPath)) {
     console.log(`   ✅ ${script}`);
   } else {

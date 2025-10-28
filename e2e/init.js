@@ -15,7 +15,9 @@ describe('Airbnb Property Manager E2E Tests', () => {
 
   describe('Authentication Flow', () => {
     it('should display login screen on app launch', async () => {
-      await expect(element(by.text('Welcome to Airbnb Property Manager'))).toBeVisible();
+      await expect(
+        element(by.text('Welcome to Airbnb Property Manager'))
+      ).toBeVisible();
     });
 
     it('should allow user to login with valid credentials', async () => {

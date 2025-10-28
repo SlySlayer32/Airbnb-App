@@ -7,6 +7,7 @@ This library was generated with [Nx](https://nx.dev).
 ## Purpose
 
 Data access layer library containing:
+
 - Supabase client
 - API service functions
 - Data fetching utilities

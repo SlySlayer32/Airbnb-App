@@ -1,10 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BannerStateService, BannerStateContext, BannerStateResult } from '../services/bannerStateService';
+import {
+  BannerStateContext,
+  BannerStateResult,
+  BannerStateService,
+} from '../services/bannerStateService';
 import { CleaningSession } from '../types';
 
-export type CleanerStatus = 'relax' | 'scheduled' | 'ready' | 'active' | 'break' | 'awaiting_photos' | 'day_wrap';
+export type CleanerStatus =
+  | 'relax'
+  | 'scheduled'
+  | 'ready'
+  | 'active'
+  | 'break'
+  | 'awaiting_photos'
+  | 'day_wrap';
 
 interface CleanerStatusBannerProps {
   sessions: CleaningSession[];
@@ -74,15 +85,17 @@ const statusConfig = {
   },
 };
 
-export default function CleanerStatusBanner({ 
+export default function CleanerStatusBanner({
   sessions,
   activeSession,
   nextSession,
   userRole,
   isOnline,
-  onActionPress
+  onActionPress,
 }: CleanerStatusBannerProps) {
-  const [bannerState, setBannerState] = useState<BannerStateResult | null>(null);
+  const [bannerState, setBannerState] = useState<BannerStateResult | null>(
+    null
+  );
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -102,7 +115,7 @@ export default function CleanerStatusBanner({
       activeSession,
       nextSession,
       userRole,
-      isOnline
+      isOnline,
     };
 
     const state = BannerStateService.calculateBannerState(context);
@@ -148,27 +161,25 @@ export default function CleanerStatusBanner({
   };
 
   return (
-    <View style={[
-      styles.container,
-      { 
-        backgroundColor: config.bgColor,
-        borderColor: config.borderColor,
-        borderWidth: bannerState.priority === 'urgent' ? 2 : 1,
-      }
-    ]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: config.bgColor,
+          borderColor: config.borderColor,
+          borderWidth: bannerState.priority === 'urgent' ? 2 : 1,
+        },
+      ]}
+    >
       <View style={styles.iconContainer}>
-        <Ionicons 
-          name={config.icon} 
-          size={24} 
-          color={config.textColor} 
-        />
+        <Ionicons name={config.icon} size={24} color={config.textColor} />
         {bannerState.priority === 'urgent' && (
           <View style={styles.urgentIndicator}>
             <Ionicons name="warning" size={12} color="#ef4444" />
           </View>
         )}
       </View>
-      
+
       <View style={styles.textContainer}>
         <View style={styles.titleRow}>
           <Text style={[styles.title, { color: config.textColor }]}>
@@ -180,25 +191,28 @@ export default function CleanerStatusBanner({
             </View>
           )}
         </View>
-        
-        <Text style={styles.message}>
-          {displayMessage}
-        </Text>
-        
+
+        <Text style={styles.message}>{displayMessage}</Text>
+
         {bannerState.timeRemaining && bannerState.timeRemaining > 0 && (
-          <Text style={[styles.timeText, { color: getPriorityColor(bannerState.priority) }]}>
+          <Text
+            style={[
+              styles.timeText,
+              { color: getPriorityColor(bannerState.priority) },
+            ]}
+          >
             {formatTimeRemaining(bannerState.timeRemaining)}
           </Text>
         )}
-        
+
         {bannerState.urgencyReason && (
           <Text style={styles.urgencyReason}>
             ⚠️ {bannerState.urgencyReason}
           </Text>
         )}
-        
+
         {bannerState.nextAction && (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.actionButton}
             onPress={handleActionPress}
           >

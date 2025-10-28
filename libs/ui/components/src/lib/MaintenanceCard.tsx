@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface MaintenanceCardProps {
   ticketNumber: string;
@@ -20,25 +20,35 @@ export default function MaintenanceCard({
   status,
   assignedTo,
   createdDate,
-  onPress
+  onPress,
 }: MaintenanceCardProps) {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return '#dc2626';
-      case 'high': return '#ea580c';
-      case 'medium': return '#d97706';
-      case 'low': return '#65a30d';
-      default: return '#6b7280';
+      case 'urgent':
+        return '#dc2626';
+      case 'high':
+        return '#ea580c';
+      case 'medium':
+        return '#d97706';
+      case 'low':
+        return '#65a30d';
+      default:
+        return '#6b7280';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'resolved': return '#10b981';
-      case 'in-progress': return '#3b82f6';
-      case 'open': return '#f59e0b';
-      case 'closed': return '#6b7280';
-      default: return '#6b7280';
+      case 'resolved':
+        return '#10b981';
+      case 'in-progress':
+        return '#3b82f6';
+      case 'open':
+        return '#f59e0b';
+      case 'closed':
+        return '#6b7280';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -53,7 +63,7 @@ export default function MaintenanceCard({
     const today = new Date();
     const diffTime = today.getTime() - date.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     return `${diffDays} days ago`;
@@ -64,28 +74,33 @@ export default function MaintenanceCard({
       <View style={styles.header}>
         <Text style={styles.ticketNumber}>#{ticketNumber}</Text>
         <View style={styles.badges}>
-          <View style={[styles.priority, { backgroundColor: getPriorityColor(priority) }]}>
+          <View
+            style={[
+              styles.priority,
+              { backgroundColor: getPriorityColor(priority) },
+            ]}
+          >
             <Text style={styles.priorityText}>{priority}</Text>
           </View>
-          <View style={[styles.status, { backgroundColor: getStatusColor(status) }]}>
+          <View
+            style={[styles.status, { backgroundColor: getStatusColor(status) }]}
+          >
             <Text style={styles.statusText}>{status}</Text>
           </View>
         </View>
       </View>
-      
+
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.property}>{propertyName}</Text>
-      
+
       <View style={styles.footer}>
         <View>
           <Text style={styles.assignedTo}>
             {assignedTo ? `Assigned to: ${assignedTo}` : 'Unassigned'}
           </Text>
-          <Text style={styles.date}>
-            Created {getDaysAgo(createdDate)}
-          </Text>
+          <Text style={styles.date}>Created {getDaysAgo(createdDate)}</Text>
         </View>
-        
+
         <TouchableOpacity style={styles.actionButton}>
           <Text style={styles.actionText}>View Details</Text>
         </TouchableOpacity>

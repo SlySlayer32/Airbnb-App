@@ -63,20 +63,27 @@ function checkFileExists(relativePath) {
  * Validate CURRENT_PHASE.json structure (if exists)
  */
 function validatePhaseJSON() {
-  const phaseFile = path.join(DOCS_ROOT, '07-project-management/phase-status.md');
+  const phaseFile = path.join(
+    DOCS_ROOT,
+    '07-project-management/phase-status.md'
+  );
 
   if (!fs.existsSync(phaseFile)) {
-    return { valid: true, data: null, note: 'Phase status is now in markdown format' };
+    return {
+      valid: true,
+      data: null,
+      note: 'Phase status is now in markdown format',
+    };
   }
 
   try {
     const content = fs.readFileSync(phaseFile, 'utf-8');
 
     // Check for key phase indicators
-    const hasPhaseInfo = content.includes('Current Phase') || content.includes('Phase Status');
+    const hasPhaseInfo =
+      content.includes('Current Phase') || content.includes('Phase Status');
 
     return { valid: true, data: { format: 'markdown', hasPhaseInfo } };
-
   } catch (error) {
     return { valid: false, error: `Error reading file: ${error.message}` };
   }
@@ -121,7 +128,9 @@ function validateDocumentation() {
 
   // Check .cursorrules exists
   console.log('\n📋 Checking .cursorrules...');
-  const cursorrulesExists = fs.existsSync(path.join(__dirname, '../.cursorrules'));
+  const cursorrulesExists = fs.existsSync(
+    path.join(__dirname, '../.cursorrules')
+  );
   if (cursorrulesExists) {
     console.log('   ✅ .cursorrules found');
   } else {

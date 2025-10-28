@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface InvoiceCardProps {
   invoiceNumber: string;
@@ -18,14 +18,18 @@ export default function InvoiceCard({
   amount,
   status,
   dueDate,
-  onPress
+  onPress,
 }: InvoiceCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid': return '#10b981';
-      case 'pending': return '#f59e0b';
-      case 'overdue': return '#ef4444';
-      default: return '#6b7280';
+      case 'paid':
+        return '#10b981';
+      case 'pending':
+        return '#f59e0b';
+      case 'overdue':
+        return '#ef4444';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -48,7 +52,7 @@ export default function InvoiceCard({
     const today = new Date();
     const diffTime = dueDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`;
     if (diffDays === 0) return 'Due today';
     return `Due in ${diffDays} days`;
@@ -58,25 +62,29 @@ export default function InvoiceCard({
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
         <Text style={styles.invoiceNumber}>#{invoiceNumber}</Text>
-        <View style={[styles.status, { backgroundColor: getStatusColor(status) }]}>
+        <View
+          style={[styles.status, { backgroundColor: getStatusColor(status) }]}
+        >
           <Text style={styles.statusText}>{status}</Text>
         </View>
       </View>
-      
+
       <Text style={styles.property}>{propertyName}</Text>
       <Text style={styles.cleaner}>{cleanerName}</Text>
-      
+
       <View style={styles.footer}>
         <View>
           <Text style={styles.amount}>{formatCurrency(amount)}</Text>
-          <Text style={[
-            styles.dueDate,
-            { color: status === 'overdue' ? '#ef4444' : '#6b7280' }
-          ]}>
+          <Text
+            style={[
+              styles.dueDate,
+              { color: status === 'overdue' ? '#ef4444' : '#6b7280' },
+            ]}
+          >
             {getDaysUntilDue(dueDate)}
           </Text>
         </View>
-        
+
         <View style={styles.actions}>
           <TouchableOpacity style={styles.actionButton}>
             <Text style={styles.actionText}>View</Text>

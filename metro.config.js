@@ -48,7 +48,7 @@ config.serializer = {
 config.server = {
   ...config.server,
   port: 8081,
-  enhanceMiddleware: (middleware) => {
+  enhanceMiddleware: middleware => {
     return (req, res, next) => {
       // Handle Windows path issues
       if (req.url && req.url.includes('%20')) {
@@ -71,7 +71,7 @@ config.cacheStores = [
 
 // Source map configuration
 config.symbolicator = {
-  customizeFrame: (frame) => {
+  customizeFrame: frame => {
     // Customize stack frame processing if needed
     return frame;
   },

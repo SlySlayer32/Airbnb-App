@@ -82,7 +82,7 @@ export class RealtimeService {
             ? `assigned_cleaner_id=eq.${teamMemberId}`
             : undefined,
         },
-        payload => {
+        (payload: { new: unknown; old: unknown }) => {
           if (this.config?.onSessionUpdate && payload.new) {
             this.config.onSessionUpdate(payload.new as CleaningSession);
           }
@@ -98,7 +98,7 @@ export class RealtimeService {
             ? `assigned_cleaner_id=eq.${teamMemberId}`
             : undefined,
         },
-        payload => {
+        (payload: { new: unknown; old: unknown }) => {
           if (this.config?.onSessionInsert && payload.new) {
             this.config.onSessionInsert(payload.new as CleaningSession);
           }
@@ -114,7 +114,7 @@ export class RealtimeService {
             ? `assigned_cleaner_id=eq.${teamMemberId}`
             : undefined,
         },
-        payload => {
+        (payload: { new: unknown; old: unknown }) => {
           if (this.config?.onSessionDelete && (payload.old as any)?.id) {
             this.config.onSessionDelete((payload.old as any).id as string);
           }

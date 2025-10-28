@@ -1,7 +1,7 @@
-import { CleaningSession } from '@airbnb/core-domain-models';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { CleaningSession } from '@airbnb/core-domain-models';
 
 interface TodayJobCardProps {
   session: CleaningSession;
@@ -63,8 +63,15 @@ export default function TodayJobCard({
           {propertyName}
         </Text>
         {session.status && (
-          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(session.status) }]}>
-            <Text style={styles.statusText}>{session.status.replace('_', ' ').toUpperCase()}</Text>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusColor(session.status) },
+            ]}
+          >
+            <Text style={styles.statusText}>
+              {session.status.replace('_', ' ').toUpperCase()}
+            </Text>
           </View>
         )}
       </View>
@@ -80,7 +87,8 @@ export default function TodayJobCard({
         <View style={styles.detailRow}>
           <Ionicons name="time-outline" size={16} color="#6b7280" />
           <Text style={styles.detailText}>
-            {formatTime(session.scheduled_cleaning_time)} - {formatTime(session.checkin_time)}
+            {formatTime(session.scheduled_cleaning_time)} -{' '}
+            {formatTime(session.checkin_time)}
           </Text>
         </View>
       </View>
@@ -209,4 +217,3 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
 });
-

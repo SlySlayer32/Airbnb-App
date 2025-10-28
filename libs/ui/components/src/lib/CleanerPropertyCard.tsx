@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { EnhancedProperty, CleaningSession } from '@airbnb/core-domain-models';
 import { cleaningSessionService } from '@/services';
+import { CleaningSession, EnhancedProperty } from '@airbnb/core-domain-models';
 import CleaningUpdates from './CleaningUpdates';
 
 interface CleanerPropertyCardProps {
@@ -10,37 +17,45 @@ interface CleanerPropertyCardProps {
   onPress: () => void;
 }
 
-export default function CleanerPropertyCard({ property, onPress }: CleanerPropertyCardProps) {
+export default function CleanerPropertyCard({
+  property,
+  onPress,
+}: CleanerPropertyCardProps) {
   const [showUpdates, setShowUpdates] = useState(false);
   const session = property.current_session;
-  
+
   const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit' 
+    return new Date(timeString).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
     });
   };
 
   const formatDate = (timeString: string) => {
-    return new Date(timeString).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
+    return new Date(timeString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
     });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return '#10b981';
-      case 'in_progress': return '#f59e0b';
-      case 'completed': return '#6b7280';
-      case 'cancelled': return '#ef4444';
-      default: return '#3b82f6';
+      case 'confirmed':
+        return '#10b981';
+      case 'in_progress':
+        return '#f59e0b';
+      case 'completed':
+        return '#6b7280';
+      case 'cancelled':
+        return '#ef4444';
+      default:
+        return '#3b82f6';
     }
   };
 
   const handleStartCleaning = async () => {
     if (!session) return;
-    
+
     try {
       await cleaningSessionService.startCleaning(session.id);
       Alert.alert('Success', 'Cleaning session started!');
@@ -55,31 +70,38 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
       'What type of issue would you like to report?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Minor Issue', 
-          onPress: () => reportIssue('minor', 'Minor maintenance or cleaning issue') 
+        {
+          text: 'Minor Issue',
+          onPress: () =>
+            reportIssue('minor', 'Minor maintenance or cleaning issue'),
         },
-        { 
-          text: 'Urgent Issue', 
-          onPress: () => reportIssue('urgent', 'Urgent issue requiring immediate attention'),
-          style: 'destructive'
+        {
+          text: 'Urgent Issue',
+          onPress: () =>
+            reportIssue('urgent', 'Urgent issue requiring immediate attention'),
+          style: 'destructive',
         },
       ]
     );
   };
 
-  const reportIssue = async (severity: 'minor' | 'urgent', description: string) => {
+  const reportIssue = async (
+    severity: 'minor' | 'urgent',
+    description: string
+  ) => {
     if (!session) return;
-    
+
     try {
-      const { cleaningUpdateService } = await import('@/services/cleaningUpdateService');
+      const { cleaningUpdateService } = await import(
+        '@/services/cleaningUpdateService'
+      );
       await cleaningUpdateService.reportIssue(session.id, {
         message: description,
-        is_urgent: severity === 'urgent'
+        is_urgent: severity === 'urgent',
       });
-      
+
       Alert.alert(
-        'Issue Reported', 
+        'Issue Reported',
         `${severity === 'urgent' ? 'Urgent issue' : 'Issue'} has been reported to the property owner.`
       );
     } catch (error) {
@@ -89,19 +111,29 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
 
   const getLinenSummary = () => {
     if (!session?.linen_requirements) return 'Standard linen set';
-    
+
     const linen = session.linen_requirements;
-    const totalSheets = linen.bed_sheets_single + linen.bed_sheets_double + linen.bed_sheets_queen + linen.bed_sheets_king;
-    const totalTowels = linen.towels_bath + linen.towels_hand + linen.towels_face;
-    
+    const totalSheets =
+      linen.bed_sheets_single +
+      linen.bed_sheets_double +
+      linen.bed_sheets_queen +
+      linen.bed_sheets_king;
+    const totalTowels =
+      linen.towels_bath + linen.towels_hand + linen.towels_face;
+
     return `${totalSheets} sheet sets, ${totalTowels} towels`;
   };
 
   const isCancelled = session?.status === 'cancelled';
-  const isShortNotice = session?.cancellation_notice_hours && session.cancellation_notice_hours < 24;
+  const isShortNotice =
+    session?.cancellation_notice_hours &&
+    session.cancellation_notice_hours < 24;
 
   return (
-    <TouchableOpacity style={[styles.card, isCancelled && styles.cancelledCard]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.card, isCancelled && styles.cancelledCard]}
+      onPress={onPress}
+    >
       {/* Cancellation Overlay */}
       {isCancelled && (
         <View style={styles.cancellationOverlay}>
@@ -116,14 +148,15 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
           </Text>
           {session?.cancelled_at && (
             <Text style={styles.cancellationTime}>
-              Cancelled: {formatDate(session.cancelled_at)} at {formatTime(session.cancelled_at)}
+              Cancelled: {formatDate(session.cancelled_at)} at{' '}
+              {formatTime(session.cancelled_at)}
             </Text>
           )}
         </View>
       )}
 
       <Image source={{ uri: property.image_url }} style={styles.image} />
-      
+
       <View style={styles.content}>
         {/* Header with property name and guest count */}
         <View style={styles.header}>
@@ -141,15 +174,21 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
           <View style={styles.timingSection}>
             <View style={styles.timeRow}>
               <Text style={styles.timeLabel}>Check-out:</Text>
-              <Text style={styles.timeValue}>{formatTime(session.checkout_time)}</Text>
+              <Text style={styles.timeValue}>
+                {formatTime(session.checkout_time)}
+              </Text>
             </View>
             <View style={styles.timeRow}>
               <Text style={styles.timeLabel}>Cleaning:</Text>
-              <Text style={styles.timeValue}>{formatTime(session.scheduled_cleaning_time)}</Text>
+              <Text style={styles.timeValue}>
+                {formatTime(session.scheduled_cleaning_time)}
+              </Text>
             </View>
             <View style={styles.timeRow}>
               <Text style={styles.timeLabel}>Next check-in:</Text>
-              <Text style={styles.timeValue}>{formatTime(session.checkin_time)}</Text>
+              <Text style={styles.timeValue}>
+                {formatTime(session.checkin_time)}
+              </Text>
             </View>
           </View>
         )}
@@ -163,45 +202,70 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
               {property.access_method?.replace('_', ' ').toUpperCase()}
             </Text>
             {property.access_code && (
-              <Text style={styles.accessCode}>Code: {property.access_code}</Text>
+              <Text style={styles.accessCode}>
+                Code: {property.access_code}
+              </Text>
             )}
           </View>
           {property.access_instructions && (
-            <Text style={styles.accessInstructions}>{property.access_instructions}</Text>
+            <Text style={styles.accessInstructions}>
+              {property.access_instructions}
+            </Text>
           )}
         </View>
 
         {/* Linen Requirements */}
         <View style={styles.linenSection}>
-          <Text style={styles.sectionTitle}>🛏️ Linen Requirements ({session?.guest_count || property.max_occupancy} guests)</Text>
+          <Text style={styles.sectionTitle}>
+            🛏️ Linen Requirements (
+            {session?.guest_count || property.max_occupancy} guests)
+          </Text>
           {session?.linen_requirements ? (
             <View style={styles.linenGrid}>
               {session.linen_requirements.bed_sheets_queen > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_queen} Queen sheets</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.bed_sheets_queen} Queen sheets
+                </Text>
               )}
               {session.linen_requirements.bed_sheets_king > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_king} King sheets</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.bed_sheets_king} King sheets
+                </Text>
               )}
               {session.linen_requirements.bed_sheets_double > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.bed_sheets_double} Double sheets</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.bed_sheets_double} Double sheets
+                </Text>
               )}
               {session.linen_requirements.pillow_cases > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.pillow_cases} Pillowcases</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.pillow_cases} Pillowcases
+                </Text>
               )}
               {session.linen_requirements.duvet_covers > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.duvet_covers} Duvet covers</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.duvet_covers} Duvet covers
+                </Text>
               )}
               {session.linen_requirements.towels_bath > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.towels_bath} Bath towels</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.towels_bath} Bath towels
+                </Text>
               )}
               {session.linen_requirements.towels_hand > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.towels_hand} Hand towels</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.towels_hand} Hand towels
+                </Text>
               )}
               {session.linen_requirements.kitchen_towels > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.kitchen_towels} Kitchen towels</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.kitchen_towels} Kitchen towels
+                </Text>
               )}
               {session.linen_requirements.bath_mats > 0 && (
-                <Text style={styles.linenItem}>• {session.linen_requirements.bath_mats} Bath mats</Text>
+                <Text style={styles.linenItem}>
+                  • {session.linen_requirements.bath_mats} Bath mats
+                </Text>
               )}
             </View>
           ) : (
@@ -214,10 +278,14 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
           <View style={styles.specialSection}>
             <Text style={styles.sectionTitle}>Special Areas</Text>
             {property.special_areas?.map((area, index) => (
-              <Text key={index} style={styles.specialArea}>• {area}</Text>
+              <Text key={index} style={styles.specialArea}>
+                • {area}
+              </Text>
             ))}
             {session?.special_requests && (
-              <Text style={styles.specialRequests}>{session.special_requests}</Text>
+              <Text style={styles.specialRequests}>
+                {session.special_requests}
+              </Text>
             )}
           </View>
         )}
@@ -237,7 +305,8 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
           <View style={styles.emergencyContact}>
             <Ionicons name="call" size={16} color="#ef4444" />
             <Text style={styles.emergencyText}>
-              Emergency: {property.emergency_contact_name} - {property.emergency_contact_phone}
+              Emergency: {property.emergency_contact_name} -{' '}
+              {property.emergency_contact_phone}
             </Text>
           </View>
         )}
@@ -246,15 +315,24 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
         {session && !isCancelled && (
           <View style={styles.actionButtons}>
             {session.status === 'confirmed' && (
-              <TouchableOpacity style={styles.startButton} onPress={handleStartCleaning}>
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={handleStartCleaning}
+              >
                 <Text style={styles.startButtonText}>Start Cleaning</Text>
               </TouchableOpacity>
             )}
-            <TouchableOpacity style={styles.issueButton} onPress={handleReportIssue}>
+            <TouchableOpacity
+              style={styles.issueButton}
+              onPress={handleReportIssue}
+            >
               <Ionicons name="warning" size={16} color="#ef4444" />
               <Text style={styles.issueButtonText}>Report Issue</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.updatesButton} onPress={() => setShowUpdates(true)}>
+            <TouchableOpacity
+              style={styles.updatesButton}
+              onPress={() => setShowUpdates(true)}
+            >
               <Ionicons name="chatbubbles" size={16} color="#007AFF" />
               <Text style={styles.updatesButtonText}>Updates</Text>
             </TouchableOpacity>
@@ -263,8 +341,15 @@ export default function CleanerPropertyCard({ property, onPress }: CleanerProper
 
         {/* Status Badge */}
         {session && (
-          <View style={[styles.statusBadge, { backgroundColor: getStatusColor(session.status) }]}>
-            <Text style={styles.statusText}>{session.status.replace('_', ' ').toUpperCase()}</Text>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusColor(session.status) },
+            ]}
+          >
+            <Text style={styles.statusText}>
+              {session.status.replace('_', ' ').toUpperCase()}
+            </Text>
           </View>
         )}
       </View>

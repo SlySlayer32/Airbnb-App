@@ -1,12 +1,12 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import TodoTaskItem from './TodoTaskItem';
 
 interface TodoTask {
   id: string;
   title: string;
-  isUrgent?: boolean;
+  isUrgent?: boolean | undefined;
   isCompleted: boolean;
 }
 
@@ -16,8 +16,12 @@ interface TodoTasksSectionProps {
   isLoading: boolean;
 }
 
-export default function TodoTasksSection({ tasks, onToggleTask, isLoading }: TodoTasksSectionProps) {
-  const completedCount = tasks.filter((task) => task.isCompleted).length;
+export default function TodoTasksSection({
+  tasks,
+  onToggleTask,
+  isLoading,
+}: TodoTasksSectionProps) {
+  const completedCount = tasks.filter(task => task.isCompleted).length;
 
   if (isLoading) {
     return (
@@ -40,7 +44,9 @@ export default function TodoTasksSection({ tasks, onToggleTask, isLoading }: Tod
         </View>
         <View style={styles.emptyContainer}>
           <Ionicons name="checkmark-circle-outline" size={48} color="#d1d5db" />
-          <Text style={styles.emptyText}>All caught up! No tasks to complete.</Text>
+          <Text style={styles.emptyText}>
+            All caught up! No tasks to complete.
+          </Text>
         </View>
       </View>
     );
@@ -56,7 +62,7 @@ export default function TodoTasksSection({ tasks, onToggleTask, isLoading }: Tod
       </View>
 
       <View style={styles.tasksList}>
-        {tasks.map((task) => (
+        {tasks.map(task => (
           <TodoTaskItem
             key={task.id}
             id={task.id}
@@ -114,4 +120,3 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
-

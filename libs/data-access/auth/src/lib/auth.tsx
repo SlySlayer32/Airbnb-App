@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log('[AuthContext] Demo Mode: Using mock data');
       }
       setIsDemoMode(true);
-      setProfile(DEFAULT_MOCK_PROFILE);
+      setProfile(DEFAULT_MOCK_PROFILE ?? null);
       setLoading(false);
       return;
     }
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           );
         }
         setIsDemoMode(true);
-        setProfile(DEFAULT_MOCK_PROFILE);
+        setProfile(DEFAULT_MOCK_PROFILE ?? null);
         setLoading(false);
       }
     }, AUTH_TIMEOUT_MS);
@@ -113,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             console.log('[AuthContext] Network error - using demo mode');
           }
           setIsDemoMode(true);
-          setProfile(DEFAULT_MOCK_PROFILE);
+          setProfile(DEFAULT_MOCK_PROFILE ?? null);
         } else if (__DEV__) {
           console.error('[AuthContext] Auth error:', error);
         }
@@ -210,7 +210,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (error) throw error;
 
-      setProfile(prev => (prev ? { ...prev, ...updates } : null));
+      setProfile((prev: Profile | null) =>
+        prev ? { ...prev, ...updates } : null
+      );
     },
     [user]
   );

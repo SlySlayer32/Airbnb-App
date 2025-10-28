@@ -7,6 +7,7 @@ This library was generated with [Nx](https://nx.dev).
 ## Purpose
 
 Presentation layer library containing:
+
 - Dumb/presentational components
 - Reusable UI elements
 - Component-specific types

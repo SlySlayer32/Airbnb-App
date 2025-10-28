@@ -2,10 +2,10 @@
 
 /**
  * Update Manifests Script
- * 
+ *
  * Scans the codebase and updates file counts in .ai/ manifest files
  * to keep documentation synchronized with actual code.
- * 
+ *
  * Usage: node scripts/update-manifests.js
  */
 
@@ -28,7 +28,7 @@ function countFiles(dir, extension) {
   if (!fs.existsSync(dir)) {
     return 0;
   }
-  
+
   const files = fs.readdirSync(dir);
   return files.filter(file => file.endsWith(extension)).length;
 }
@@ -40,16 +40,16 @@ function countFilesRecursive(dir, extension) {
   if (!fs.existsSync(dir)) {
     return 0;
   }
-  
+
   let count = 0;
-  
+
   function traverse(currentDir) {
     const files = fs.readdirSync(currentDir);
-    
+
     files.forEach(file => {
       const filePath = path.join(currentDir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory() && !file.startsWith('.')) {
         traverse(filePath);
       } else if (file.endsWith(extension)) {
@@ -57,7 +57,7 @@ function countFilesRecursive(dir, extension) {
       }
     });
   }
-  
+
   traverse(dir);
   return count;
 }
@@ -69,8 +69,9 @@ function getComponentFiles() {
   if (!fs.existsSync(COMPONENTS_DIR)) {
     return [];
   }
-  
-  return fs.readdirSync(COMPONENTS_DIR)
+
+  return fs
+    .readdirSync(COMPONENTS_DIR)
     .filter(file => file.endsWith('.tsx'))
     .map(file => file.replace('.tsx', ''));
 }
@@ -82,8 +83,9 @@ function getServiceFiles() {
   if (!fs.existsSync(SERVICES_DIR)) {
     return [];
   }
-  
-  return fs.readdirSync(SERVICES_DIR)
+
+  return fs
+    .readdirSync(SERVICES_DIR)
     .filter(file => file.endsWith('.ts') && file !== 'index.ts')
     .map(file => file.replace('.ts', ''));
 }
@@ -95,22 +97,24 @@ function getScreenFiles() {
   if (!fs.existsSync(APP_DIR)) {
     return [];
   }
-  
+
   const screens = [];
-  
+
   // Main screens
-  const mainFiles = fs.readdirSync(APP_DIR)
+  const mainFiles = fs
+    .readdirSync(APP_DIR)
     .filter(file => file.endsWith('.tsx'));
   screens.push(...mainFiles);
-  
+
   // Auth screens
   const authDir = path.join(APP_DIR, 'auth');
   if (fs.existsSync(authDir)) {
-    const authFiles = fs.readdirSync(authDir)
+    const authFiles = fs
+      .readdirSync(authDir)
       .filter(file => file.endsWith('.tsx'));
     screens.push(...authFiles.map(f => `auth/${f}`));
   }
-  
+
   return screens;
 }
 

@@ -5,16 +5,19 @@ This directory contains scripts to help resolve dependency conflicts and clean u
 ## 🚀 Quick Start
 
 ### For Windows Users
+
 ```bash
 npm run fix:dependencies:win
 ```
 
 ### For macOS/Linux Users
+
 ```bash
 npm run fix:dependencies:unix
 ```
 
 ### Cross-Platform (Auto-detects OS)
+
 ```bash
 npm run fix:dependencies
 ```
@@ -22,10 +25,12 @@ npm run fix:dependencies
 ## 📋 What These Scripts Do
 
 ### 1. **Clean Installation Files**
+
 - Removes `node_modules` directory
 - Removes lock files (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`)
 
 ### 2. **Clear All Caches**
+
 - npm cache
 - yarn cache (if available)
 - Metro bundler cache
@@ -33,24 +38,29 @@ npm run fix:dependencies
 - React Native temp files
 
 ### 3. **Fix Expo Dependencies**
+
 - Runs `npx expo install --fix` to ensure Expo packages are compatible
 
 ### 4. **Reinstall Dependencies**
+
 - Runs `npm install` to install all dependencies fresh
 
 ### 5. **Verify Installation**
+
 - Runs TypeScript type checking
 - Runs Expo doctor for diagnostics
 
 ## 🔧 Platform-Specific Features
 
 ### Windows (`fix-dependencies.bat`)
+
 - Uses Windows-native commands (`rmdir`, `del`)
 - Handles Windows path separators
 - Includes Windows-specific troubleshooting tips
 - Pauses at the end to show results
 
 ### Cross-Platform (`fix-dependencies.js`)
+
 - Auto-detects operating system
 - Uses appropriate commands for each platform
 - Handles file permissions gracefully
@@ -61,6 +71,7 @@ npm run fix:dependencies
 If the automated scripts don't work, you can run these commands manually:
 
 ### Windows
+
 ```cmd
 REM Remove files
 rmdir /s /q node_modules
@@ -77,6 +88,7 @@ npm install
 ```
 
 ### macOS/Linux
+
 ```bash
 # Remove files
 rm -rf node_modules
@@ -94,21 +106,25 @@ npm install
 ## 🚨 Troubleshooting
 
 ### Permission Errors
+
 - **Windows**: Run Command Prompt as Administrator
 - **macOS**: Check npm permissions with `npm config get prefix`
 - **Linux**: Use `sudo` if necessary, but prefer fixing npm permissions
 
 ### File Lock Errors
+
 - Close all IDEs and editors
 - Close Metro bundler (`Ctrl+C` in terminal)
 - Restart your computer if files remain locked
 
 ### Network Issues
+
 - Check your internet connection
 - Try using a different npm registry: `npm config set registry https://registry.npmjs.org/`
 - Clear DNS cache: `ipconfig /flushdns` (Windows) or `sudo dscacheutil -flushcache` (macOS)
 
 ### Expo Issues
+
 - Run `npx expo doctor` for specific Expo-related problems
 - Check Expo CLI version: `npx expo --version`
 - Update Expo CLI: `npm install -g @expo/cli`
@@ -123,6 +139,7 @@ npm install
 ## 🔄 When to Use These Scripts
 
 Use these scripts when you encounter:
+
 - Dependency version conflicts
 - Metro bundler errors
 - Expo installation issues
@@ -142,12 +159,14 @@ Use these scripts when you encounter:
 ## 🎯 Expected Results
 
 After running successfully, you should see:
+
 - ✅ All dependencies installed without conflicts
 - ✅ TypeScript compilation successful
 - ✅ Expo doctor shows no critical issues
 - ✅ Development server starts without errors
 
 If you still encounter issues after running these scripts, the problem may be:
+
 - Environment-specific (Node.js version, OS permissions)
 - Project configuration issues
 - Network/proxy issues

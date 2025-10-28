@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default function ReportsScreen() {
-  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
+  const [selectedPeriod, setSelectedPeriod] = useState<
+    'week' | 'month' | 'quarter' | 'year'
+  >('month');
 
   const periods = [
     { key: 'week', label: 'This Week' },
@@ -53,20 +61,26 @@ export default function ReportsScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Performance Reports</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.periodSelector}>
-          {periods.map((period) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.periodSelector}
+        >
+          {periods.map(period => (
             <TouchableOpacity
               key={period.key}
               style={[
                 styles.periodButton,
-                selectedPeriod === period.key && styles.periodButtonActive
+                selectedPeriod === period.key && styles.periodButtonActive,
               ]}
               onPress={() => setSelectedPeriod(period.key as any)}
             >
-              <Text style={[
-                styles.periodText,
-                selectedPeriod === period.key && styles.periodTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.periodText,
+                  selectedPeriod === period.key && styles.periodTextActive,
+                ]}
+              >
                 {period.label}
               </Text>
             </TouchableOpacity>
@@ -80,12 +94,18 @@ export default function ReportsScreen() {
           <Text style={styles.sectionTitle}>Cleaning Overview</Text>
           <View style={styles.metricsGrid}>
             <View style={styles.metricCard}>
-              <Text style={styles.metricValue}>{reportData.cleaningStats.totalCleans}</Text>
+              <Text style={styles.metricValue}>
+                {reportData.cleaningStats.totalCleans}
+              </Text>
               <Text style={styles.metricLabel}>Total Cleanings</Text>
             </View>
             <View style={styles.metricCard}>
               <Text style={[styles.metricValue, { color: '#10b981' }]}>
-                {getPercentage(reportData.cleaningStats.completedOnTime, reportData.cleaningStats.totalCleans)}%
+                {getPercentage(
+                  reportData.cleaningStats.completedOnTime,
+                  reportData.cleaningStats.totalCleans
+                )}
+                %
               </Text>
               <Text style={styles.metricLabel}>On-Time Rate</Text>
             </View>
@@ -109,12 +129,18 @@ export default function ReportsScreen() {
           <Text style={styles.sectionTitle}>Maintenance Overview</Text>
           <View style={styles.metricsGrid}>
             <View style={styles.metricCard}>
-              <Text style={styles.metricValue}>{reportData.maintenanceStats.totalTickets}</Text>
+              <Text style={styles.metricValue}>
+                {reportData.maintenanceStats.totalTickets}
+              </Text>
               <Text style={styles.metricLabel}>Total Tickets</Text>
             </View>
             <View style={styles.metricCard}>
               <Text style={[styles.metricValue, { color: '#10b981' }]}>
-                {getPercentage(reportData.maintenanceStats.resolvedTickets, reportData.maintenanceStats.totalTickets)}%
+                {getPercentage(
+                  reportData.maintenanceStats.resolvedTickets,
+                  reportData.maintenanceStats.totalTickets
+                )}
+                %
               </Text>
               <Text style={styles.metricLabel}>Resolution Rate</Text>
             </View>
@@ -140,9 +166,15 @@ export default function ReportsScreen() {
             <View key={index} style={styles.propertyCard}>
               <Text style={styles.propertyName}>{property.name}</Text>
               <View style={styles.propertyStats}>
-                <Text style={styles.propertyStat}>{property.cleans} cleans</Text>
-                <Text style={styles.propertyStat}>{formatCurrency(property.revenue)}</Text>
-                <Text style={[styles.propertyStat, { color: '#f59e0b' }]}>★ {property.rating}</Text>
+                <Text style={styles.propertyStat}>
+                  {property.cleans} cleans
+                </Text>
+                <Text style={styles.propertyStat}>
+                  {formatCurrency(property.revenue)}
+                </Text>
+                <Text style={[styles.propertyStat, { color: '#f59e0b' }]}>
+                  ★ {property.rating}
+                </Text>
               </View>
             </View>
           ))}
@@ -154,13 +186,17 @@ export default function ReportsScreen() {
           {reportData.expenses.map((expense, index) => (
             <View key={index} style={styles.expenseRow}>
               <Text style={styles.expenseCategory}>{expense.category}</Text>
-              <Text style={styles.expenseAmount}>{formatCurrency(expense.amount)}</Text>
+              <Text style={styles.expenseAmount}>
+                {formatCurrency(expense.amount)}
+              </Text>
             </View>
           ))}
           <View style={[styles.expenseRow, styles.expenseTotal]}>
             <Text style={styles.expenseTotalLabel}>Total Expenses</Text>
             <Text style={styles.expenseTotalAmount}>
-              {formatCurrency(reportData.expenses.reduce((sum, e) => sum + e.amount, 0))}
+              {formatCurrency(
+                reportData.expenses.reduce((sum, e) => sum + e.amount, 0)
+              )}
             </Text>
           </View>
         </View>

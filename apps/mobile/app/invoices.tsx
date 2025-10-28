@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import InvoiceCard from '../components/InvoiceCard';
 
 export default function InvoicesScreen() {
@@ -42,9 +48,21 @@ export default function InvoicesScreen() {
 
   const statusFilters = [
     { key: 'all', label: 'All', count: invoices.length },
-    { key: 'pending', label: 'Pending', count: invoices.filter(i => i.status === 'pending').length },
-    { key: 'overdue', label: 'Overdue', count: invoices.filter(i => i.status === 'overdue').length },
-    { key: 'paid', label: 'Paid', count: invoices.filter(i => i.status === 'paid').length },
+    {
+      key: 'pending',
+      label: 'Pending',
+      count: invoices.filter(i => i.status === 'pending').length,
+    },
+    {
+      key: 'overdue',
+      label: 'Overdue',
+      count: invoices.filter(i => i.status === 'overdue').length,
+    },
+    {
+      key: 'paid',
+      label: 'Paid',
+      count: invoices.filter(i => i.status === 'paid').length,
+    },
   ];
 
   const totalPending = invoices
@@ -60,24 +78,31 @@ export default function InvoicesScreen() {
             ${totalPending.toLocaleString()}
           </Text>
           <Text style={styles.summarySubtitle}>
-            {invoices.filter(i => i.status === 'overdue').length} overdue invoices
+            {invoices.filter(i => i.status === 'overdue').length} overdue
+            invoices
           </Text>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-          {statusFilters.map((filter) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtersContainer}
+        >
+          {statusFilters.map(filter => (
             <TouchableOpacity
               key={filter.key}
               style={[
                 styles.filterButton,
-                filterStatus === filter.key && styles.filterButtonActive
+                filterStatus === filter.key && styles.filterButtonActive,
               ]}
               onPress={() => setFilterStatus(filter.key)}
             >
-              <Text style={[
-                styles.filterText,
-                filterStatus === filter.key && styles.filterTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.filterText,
+                  filterStatus === filter.key && styles.filterTextActive,
+                ]}
+              >
                 {filter.label} ({filter.count})
               </Text>
             </TouchableOpacity>
@@ -99,7 +124,7 @@ export default function InvoicesScreen() {
           {filteredInvoices.length} invoices
         </Text>
 
-        {filteredInvoices.map((invoice) => (
+        {filteredInvoices.map(invoice => (
           <InvoiceCard
             key={invoice.id}
             invoiceNumber={invoice.invoiceNumber}

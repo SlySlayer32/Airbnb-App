@@ -1,34 +1,40 @@
 /**
  * Phase Status Updater
- * 
+ *
  * Updates docs/phase-tracking/CURRENT_PHASE.json based on project state
  * Can be run manually or integrated into CI/CD pipeline
- * 
+ *
  * Usage: node scripts/update-phase-status.js
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const PHASE_FILE = path.join(__dirname, '../docs/phase-tracking/CURRENT_PHASE.json');
+const PHASE_FILE = path.join(
+  __dirname,
+  '../docs/phase-tracking/CURRENT_PHASE.json'
+);
 
 /**
  * Counts completed issues by scanning ISSUE_AUDIT.md
  */
 function countCompletedIssues() {
-  const auditPath = path.join(__dirname, '../docs/phase-tracking/ISSUE_AUDIT.md');
-  
+  const auditPath = path.join(
+    __dirname,
+    '../docs/phase-tracking/ISSUE_AUDIT.md'
+  );
+
   if (!fs.existsSync(auditPath)) {
     console.log('⚠️  ISSUE_AUDIT.md not found');
     return { completed: 0, total: 0 };
   }
-  
+
   const content = fs.readFileSync(auditPath, 'utf-8');
-  
+
   // Count "Status**: ✅ Complete" occurrences
   const completedMatches = content.match(/Status.*:.*✅.*Complete/gi) || [];
   const completed = completedMatches.length;
-  
+
   return { completed, total: completed }; // Assuming all issues are complete for Phase 1
 }
 
@@ -48,22 +54,22 @@ function getNextStep(phase, completion) {
     return {
       recommended_next_step: 'Photo storage optimization',
       current_focus: 'Planning Phase 2 features',
-      blockers: []
+      blockers: [],
     };
   }
-  
+
   if (phase === 1) {
     return {
       recommended_next_step: 'Complete remaining Phase 1 issues',
       current_focus: 'Finishing Phase 1 MVP',
-      blockers: []
+      blockers: [],
     };
   }
-  
+
   return {
     recommended_next_step: 'Define Phase 2 scope',
     current_focus: 'Planning',
-    blockers: []
+    blockers: [],
   };
 }
 
@@ -72,7 +78,7 @@ function getNextStep(phase, completion) {
  */
 function updatePhaseStatus() {
   console.log('🔄 Updating phase status...\n');
-  
+
   // Read current phase file
   let currentPhase = {
     project: 'Airbnb Cleaning Management',
@@ -88,28 +94,28 @@ function updatePhaseStatus() {
     next_phase_name: 'Advanced Features & Polish',
     blockers: [],
     current_focus: 'Development',
-    recommended_next_step: 'Continue implementation'
+    recommended_next_step: 'Continue implementation',
   };
-  
+
   if (fs.existsSync(PHASE_FILE)) {
     const existing = JSON.parse(fs.readFileSync(PHASE_FILE, 'utf-8'));
     currentPhase = { ...currentPhase, ...existing };
   }
-  
+
   // Count issues
   const issues = countCompletedIssues();
   console.log(`📊 Issues: ${issues.completed}/${issues.total} completed`);
-  
+
   // Calculate completion
   const completion = calculateCompletion(issues);
   console.log(`📈 Completion: ${completion}%`);
-  
+
   // Determine status
   const status = completion === 100 ? 'complete' : 'in_progress';
-  
+
   // Get next steps
   const nextSteps = getNextStep(currentPhase.current_phase, completion);
-  
+
   // Update phase object
   const updatedPhase = {
     ...currentPhase,
@@ -117,18 +123,17 @@ function updatePhaseStatus() {
     status: status,
     issues_closed: issues.completed,
     issues_total: issues.total,
-    completed: status === 'complete' ? (currentPhase.completed || new Date().toISOString().split('T')[0]) : null,
+    completed:
+      status === 'complete'
+        ? currentPhase.completed || new Date().toISOString().split('T')[0]
+        : null,
     ...nextSteps,
-    last_updated: new Date().toISOString()
+    last_updated: new Date().toISOString(),
   };
-  
+
   // Write back to file
-  fs.writeFileSync(
-    PHASE_FILE, 
-    JSON.stringify(updatedPhase, null, 2),
-    'utf-8'
-  );
-  
+  fs.writeFileSync(PHASE_FILE, JSON.stringify(updatedPhase, null, 2), 'utf-8');
+
   console.log('\n✅ Phase status updated successfully!');
   console.log(`📍 Status: ${updatedPhase.status}`);
   console.log(`🎯 Next: ${updatedPhase.recommended_next_step}\n`);
@@ -145,4 +150,3 @@ if (require.main === module) {
 }
 
 module.exports = { updatePhaseStatus };
-

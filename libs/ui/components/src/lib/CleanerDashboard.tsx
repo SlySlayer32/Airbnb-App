@@ -1,9 +1,18 @@
-import { useAuth } from '@airbnb/data-access-auth';
-import { cleaningSessionService } from '@/services';
-import { realtimeService, RealtimeSubscriptionConfig } from '@/services/realtimeService';
-import { CleaningSession } from '@airbnb/core-domain-models';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { cleaningSessionService } from '@/services';
+import {
+  realtimeService,
+  RealtimeSubscriptionConfig,
+} from '@/services/realtimeService';
+import { CleaningSession } from '@airbnb/core-domain-models';
+import { useAuth } from '@airbnb/data-access-auth';
 import DashboardStats from './DashboardStats';
 import QuickActions from './QuickActions';
 import TodayJobsSection from './TodayJobsSection';
@@ -23,11 +32,36 @@ export default function CleanerDashboard() {
   const [todaySessions, setTodaySessions] = useState<CleaningSession[]>([]);
   const [isLoadingSessions, setIsLoadingSessions] = useState(true);
   const [tasks, setTasks] = useState<TodoTask[]>([
-    { id: '1', title: 'Pick up cleaning supplies from warehouse', isUrgent: true, isCompleted: false },
-    { id: '2', title: 'Submit timesheet for last week', isUrgent: false, isCompleted: false },
-    { id: '3', title: 'Check inventory before Office Complex job', isUrgent: true, isCompleted: false },
-    { id: '4', title: 'Confirm tomorrow\'s schedule', isUrgent: false, isCompleted: false },
-    { id: '5', title: 'Review eco-friendly products request for Tech Hub', isUrgent: false, isCompleted: false },
+    {
+      id: '1',
+      title: 'Pick up cleaning supplies from warehouse',
+      isUrgent: true,
+      isCompleted: false,
+    },
+    {
+      id: '2',
+      title: 'Submit timesheet for last week',
+      isUrgent: false,
+      isCompleted: false,
+    },
+    {
+      id: '3',
+      title: 'Check inventory before Office Complex job',
+      isUrgent: true,
+      isCompleted: false,
+    },
+    {
+      id: '4',
+      title: "Confirm tomorrow's schedule",
+      isUrgent: false,
+      isCompleted: false,
+    },
+    {
+      id: '5',
+      title: 'Review eco-friendly products request for Tech Hub',
+      isUrgent: false,
+      isCompleted: false,
+    },
   ]);
 
   const loadTodaySessions = async () => {
@@ -49,8 +83,8 @@ export default function CleanerDashboard() {
   };
 
   const handleToggleTask = (taskId: string) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
         task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
       )
     );
@@ -76,7 +110,7 @@ export default function CleanerDashboard() {
             loadTodaySessions();
           },
           onUpdateInsert: () => {},
-          onError: handleRealtimeError
+          onError: handleRealtimeError,
         };
 
         await realtimeService.subscribe(config);
@@ -109,15 +143,24 @@ export default function CleanerDashboard() {
         }
       >
         <View style={styles.header}>
-          <Text style={styles.greeting}>Good morning, {profile?.full_name?.split(' ')[0] || 'Cleaner'}!</Text>
+          <Text style={styles.greeting}>
+            Good morning, {profile?.full_name?.split(' ')[0] || 'Cleaner'}!
+          </Text>
           <Text style={styles.subtitle}>Your cleaning schedule for today</Text>
         </View>
 
         <DashboardStats />
 
-        <TodayJobsSection sessions={todaySessions} isLoading={isLoadingSessions} />
+        <TodayJobsSection
+          sessions={todaySessions}
+          isLoading={isLoadingSessions}
+        />
 
-        <TodoTasksSection tasks={tasks} onToggleTask={handleToggleTask} isLoading={false} />
+        <TodoTasksSection
+          tasks={tasks}
+          onToggleTask={handleToggleTask}
+          isLoading={false}
+        />
 
         <QuickActions />
 

@@ -7,6 +7,7 @@ This document provides additional architectural details for the Airbnb Property 
 ## Architecture Principles
 
 ### 1. Mobile-Only Focus
+
 - **Single Target**: Only `apps/mobile` is a runnable application
 - **Platform**: iOS and Android via React Native/Expo
 - **No Web**: Static web artifacts are build outputs, not source code
@@ -57,6 +58,7 @@ NX enforces these rules via tags in `project.json`:
 ### 3. Import Patterns
 
 #### Barrel Exports
+
 Each library exports through `src/index.ts`:
 
 ```typescript
@@ -67,6 +69,7 @@ export * from './lib/mockData';
 ```
 
 #### Path Aliases
+
 TypeScript path mappings provide clean imports:
 
 ```typescript
@@ -88,7 +91,6 @@ TypeScript path mappings provide clean imports:
 // ✅ CORRECT: Use path aliases
 import { Property } from '@airbnb/core-domain-models';
 import { PropertyCard } from '@airbnb/ui-components';
-
 // ❌ WRONG: Don't use relative paths across libs
 import { Property } from '../../../libs/core/domain-models/src/lib/models';
 ```
@@ -100,6 +102,7 @@ import { Property } from '../../../libs/core/domain-models/src/lib/models';
 **Purpose**: Domain entities, types, and interfaces
 
 **Contents**:
+
 - Core business entities (Property, CleaningSession, User, etc.)
 - TypeScript type definitions
 - Mock data for development and testing
@@ -114,16 +117,19 @@ import { Property } from '../../../libs/core/domain-models/src/lib/models';
 **Purpose**: Platform-agnostic utility functions
 
 **Contents**:
+
 - Date/time formatting
 - String manipulation
 - Data transformations
 - Validation helpers
 
-**Dependencies**: 
+**Dependencies**:
+
 - May import from `@airbnb/core-domain-models` for type safety
 - No UI or data-access dependencies
 
 **Guidelines**:
+
 - Keep platform-agnostic (Node.js compatible)
 - Pure functions preferred
 - No React or React Native specific code
@@ -133,6 +139,7 @@ import { Property } from '../../../libs/core/domain-models/src/lib/models';
 **Purpose**: API clients and backend service integrations
 
 **Contents**:
+
 - Property service
 - Cleaning session service
 - Photo proof service
@@ -140,17 +147,19 @@ import { Property } from '../../../libs/core/domain-models/src/lib/models';
 - Realtime service (Supabase subscriptions)
 
 **Dependencies**:
+
 - `@airbnb/core-domain-models` for types
 - Supabase client
 - TanStack Query hooks
 
 **Pattern**:
+
 ```typescript
 // Service exports query hooks
 export function useProperties() {
   return useQuery({
     queryKey: ['properties'],
-    queryFn: () => propertyService.getAll()
+    queryFn: () => propertyService.getAll(),
   });
 }
 ```
@@ -160,12 +169,14 @@ export function useProperties() {
 **Purpose**: Authentication logic and user session management
 
 **Contents**:
+
 - AuthContext provider
 - Login/logout/register functions
 - Session management
 - User profile access
 
 **Dependencies**:
+
 - `@airbnb/core-domain-models` for User types
 - Supabase auth client
 
@@ -176,6 +187,7 @@ export function useProperties() {
 **Status**: Directory created, not yet implemented
 
 **Planned Contents**:
+
 - Supabase client configuration
 - Database schema types
 - Storage helpers
@@ -186,6 +198,7 @@ export function useProperties() {
 **Purpose**: Reusable React Native UI components
 
 **Contents**:
+
 - Dashboard components
 - Property cards
 - Cleaning session components
@@ -193,12 +206,14 @@ export function useProperties() {
 - Modal and overlay components
 
 **Dependencies**:
+
 - `@airbnb/core-domain-models` for props types
 - `@airbnb/data-access-api` for data hooks
 - Gluestack UI components
 - NativeWind for styling
 
 **Guidelines**:
+
 - Components should be reusable
 - Accept data via props, not fetch directly
 - Use TypeScript for prop types
@@ -211,6 +226,7 @@ export function useProperties() {
 **Status**: Directory created, not yet implemented
 
 **Planned Contents**:
+
 - Color palette
 - Typography scale
 - Spacing system
@@ -224,6 +240,7 @@ export function useProperties() {
 **Status**: Directory created, not yet implemented
 
 **Planned Contents**:
+
 - useTheme
 - useResponsive
 - useAnimation
@@ -236,6 +253,7 @@ export function useProperties() {
 **Purpose**: Main mobile application
 
 **Key Files**:
+
 - `app/_layout.tsx`: Root layout with navigation setup
 - `app/index.tsx`: Home/Dashboard screen
 - `app/auth/`: Authentication screens
@@ -243,11 +261,13 @@ export function useProperties() {
 - `eas.json`: EAS Build configuration
 
 **Routing**: Uses Expo Router for file-based routing
+
 - File structure determines routes
 - `_layout.tsx` files define nested layouts
 - `index.tsx` is the default route
 
 **Navigation Flow**:
+
 ```
 _layout.tsx (Root)
 ├── index.tsx (Dashboard)
@@ -288,6 +308,7 @@ apps/mobile/app/
 ```
 
 This will:
+
 - Separate concerns more clearly
 - Make screens easily discoverable
 - Isolate app-specific from shared components
@@ -340,6 +361,7 @@ Configured in `apps/mobile/eas.json`:
 **Location**: Next to source files as `*.spec.ts` or `*.test.ts`
 
 **Coverage**:
+
 - Domain models and types
 - Utility functions
 - Service functions
@@ -352,6 +374,7 @@ Configured in `apps/mobile/eas.json`:
 **Location**: In `src/__tests__/` or next to components
 
 **Coverage**:
+
 - Component rendering
 - User interactions
 - Data flow
@@ -364,6 +387,7 @@ Configured in `apps/mobile/eas.json`:
 **Location**: `/e2e/` directory
 
 **Coverage**:
+
 - Complete user flows
 - Authentication
 - CRUD operations
@@ -377,7 +401,7 @@ Configured in `apps/mobile/eas.json`:
 
 - **Never commit**: `.env` files to version control
 - **Use Expo Secrets**: For EAS builds
-- **Prefix with EXPO_PUBLIC_**: For client-side env vars
+- **Prefix with EXPO*PUBLIC***: For client-side env vars
 - **Keep sensitive server-side**: Backend API keys
 
 ### Supabase Security
@@ -433,4 +457,5 @@ Configured in `apps/mobile/eas.json`:
 
 ---
 
-This architecture provides a solid foundation for a scalable, maintainable mobile-first application using modern React Native and NX best practices.
+This architecture provides a solid foundation for a scalable, maintainable mobile-first application
+using modern React Native and NX best practices.

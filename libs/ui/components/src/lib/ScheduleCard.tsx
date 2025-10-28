@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface ScheduleCardProps {
   propertyName: string;
@@ -10,46 +10,56 @@ interface ScheduleCardProps {
   onPress: () => void;
 }
 
-export default function ScheduleCard({ 
-  propertyName, 
-  cleanerName, 
-  date, 
-  type, 
-  status, 
-  onPress 
+export default function ScheduleCard({
+  propertyName,
+  cleanerName,
+  date,
+  type,
+  status,
+  onPress,
 }: ScheduleCardProps) {
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'checkout': return '#ef4444';
-      case 'checkin': return '#10b981';
-      case 'maintenance': return '#f59e0b';
-      case 'deep-clean': return '#8b5cf6';
-      default: return '#6b7280';
+      case 'checkout':
+        return '#ef4444';
+      case 'checkin':
+        return '#10b981';
+      case 'maintenance':
+        return '#f59e0b';
+      case 'deep-clean':
+        return '#8b5cf6';
+      default:
+        return '#6b7280';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return '#10b981';
-      case 'in-progress': return '#3b82f6';
-      case 'pending': return '#f59e0b';
-      case 'cancelled': return '#ef4444';
-      default: return '#6b7280';
+      case 'completed':
+        return '#10b981';
+      case 'in-progress':
+        return '#3b82f6';
+      case 'pending':
+        return '#f59e0b';
+      case 'cancelled':
+        return '#ef4444';
+      default:
+        return '#6b7280';
     }
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true,
     });
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -64,12 +74,14 @@ export default function ScheduleCard({
           <Text style={styles.typeText}>{type}</Text>
         </View>
       </View>
-      
+
       <Text style={styles.property}>{propertyName}</Text>
       <Text style={styles.cleaner}>Assigned to: {cleanerName}</Text>
-      
+
       <View style={styles.footer}>
-        <View style={[styles.status, { backgroundColor: getStatusColor(status) }]}>
+        <View
+          style={[styles.status, { backgroundColor: getStatusColor(status) }]}
+        >
           <Text style={styles.statusText}>{status}</Text>
         </View>
         <TouchableOpacity style={styles.actionButton}>

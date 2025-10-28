@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 interface ActionButtonProps {
@@ -11,7 +11,10 @@ interface ActionButtonProps {
 
 function ActionButton({ title, icon, color, onPress }: ActionButtonProps) {
   return (
-    <TouchableOpacity style={[styles.actionButton, { backgroundColor: color }]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.actionButton, { backgroundColor: color }]}
+      onPress={onPress}
+    >
       <Text style={styles.actionIcon}>{icon}</Text>
       <Text style={styles.actionTitle}>{title}</Text>
     </TouchableOpacity>

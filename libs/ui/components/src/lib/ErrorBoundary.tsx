@@ -1,6 +1,13 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { Component, ReactNode } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   children: ReactNode;
@@ -32,7 +39,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('[ErrorBoundary] Caught error:', error);
     console.error('[ErrorBoundary] Error info:', errorInfo);
 
@@ -61,15 +68,18 @@ export default class ErrorBoundary extends Component<Props, State> {
       `Error: ${error?.message}\n\nComponent Stack:\n${errorInfo?.componentStack}`,
       [
         { text: 'OK', style: 'default' },
-        { text: 'Copy to Clipboard', onPress: () => {
-          // In a real app, you'd copy to clipboard here
-          console.log('Copy error details to clipboard');
-        }}
+        {
+          text: 'Copy to Clipboard',
+          onPress: () => {
+            // In a real app, you'd copy to clipboard here
+            console.log('Copy error details to clipboard');
+          },
+        },
       ]
     );
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       // Custom fallback UI
       if (this.props.fallback) {
@@ -83,7 +93,8 @@ export default class ErrorBoundary extends Component<Props, State> {
             <Ionicons name="warning" size={48} color="#ef4444" />
             <Text style={styles.title}>Something went wrong</Text>
             <Text style={styles.subtitle}>
-              The app encountered an unexpected error. This has been logged for debugging.
+              The app encountered an unexpected error. This has been logged for
+              debugging.
             </Text>
           </View>
 
@@ -120,7 +131,11 @@ export default class ErrorBoundary extends Component<Props, State> {
                   style={styles.secondaryButton}
                   onPress={this.handleShowDetails}
                 >
-                  <Ionicons name="information-circle" size={20} color="#007AFF" />
+                  <Ionicons
+                    name="information-circle"
+                    size={20}
+                    color="#007AFF"
+                  />
                   <Text style={styles.secondaryButtonText}>Show Details</Text>
                 </TouchableOpacity>
               )}

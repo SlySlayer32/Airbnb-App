@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, FlatList, Modal } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@airbnb/data-access-auth';
 import { notificationService } from '@/services';
+import { useAuth } from '@airbnb/data-access-auth';
 
 interface Notification {
   id: string;
@@ -44,7 +52,8 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
   const loadNotifications = async () => {
     try {
       setLoading(true);
-      const allNotifications = await notificationService.getAllNotifications(20);
+      const allNotifications =
+        await notificationService.getAllNotifications(20);
       setNotifications(allNotifications);
     } catch (error) {
       Alert.alert('Error', 'Failed to load notifications');
@@ -61,9 +70,12 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
       (newNotification: Notification) => {
         setUnreadCount(prev => prev + 1);
         setNotifications(prev => [newNotification, ...prev]);
-        
+
         // Show a brief alert for important notifications
-        if (newNotification.type === 'session_cancelled' || newNotification.type === 'urgent_issue') {
+        if (
+          newNotification.type === 'session_cancelled' ||
+          newNotification.type === 'urgent_issue'
+        ) {
           Alert.alert(newNotification.title, newNotification.message);
         }
       }
@@ -86,8 +98,8 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
   const handleMarkAsRead = async (notificationId: string) => {
     try {
       await notificationService.markAsRead(notificationId);
-      setNotifications(prev => 
-        prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
+      setNotifications(prev =>
+        prev.map(n => (n.id === notificationId ? { ...n, read: true } : n))
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
@@ -125,23 +137,35 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'session_cancelled': return 'close-circle';
-      case 'cleaning_started': return 'play';
-      case 'cleaning_completed': return 'checkmark-circle';
-      case 'urgent_issue': return 'warning';
-      case 'issue_reported': return 'alert-circle';
-      default: return 'notifications';
+      case 'session_cancelled':
+        return 'close-circle';
+      case 'cleaning_started':
+        return 'play';
+      case 'cleaning_completed':
+        return 'checkmark-circle';
+      case 'urgent_issue':
+        return 'warning';
+      case 'issue_reported':
+        return 'alert-circle';
+      default:
+        return 'notifications';
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'session_cancelled': return '#ef4444';
-      case 'cleaning_started': return '#3b82f6';
-      case 'cleaning_completed': return '#10b981';
-      case 'urgent_issue': return '#f59e0b';
-      case 'issue_reported': return '#8b5cf6';
-      default: return '#6b7280';
+      case 'session_cancelled':
+        return '#ef4444';
+      case 'cleaning_started':
+        return '#3b82f6';
+      case 'cleaning_completed':
+        return '#10b981';
+      case 'urgent_issue':
+        return '#f59e0b';
+      case 'issue_reported':
+        return '#8b5cf6';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -151,13 +175,15 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
       onPress={() => !item.read && handleMarkAsRead(item.id)}
     >
       <View style={styles.notificationHeader}>
-        <Ionicons 
-          name={getNotificationIcon(item.type)} 
-          size={20} 
-          color={getNotificationColor(item.type)} 
+        <Ionicons
+          name={getNotificationIcon(item.type)}
+          size={20}
+          color={getNotificationColor(item.type)}
         />
         <Text style={styles.notificationTitle}>{item.title}</Text>
-        <Text style={styles.notificationTime}>{formatTime(item.created_at)}</Text>
+        <Text style={styles.notificationTime}>
+          {formatTime(item.created_at)}
+        </Text>
       </View>
       <Text style={styles.notificationMessage}>{item.message}</Text>
       {!item.read && <View style={styles.unreadDot} />}
@@ -172,7 +198,9 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
         <Ionicons name="notifications" size={24} color="#374151" />
         {unreadCount > 0 && (
           <View style={styles.countBadge}>
-            <Text style={styles.countText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
+            <Text style={styles.countText}>
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
@@ -188,11 +216,17 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
             <Text style={styles.modalTitle}>Notifications</Text>
             <View style={styles.modalActions}>
               {unreadCount > 0 && (
-                <TouchableOpacity onPress={handleMarkAllAsRead} style={styles.markAllButton}>
+                <TouchableOpacity
+                  onPress={handleMarkAllAsRead}
+                  style={styles.markAllButton}
+                >
                   <Text style={styles.markAllText}>Mark All Read</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={() => setShowModal(false)} style={styles.closeButton}>
+              <TouchableOpacity
+                onPress={() => setShowModal(false)}
+                style={styles.closeButton}
+              >
                 <Ionicons name="close" size={24} color="#374151" />
               </TouchableOpacity>
             </View>
@@ -206,7 +240,7 @@ export default function NotificationBadge({ onPress }: NotificationBadgeProps) {
           ) : (
             <FlatList
               data={notifications}
-              keyExtractor={(item) => item.id}
+              keyExtractor={item => item.id}
               renderItem={renderNotification}
               style={styles.notificationsList}
               refreshing={loading}

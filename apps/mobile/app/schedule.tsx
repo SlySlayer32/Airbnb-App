@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ScheduleCard from '../components/ScheduleCard';
 
 export default function ScheduleScreen() {
@@ -41,11 +47,11 @@ export default function ScheduleScreen() {
   ];
 
   const formatSelectedDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -53,21 +59,23 @@ export default function ScheduleScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.dateTitle}>{formatSelectedDate(selectedDate)}</Text>
-        
+
         <View style={styles.viewModeContainer}>
-          {viewModes.map((mode) => (
+          {viewModes.map(mode => (
             <TouchableOpacity
               key={mode.key}
               style={[
                 styles.viewModeButton,
-                viewMode === mode.key && styles.viewModeButtonActive
+                viewMode === mode.key && styles.viewModeButtonActive,
               ]}
               onPress={() => setViewMode(mode.key as any)}
             >
-              <Text style={[
-                styles.viewModeText,
-                viewMode === mode.key && styles.viewModeTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.viewModeText,
+                  viewMode === mode.key && styles.viewModeTextActive,
+                ]}
+              >
                 {mode.label}
               </Text>
             </TouchableOpacity>
@@ -86,8 +94,8 @@ export default function ScheduleScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Today's Schedule</Text>
-        
-        {schedules.map((schedule) => (
+
+        {schedules.map(schedule => (
           <ScheduleCard
             key={schedule.id}
             propertyName={schedule.propertyName}

@@ -42,7 +42,7 @@ export const MOCK_PROFILES: Record<string, MockProfile> = {
   },
 };
 
-export const DEFAULT_MOCK_PROFILE = MOCK_PROFILES.owner;
+export const DEFAULT_MOCK_PROFILE: MockProfile = MOCK_PROFILES.owner!;
 
 /**
  * Get mock profile by role

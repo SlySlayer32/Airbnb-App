@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, TextInput, ScrollView } from 'react-native';
+import {
+  Alert,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { EnhancedProperty, CleaningSession } from '@airbnb/core-domain-models';
 import { cleaningSessionService } from '@/services';
+import { CleaningSession, EnhancedProperty } from '@airbnb/core-domain-models';
 
 interface OwnerPropertyCardProps {
   property: EnhancedProperty;
@@ -12,45 +22,56 @@ interface OwnerPropertyCardProps {
   onAssignCleaner?: (propertyId: string) => void;
 }
 
-export default function OwnerPropertyCard({ 
-  property, 
-  onPress, 
+export default function OwnerPropertyCard({
+  property,
+  onPress,
   onEdit,
   onScheduleClean,
-  onAssignCleaner
+  onAssignCleaner,
 }: OwnerPropertyCardProps) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const currentSession = property.current_session;
-  
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'scheduled': return '#f59e0b';
-      case 'confirmed': return '#3b82f6';
-      case 'in_progress': return '#8b5cf6';
-      case 'completed': return '#10b981';
-      case 'cancelled': return '#ef4444';
-      default: return '#6b7280';
+      case 'scheduled':
+        return '#f59e0b';
+      case 'confirmed':
+        return '#3b82f6';
+      case 'in_progress':
+        return '#8b5cf6';
+      case 'completed':
+        return '#10b981';
+      case 'cancelled':
+        return '#ef4444';
+      default:
+        return '#6b7280';
     }
   };
 
   const getPropertyStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return '#10b981';
-      case 'occupied': return '#f59e0b';
-      case 'maintenance': return '#ef4444';
-      case 'inactive': return '#6b7280';
-      default: return '#6b7280';
+      case 'active':
+        return '#10b981';
+      case 'occupied':
+        return '#f59e0b';
+      case 'maintenance':
+        return '#ef4444';
+      case 'inactive':
+        return '#6b7280';
+      default:
+        return '#6b7280';
     }
   };
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true,
     });
   };
 
@@ -59,15 +80,15 @@ export default function OwnerPropertyCard({
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     if (date.toDateString() === today.toDateString()) {
       return 'Today';
     } else if (date.toDateString() === tomorrow.toDateString()) {
       return 'Tomorrow';
     } else {
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
       });
     }
   };
@@ -76,7 +97,10 @@ export default function OwnerPropertyCard({
     if (!currentSession?.scheduled_cleaning_time) return 0;
     const now = new Date();
     const sessionTime = new Date(currentSession.scheduled_cleaning_time);
-    return Math.max(0, Math.floor((sessionTime.getTime() - now.getTime()) / (1000 * 60 * 60)));
+    return Math.max(
+      0,
+      Math.floor((sessionTime.getTime() - now.getTime()) / (1000 * 60 * 60))
+    );
   };
 
   const handleCancelSession = async () => {
@@ -94,7 +118,7 @@ export default function OwnerPropertyCard({
         `You are cancelling with only ${noticeHours} hours notice. This may affect your cleaner's schedule and compensation.`,
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Proceed', onPress: () => executeCancellation(noticeHours) }
+          { text: 'Proceed', onPress: () => executeCancellation(noticeHours) },
         ]
       );
     } else {
@@ -108,9 +132,9 @@ export default function OwnerPropertyCard({
       await cleaningSessionService.cancelSession(currentSession!.id, {
         cancelled_by: 'owner',
         cancellation_reason: cancellationReason,
-        cancellation_notice_hours: noticeHours
+        cancellation_notice_hours: noticeHours,
       });
-      
+
       setShowCancelModal(false);
       setCancellationReason('');
       Alert.alert('Success', 'Cleaning session cancelled successfully');
@@ -125,10 +149,17 @@ export default function OwnerPropertyCard({
     <>
       <TouchableOpacity style={styles.card} onPress={onPress}>
         <Image source={{ uri: property.image_url }} style={styles.image} />
-        
+
         {/* Property Status Badge */}
-        <View style={[styles.propertyStatusBadge, { backgroundColor: getPropertyStatusColor(property.status) }]}>
-          <Text style={styles.propertyStatusText}>{property.status.toUpperCase()}</Text>
+        <View
+          style={[
+            styles.propertyStatusBadge,
+            { backgroundColor: getPropertyStatusColor(property.status) },
+          ]}
+        >
+          <Text style={styles.propertyStatusText}>
+            {property.status.toUpperCase()}
+          </Text>
         </View>
 
         <View style={styles.content}>
@@ -139,8 +170,12 @@ export default function OwnerPropertyCard({
               <Text style={styles.address}>{property.address}</Text>
             </View>
             <View style={styles.propertyDetails}>
-              <Text style={styles.detailText}>{property.rooms}BR • {property.bathrooms}BA</Text>
-              <Text style={styles.detailText}>Max: {property.max_occupancy} guests</Text>
+              <Text style={styles.detailText}>
+                {property.rooms}BR • {property.bathrooms}BA
+              </Text>
+              <Text style={styles.detailText}>
+                Max: {property.max_occupancy} guests
+              </Text>
             </View>
           </View>
 
@@ -149,23 +184,32 @@ export default function OwnerPropertyCard({
             <View style={styles.sessionSection}>
               <View style={styles.sessionHeader}>
                 <Text style={styles.sessionTitle}>Current Session</Text>
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(currentSession.status) }]}>
-                  <Text style={styles.statusText}>{currentSession.status.replace('_', ' ').toUpperCase()}</Text>
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: getStatusColor(currentSession.status) },
+                  ]}
+                >
+                  <Text style={styles.statusText}>
+                    {currentSession.status.replace('_', ' ').toUpperCase()}
+                  </Text>
                 </View>
               </View>
-              
+
               <View style={styles.sessionDetails}>
                 <View style={styles.sessionInfo}>
                   <Ionicons name="people" size={16} color="#374151" />
                   <Text style={styles.sessionText}>
-                    {currentSession.guest_count} guests • {currentSession.session_type.replace('_', ' ')}
+                    {currentSession.guest_count} guests •{' '}
+                    {currentSession.session_type.replace('_', ' ')}
                   </Text>
                 </View>
-                
+
                 <View style={styles.sessionInfo}>
                   <Ionicons name="time" size={16} color="#374151" />
                   <Text style={styles.sessionText}>
-                    {formatDate(currentSession.scheduled_cleaning_time)} at {formatTime(currentSession.scheduled_cleaning_time)}
+                    {formatDate(currentSession.scheduled_cleaning_time)} at{' '}
+                    {formatTime(currentSession.scheduled_cleaning_time)}
                   </Text>
                 </View>
 
@@ -196,11 +240,15 @@ export default function OwnerPropertyCard({
               <Text style={styles.statLabel}>Type</Text>
             </View>
             <View style={styles.stat}>
-              <Text style={styles.statValue}>{property.estimated_cleaning_duration}min</Text>
+              <Text style={styles.statValue}>
+                {property.estimated_cleaning_duration}min
+              </Text>
               <Text style={styles.statLabel}>Est. Clean</Text>
             </View>
             <View style={styles.stat}>
-              <Text style={styles.statValue}>{property.access_method.replace('_', ' ')}</Text>
+              <Text style={styles.statValue}>
+                {property.access_method.replace('_', ' ')}
+              </Text>
               <Text style={styles.statLabel}>Access</Text>
             </View>
           </View>
@@ -208,27 +256,29 @@ export default function OwnerPropertyCard({
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
             {!currentSession && (
-              <TouchableOpacity 
-                style={styles.primaryButton} 
+              <TouchableOpacity
+                style={styles.primaryButton}
                 onPress={() => onScheduleClean?.(property.id)}
               >
                 <Ionicons name="add" size={16} color="white" />
                 <Text style={styles.primaryButtonText}>Schedule Clean</Text>
               </TouchableOpacity>
             )}
-            
-            {currentSession && currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
-              <TouchableOpacity 
-                style={styles.cancelButton} 
-                onPress={() => setShowCancelModal(true)}
-              >
-                <Ionicons name="close" size={16} color="#ef4444" />
-                <Text style={styles.cancelButtonText}>Cancel Session</Text>
-              </TouchableOpacity>
-            )}
 
-            <TouchableOpacity 
-              style={styles.secondaryButton} 
+            {currentSession &&
+              currentSession.status !== 'cancelled' &&
+              currentSession.status !== 'completed' && (
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => setShowCancelModal(true)}
+                >
+                  <Ionicons name="close" size={16} color="#ef4444" />
+                  <Text style={styles.cancelButtonText}>Cancel Session</Text>
+                </TouchableOpacity>
+              )}
+
+            <TouchableOpacity
+              style={styles.secondaryButton}
               onPress={() => onEdit?.(property.id)}
             >
               <Ionicons name="create" size={16} color="#374151" />
@@ -236,8 +286,8 @@ export default function OwnerPropertyCard({
             </TouchableOpacity>
 
             {currentSession && !currentSession.assigned_cleaner_id && (
-              <TouchableOpacity 
-                style={styles.secondaryButton} 
+              <TouchableOpacity
+                style={styles.secondaryButton}
                 onPress={() => onAssignCleaner?.(property.id)}
               >
                 <Ionicons name="person-add" size={16} color="#374151" />
@@ -258,14 +308,13 @@ export default function OwnerPropertyCard({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Cancel Cleaning Session</Text>
-            
+
             <View style={styles.warningBox}>
               <Ionicons name="warning" size={20} color="#f59e0b" />
               <Text style={styles.warningText}>
-                {calculateNoticeHours() < 24 
+                {calculateNoticeHours() < 24
                   ? `Short notice: Only ${calculateNoticeHours()} hours until cleaning`
-                  : `${calculateNoticeHours()} hours notice provided`
-                }
+                  : `${calculateNoticeHours()} hours notice provided`}
               </Text>
             </View>
 
@@ -287,9 +336,12 @@ export default function OwnerPropertyCard({
               >
                 <Text style={styles.modalCancelText}>Back</Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
-                style={[styles.modalConfirmButton, loading && styles.modalButtonDisabled]}
+                style={[
+                  styles.modalConfirmButton,
+                  loading && styles.modalButtonDisabled,
+                ]}
                 onPress={handleCancelSession}
                 disabled={loading}
               >

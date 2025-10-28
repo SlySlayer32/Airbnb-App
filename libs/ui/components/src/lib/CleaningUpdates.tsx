@@ -1,14 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, FlatList, Modal, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { cleaningUpdateService, CleaningUpdate } from '@/services/cleaningUpdateService';
+import {
+  CleaningUpdate,
+  cleaningUpdateService,
+} from '@/services/cleaningUpdateService';
 
 interface CleaningUpdatesProps {
   sessionId: string;
   onClose: () => void;
 }
 
-export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesProps) {
+export default function CleaningUpdates({
+  sessionId,
+  onClose,
+}: CleaningUpdatesProps) {
   const [updates, setUpdates] = useState<CleaningUpdate[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +37,8 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
   const loadUpdates = async () => {
     try {
       setLoading(true);
-      const sessionUpdates = await cleaningUpdateService.getSessionUpdates(sessionId);
+      const sessionUpdates =
+        await cleaningUpdateService.getSessionUpdates(sessionId);
       setUpdates(sessionUpdates);
     } catch (error) {
       Alert.alert('Error', 'Failed to load updates');
@@ -39,9 +56,9 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
         update_type: 'note',
         message: newMessage.trim(),
         requires_response: false,
-        is_urgent: false
+        is_urgent: false,
       });
-      
+
       setNewMessage('');
       await loadUpdates();
     } catch (error) {
@@ -61,12 +78,15 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
       setSending(true);
       await cleaningUpdateService.reportIssue(sessionId, {
         message: newMessage.trim(),
-        is_urgent: isUrgent
+        is_urgent: isUrgent,
       });
-      
+
       setNewMessage('');
       await loadUpdates();
-      Alert.alert('Success', `${isUrgent ? 'Urgent issue' : 'Issue'} reported successfully`);
+      Alert.alert(
+        'Success',
+        `${isUrgent ? 'Urgent issue' : 'Issue'} reported successfully`
+      );
     } catch (error) {
       Alert.alert('Error', 'Failed to report issue');
     } finally {
@@ -76,10 +96,10 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
-      hour12: true 
+      hour12: true,
     });
   };
 
@@ -94,31 +114,41 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
     } else if (date.toDateString() === yesterday.toDateString()) {
       return 'Yesterday';
     } else {
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
       });
     }
   };
 
   const getUpdateIcon = (type: string) => {
     switch (type) {
-      case 'arrival': return 'location';
-      case 'status': return 'information-circle';
-      case 'issue': return 'warning';
-      case 'completion': return 'checkmark-circle';
-      case 'note': return 'chatbubble';
-      default: return 'chatbubble';
+      case 'arrival':
+        return 'location';
+      case 'status':
+        return 'information-circle';
+      case 'issue':
+        return 'warning';
+      case 'completion':
+        return 'checkmark-circle';
+      case 'note':
+        return 'chatbubble';
+      default:
+        return 'chatbubble';
     }
   };
 
   const getUpdateColor = (update: CleaningUpdate) => {
     if (update.is_urgent) return '#ef4444';
     switch (update.update_type) {
-      case 'arrival': return '#3b82f6';
-      case 'issue': return '#f59e0b';
-      case 'completion': return '#10b981';
-      default: return '#6b7280';
+      case 'arrival':
+        return '#3b82f6';
+      case 'issue':
+        return '#f59e0b';
+      case 'completion':
+        return '#10b981';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -126,10 +156,10 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
     <View style={[styles.updateItem, item.is_urgent && styles.urgentUpdate]}>
       <View style={styles.updateHeader}>
         <View style={styles.updateMeta}>
-          <Ionicons 
-            name={getUpdateIcon(item.update_type)} 
-            size={16} 
-            color={getUpdateColor(item)} 
+          <Ionicons
+            name={getUpdateIcon(item.update_type)}
+            size={16}
+            color={getUpdateColor(item)}
           />
           <Text style={styles.updateUser}>
             {item.user_name} ({item.user_role})
@@ -144,17 +174,21 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
           {formatDate(item.created_at)} at {formatTime(item.created_at)}
         </Text>
       </View>
-      
+
       <Text style={styles.updateMessage}>{item.message}</Text>
-      
+
       {item.photo_urls && item.photo_urls.length > 0 && (
         <View style={styles.photosContainer}>
-          {item.photo_urls.map((url, index) => (
-            <Image key={index} source={{ uri: url }} style={styles.updatePhoto} />
+          {item.photo_urls.map((url: string, index: number) => (
+            <Image
+              key={index}
+              source={{ uri: url }}
+              style={styles.updatePhoto}
+            />
           ))}
         </View>
       )}
-      
+
       {item.requires_response && (
         <View style={styles.responseRequired}>
           <Ionicons name="alert-circle" size={16} color="#f59e0b" />
@@ -181,7 +215,7 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
 
         <FlatList
           data={updates}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={renderUpdate}
           style={styles.updatesList}
           contentContainerStyle={styles.updatesContainer}
@@ -191,7 +225,9 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
             <View style={styles.emptyState}>
               <Ionicons name="chatbubbles" size={48} color="#d1d5db" />
               <Text style={styles.emptyText}>No updates yet</Text>
-              <Text style={styles.emptySubtext}>Send a message to start the conversation</Text>
+              <Text style={styles.emptySubtext}>
+                Send a message to start the conversation
+              </Text>
             </View>
           }
         />
@@ -205,7 +241,7 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
             multiline
             maxLength={500}
           />
-          
+
           <View style={styles.inputActions}>
             <TouchableOpacity
               style={[styles.actionButton, styles.sendButton]}
@@ -215,16 +251,18 @@ export default function CleaningUpdates({ sessionId, onClose }: CleaningUpdatesP
               <Ionicons name="send" size={16} color="white" />
               <Text style={styles.actionButtonText}>Send</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={[styles.actionButton, styles.issueButton]}
               onPress={() => reportIssue(false)}
               disabled={sending || !newMessage.trim()}
             >
               <Ionicons name="warning" size={16} color="#f59e0b" />
-              <Text style={[styles.actionButtonText, styles.issueButtonText]}>Issue</Text>
+              <Text style={[styles.actionButtonText, styles.issueButtonText]}>
+                Issue
+              </Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={[styles.actionButton, styles.urgentButton]}
               onPress={() => reportIssue(true)}

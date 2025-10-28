@@ -7,6 +7,7 @@ This library was generated with [Nx](https://nx.dev).
 ## Purpose
 
 Data access layer library containing:
+
 - Authentication context and provider
 - Auth hooks
 - Auth service utilities

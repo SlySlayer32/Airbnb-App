@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MaintenanceCard from '../components/MaintenanceCard';
 
 export default function MaintenanceScreen() {
@@ -41,16 +47,30 @@ export default function MaintenanceScreen() {
   ];
 
   const filteredTickets = tickets.filter(ticket => {
-    const matchesStatus = filterStatus === 'all' || ticket.status === filterStatus;
-    const matchesPriority = filterPriority === 'all' || ticket.priority === filterPriority;
+    const matchesStatus =
+      filterStatus === 'all' || ticket.status === filterStatus;
+    const matchesPriority =
+      filterPriority === 'all' || ticket.priority === filterPriority;
     return matchesStatus && matchesPriority;
   });
 
   const statusFilters = [
     { key: 'all', label: 'All', count: tickets.length },
-    { key: 'open', label: 'Open', count: tickets.filter(t => t.status === 'open').length },
-    { key: 'in-progress', label: 'In Progress', count: tickets.filter(t => t.status === 'in-progress').length },
-    { key: 'resolved', label: 'Resolved', count: tickets.filter(t => t.status === 'resolved').length },
+    {
+      key: 'open',
+      label: 'Open',
+      count: tickets.filter(t => t.status === 'open').length,
+    },
+    {
+      key: 'in-progress',
+      label: 'In Progress',
+      count: tickets.filter(t => t.status === 'in-progress').length,
+    },
+    {
+      key: 'resolved',
+      label: 'Resolved',
+      count: tickets.filter(t => t.status === 'resolved').length,
+    },
   ];
 
   const priorityFilters = [
@@ -67,7 +87,11 @@ export default function MaintenanceScreen() {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statNumber}>
-              {tickets.filter(t => t.status === 'open' || t.status === 'in-progress').length}
+              {
+                tickets.filter(
+                  t => t.status === 'open' || t.status === 'in-progress'
+                ).length
+              }
             </Text>
             <Text style={styles.statLabel}>Active Tickets</Text>
           </View>
@@ -79,40 +103,52 @@ export default function MaintenanceScreen() {
           </View>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-          {statusFilters.map((filter) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtersContainer}
+        >
+          {statusFilters.map(filter => (
             <TouchableOpacity
               key={filter.key}
               style={[
                 styles.filterButton,
-                filterStatus === filter.key && styles.filterButtonActive
+                filterStatus === filter.key && styles.filterButtonActive,
               ]}
               onPress={() => setFilterStatus(filter.key)}
             >
-              <Text style={[
-                styles.filterText,
-                filterStatus === filter.key && styles.filterTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.filterText,
+                  filterStatus === filter.key && styles.filterTextActive,
+                ]}
+              >
                 {filter.label} ({filter.count})
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
-          {priorityFilters.map((filter) => (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtersContainer}
+        >
+          {priorityFilters.map(filter => (
             <TouchableOpacity
               key={filter.key}
               style={[
                 styles.priorityButton,
-                filterPriority === filter.key && styles.priorityButtonActive
+                filterPriority === filter.key && styles.priorityButtonActive,
               ]}
               onPress={() => setFilterPriority(filter.key)}
             >
-              <Text style={[
-                styles.priorityText,
-                filterPriority === filter.key && styles.priorityTextActive
-              ]}>
+              <Text
+                style={[
+                  styles.priorityText,
+                  filterPriority === filter.key && styles.priorityTextActive,
+                ]}
+              >
                 {filter.label}
               </Text>
             </TouchableOpacity>
@@ -131,7 +167,7 @@ export default function MaintenanceScreen() {
           {filteredTickets.length} maintenance tickets
         </Text>
 
-        {filteredTickets.map((ticket) => (
+        {filteredTickets.map(ticket => (
           <MaintenanceCard
             key={ticket.id}
             ticketNumber={ticket.ticketNumber}

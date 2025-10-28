@@ -41,7 +41,12 @@ export interface EnhancedProperty {
   property_type: 'apartment' | 'house' | 'condo' | 'villa' | 'studio';
 
   // Access Information
-  access_method: 'key_lockbox' | 'smart_lock' | 'doorman' | 'owner_present' | 'other';
+  access_method:
+    | 'key_lockbox'
+    | 'smart_lock'
+    | 'doorman'
+    | 'owner_present'
+    | 'other';
   access_code?: string;
   access_instructions?: string;
   wifi_name?: string;
@@ -106,7 +111,12 @@ export interface DashboardMetadata {
   expected_completion_time: string;
   cleaning_window_start: string;
   cleaning_window_end: string;
-  status_indicator: 'completed' | 'in_progress' | 'overdue' | 'starting_soon' | 'scheduled';
+  status_indicator:
+    | 'completed'
+    | 'in_progress'
+    | 'overdue'
+    | 'starting_soon'
+    | 'scheduled';
   priority_level: 'urgent' | 'high' | 'medium' | 'normal';
 }
 
@@ -119,8 +129,19 @@ export interface CleaningSession {
   checkin_time: string;
   checkout_time: string;
   scheduled_cleaning_time: string;
-  session_type: 'checkout_clean' | 'checkin_prep' | 'maintenance_clean' | 'deep_clean' | 'inspection';
-  status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  session_type:
+    | 'checkout_clean'
+    | 'checkin_prep'
+    | 'maintenance_clean'
+    | 'deep_clean'
+    | 'inspection';
+  status:
+    | 'scheduled'
+    | 'confirmed'
+    | 'in_progress'
+    | 'completed'
+    | 'cancelled'
+    | 'no_show';
 
   // Cancellation info
   cancelled_at?: string;
@@ -136,10 +157,10 @@ export interface CleaningSession {
   priority_areas?: string[];
 
   // Status tracking
-  cleaner_arrived_at?: string;
-  cleaner_started_at?: string;
-  cleaner_completed_at?: string;
-  actual_guest_count?: number;
+  cleaner_arrived_at?: string | undefined;
+  cleaner_started_at?: string | undefined;
+  cleaner_completed_at?: string | undefined;
+  actual_guest_count?: number | undefined;
 
   // Pause/Resume tracking
   cleaner_paused_at?: string;
@@ -218,8 +239,8 @@ export interface MaintenanceTicket {
 // Real-time subscription types
 export interface RealtimeConnectionState {
   isConnected: boolean;
-  lastConnected?: Date;
-  connectionError?: string;
+  lastConnected?: Date | undefined;
+  connectionError?: string | undefined;
   reconnectAttempts: number;
 }
 
@@ -235,14 +256,18 @@ export interface RealtimeSubscriptionConfig {
 export interface PhotoProofRequirement {
   id: string;
   session_id: string;
-  category: 'before_cleaning' | 'after_cleaning' | 'specific_area' | 'issue_report';
+  category:
+    | 'before_cleaning'
+    | 'after_cleaning'
+    | 'specific_area'
+    | 'issue_report';
   area_name: string;
   is_required: boolean;
   is_completed: boolean;
-  photo_url?: string;
-  notes?: string;
+  photo_url?: string | undefined;
+  notes?: string | undefined;
   created_at: string;
-  completed_at?: string;
+  completed_at?: string | undefined;
 }
 
 export interface PhotoProofStatus {
@@ -270,13 +295,20 @@ export interface PhotoProofValidation {
 }
 
 // Banner State Machine Types
-export type BannerState = 'relax' | 'scheduled' | 'ready' | 'active' | 'break' | 'awaiting_photos' | 'day_wrap';
+export type BannerState =
+  | 'relax'
+  | 'scheduled'
+  | 'ready'
+  | 'active'
+  | 'break'
+  | 'awaiting_photos'
+  | 'day_wrap';
 
 export interface BannerStateContext {
   sessions: CleaningSession[];
   currentTime: Date;
-  activeSession?: CleaningSession;
-  nextSession?: CleaningSession;
+  activeSession?: CleaningSession | undefined;
+  nextSession?: CleaningSession | undefined;
   userRole: 'cleaner' | 'property_owner' | 'co_host';
   isOnline: boolean;
 }
@@ -284,11 +316,11 @@ export interface BannerStateContext {
 export interface BannerStateResult {
   status: BannerState;
   message: string;
-  timeRemaining?: number;
+  timeRemaining?: number | undefined;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  actionRequired?: boolean;
-  nextAction?: string;
-  urgencyReason?: string;
+  actionRequired?: boolean | undefined;
+  nextAction?: string | undefined;
+  urgencyReason?: string | undefined;
 }
 
 export interface BannerTransition {
@@ -316,7 +348,11 @@ export interface PhotoMetadata {
   file_name: string;
   file_size: number;
   mime_type: string;
-  category: 'before_cleaning' | 'after_cleaning' | 'specific_area' | 'issue_report';
+  category:
+    | 'before_cleaning'
+    | 'after_cleaning'
+    | 'specific_area'
+    | 'issue_report';
   area_name: string;
   uploaded_by: string;
   uploaded_at: string;
@@ -370,4 +406,15 @@ export interface ComponentLibraryItem {
   icon: string;
   color: string;
   allowedRoles: UserRole[];
+}
+
+export interface Profile {
+  id: string;
+  email: string;
+  full_name: string;
+  avatar_url?: string | undefined;
+  role: 'property_owner' | 'cleaner' | 'co_host';
+  phone?: string | undefined;
+  address?: string | undefined;
+  onboarded: boolean;
 }
